@@ -1,18 +1,19 @@
 # Szoftver specifiáció
 
 # Áttekintés
-- A dokumentum fejlesztői csapatunk szimulációs programjának megvalósításának tervét írja le. 
-- A szimulációs program egy raktárban dolgozó szállító robotok útvonalát tervezi meg és hajtja végre a tervet.
-- A felhasználó megadhatja a szimulációhoz szükséges alap infomációkat, kezelheti a szimulációt.
+A dokumentum fejlesztői csapatunk szimulációs programjának megvalósításának tervét írja le. 
+A szimulációs program egy raktárban dolgozó szállító robotok útvonalát tervezi meg és hajtja végre a tervet.
+A felhasználó megadhatja a szimulációhoz szükséges alapvető infomációkat, kezelheti a szimulációt.
 
 # A feladat elemzése
-## Felhasználói esetek
+A felhasználónak lehetősége van a következőkre:
 - új szimuláció indítása
 - szimuláció sebességének állítása
 - szimuláció megállítása
 
 ## Szimuláció indítása előtt
-- raktár elrendezésének megadása
+A felhasználó megadhatja az alábbi adatokat:
+- raktár elrendezése
 - robotok száma, helye
 - robook maximális töltöttsége (kezdetben minden robot teljes töltöttségű)
 - kiszállítandó termékek helye
