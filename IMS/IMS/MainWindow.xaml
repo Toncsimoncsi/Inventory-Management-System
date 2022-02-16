@@ -6,7 +6,53 @@
         xmlns:local="clr-namespace:IMS"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <DockPanel>
+        <Grid DockPanel.Dock="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Name="StartBtn" Width="50" Height="50" Margin="10" Command="{Binding StartSimulation}">START</Button>
+            <Button Grid.Row="1" Name="PauseBtn" Width="50" Height="50" Margin="10" Command="{Binding LoadSimulation}">LOAD</Button>
+            <Button Grid.Row="2" Name="SpeedUpBtn" Width="50" Height="50" Margin="10" Command="{Binding SpeedUp}">SPEED+</Button>
+            <Button Grid.Row="3" Name="SpeedDownBtn" Width="50" Height="50" Margin="10" Command="{Binding SpeedDown}">SPEED-</Button>
+            <Button Grid.Row="4" Name="SettingsBtn" Width="50" Height="50" Margin="10" Command="{Binding OpenSettings}">SETTINGS</Button>
+            <Button Grid.Row="5" Name="ExitBtn" Width="50" Height="50" Margin="10" Command="{Binding ExitSimulation}">EXIT</Button>
+        </Grid>
+        <StackPanel Width="100">
+            <Border BorderThickness="1" BorderBrush="Black" Margin="10 10 10 0">
+                <TextBlock >Pod info</TextBlock>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black" Margin="10 0 10 0">
+                <TextBlock Name="PodInfoTextBlock" Height="100" Text="{Binding PodInfo}"></TextBlock>
+            </Border>
 
-    </Grid>
+            <Border BorderThickness="1" BorderBrush="Black" Margin="10 10 10 0">
+                <TextBlock>Robot info</TextBlock>
+            </Border>
+            <Border BorderThickness="1" BorderBrush="Black" Margin="10 0 10 0">
+                <TextBlock Name="RobotInfoTextBlock" Height="50" Text="{Binding RobotInfo}"></TextBlock>
+            </Border>
+        </StackPanel>
+        <Viewbox DockPanel.Dock="Right">
+            <ItemsControl ItemsSource="{Binding Fields}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+
+                        <WrapPanel FlowDirection="LeftToRight" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+
+                        <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding}"  />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Viewbox>
+    </DockPanel>
 </Window>

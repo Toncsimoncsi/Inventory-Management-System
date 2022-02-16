@@ -1,15 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\IMS.Model\IMS.Model.csproj" />
-    <ProjectReference Include="..\IMS.ViewModel\IMS.ViewModel.csproj" />
-    <ProjectReference Include="..\IMS.View\IMS.View.csproj" />
   </ItemGroup>
 
 </Project>
