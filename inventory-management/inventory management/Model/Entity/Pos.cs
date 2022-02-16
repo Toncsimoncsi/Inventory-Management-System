@@ -44,9 +44,13 @@ namespace inventory_management.Model.Entity
         ///<summary>
         ///operators of the class
         ///</summary>
-        
 
+        public static Pos operator +(Pos A, Pos B) => new Pos(A.X + B.X, A.Y + B.Y);
 
+        public static Pos operator -(Pos A, Pos B) => new Pos(A.X - B.X, A.Y - B.Y);
+
+        public static bool operator ==(Pos A, Pos B) => A.Equals(B);
+        public static bool operator !=(Pos A, Pos B) => !A.Equals(B);
 
 
 
