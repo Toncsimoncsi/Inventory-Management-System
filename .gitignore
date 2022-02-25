@@ -3,3 +3,13 @@
 ################################################################################
 
 /.vs
+/IMS/IMS/bin/Debug/net5.0-windows
+/IMS/IMS/obj
+/inventory management
+/IMS/IMS.ViewModel/bin/Debug/net5.0-windows
+/IMS/IMS.ViewModel/obj
+/IMS/IMS.View/bin/Debug/net5.0-windows
+/IMS/IMS.View/obj
+/IMS/IMS.Model/bin/Debug/net5.0
+/IMS/IMS.Model/obj
+/IMS/IMS.Persistence/obj

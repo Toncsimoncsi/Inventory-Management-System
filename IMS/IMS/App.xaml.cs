@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using IMS.Persistence;
 using IMS.Model;
 using IMS.ViewModel;
 
@@ -15,6 +16,7 @@ namespace IMS
     /// </summary>
     public partial class App : Application
     {
+        private IMSDataAccess _dataAccess;
         private IMSModel _model;
         private MainViewModel _viewModel;
         private MainWindow _view;
@@ -26,7 +28,9 @@ namespace IMS
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
-            _model = new IMSModel();
+            _dataAccess = new IMSDataAccess();
+
+            _model = new IMSModel(_dataAccess);
 
             _viewModel = new MainViewModel(_model);
 

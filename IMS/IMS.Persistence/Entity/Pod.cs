@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Model.Entity
+namespace IMS.Persistence.Entity
 {
     public class Pod : Entity
     {
