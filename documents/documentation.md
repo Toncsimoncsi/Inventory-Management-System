@@ -66,11 +66,11 @@ A kezdőoldalon a szimuláció elindítása után a robotok töltöttségi álla
 ![Beállítások](./img/ui2.jpg "Beállítások")
 
 ## Felhasználói történetek
-![Felhasználói történetek](./felhasznaloi-tortenetek.pdf "Felhasználói történetek")
+[Felhasználói történetek](./felhasznaloi-tortenetek.pdf)
 
 
 ## Use case diagram
-![Use case diagram](./img/use_case.jpg "Use case diagram")
+![Use case diagram](./img/usecase.jpg "Use case diagram")
 
 ## UML diagramok
 
