@@ -1,11 +1,3 @@
-<style>
-img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-</style>
-
 # A szimuláció rövid leírása
 A szimulációs program egy raktárban dolgozó szállító robotok útvonalát tervezi meg és hajtja végre a tervet.
 
