@@ -47,27 +47,30 @@ robotok telítettségi állapotát, a termékeket, az állványokat és mozgásu
 # Felhasználói dokumentáció
 A program indítása után megjelenik a kezdőoldal, ahol a felhasználónak lehetősége van szimulációt betölteni, vagy létrehozni újat. 
 
-Bal oldalon található a menüsor, az itt található gombok szolgálnak a szimuláció elindítására, betöltésére, mentésére, gyorsítására, lassítására, a beállítás ablak megnyitására, és a szimulációból való kilépésre.
-![Kezdőoldal, szimuláció indítása](./img/pr_ind.jpg "Kezdőoldal")
+Bal oldalon található a menüsor, az itt található gombok szolgálnak a szimuláció elindítására, betöltésére, mentésére, gyorsítására, lassítására, a beállítás ablak megnyitására, és a szimulációból való kilépésre, mellette a szimuláció táblája látható.
+![Kezdőoldal, szimuláció indítása](./img/ui1_btn.jpg "Kezdőoldal")
 
 Új szimuláció létrehozása egy külön ablakban történik. Itt a felhasználó megadhatja a szimuláció kezdetén a raktár elrendezését és méretét.
 Robotokat, töltőállomásokat, célállomásokat és polcokat vehet fel a felületre, azok tartalmával együtt.
-![Beállítások, szimuláció előkészítése](./img/set_sim.jpg "Beállítások")
+![Beállítások, szimuláció előkészítése](./img/ui2_set.jpg "Beállítások")
 
-A kezdőoldalon a szimuláció elindítása után a robotok töltöttségi állapota és a polcok tartalma az erre szolgáló felületen megtekinthető, mellette a szimuláció táblája látható.
-![Kezdőoldal, info](./img/info.jpg "Szimuláció")
+A kezdőoldalon a szimuláció elindítása után a robotok töltöttségi állapota és a polcok tartalma az erre szolgáló felületen egy felugró ablakban megtekinthető, a táblán a mezőkre kattintás után.
+
+
 
 
 
 # Tervezés
 ## Felhasználói felület terv
-![Kezdőoldal](./img/index.jpg "Kezdőoldal")
-![Beállítások](./img/settings.jpg "Beállítások")
+![Kezdőoldal](./img/ui1.jpg "Kezdőoldal")
+![Beállítások](./img/ui2.jpg "Beállítások")
 
 ## Felhasználói történetek
+[Felhasználói történetek](./felhasznaloi-tortenetek.pdf)
+
 
 ## Use case diagram
-![Use case diagram](./img/use_case.jpg "Use case diagram")
+![Use case diagram](./img/usecase.jpg "Use case diagram")
 
 ## UML diagramok
 

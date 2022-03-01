@@ -26,4 +26,3 @@
 
 ### Biztonság
 - az adatok bizonsága megfelelő használat mellett garantált
-s
