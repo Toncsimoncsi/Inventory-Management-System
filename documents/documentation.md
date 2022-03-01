@@ -76,7 +76,7 @@ A kezdőoldalon a szimuláció elindítása után a robotok töltöttségi álla
 
 ## UML diagramok
 ### Package diagram
-![Package diagram](./img/Package_diagram.jpg "Package diagram")
+![Package diagram](./img/Pckg_diagram.jpg "Package diagram")
 
 ### Starter class diagram
 ![App class diagram](./img/app-class-diagram.jpg "App class")
