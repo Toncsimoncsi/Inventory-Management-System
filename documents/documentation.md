@@ -1,3 +1,11 @@
+<style>
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
+
 # A szimuláció rövid leírása
 A szimulációs program egy raktárban dolgozó szállító robotok útvonalát tervezi meg és hajtja végre a tervet.
 
@@ -62,7 +70,9 @@ A kezdőoldalon a szimuláció elindítása után a robotok töltöttségi álla
 
 # Tervezés
 ## Felhasználói felület terv
+### Főoldal
 ![Kezdőoldal](./img/ui1.jpg "Kezdőoldal")
+### Szimuláció létrehozása
 ![Beállítások](./img/ui2.jpg "Beállítások")
 
 ## Felhasználói történetek
@@ -73,6 +83,17 @@ A kezdőoldalon a szimuláció elindítása után a robotok töltöttségi álla
 ![Use case diagram](./img/usecase.jpg "Use case diagram")
 
 ## UML diagramok
+### Package diagram
+![Package diagram](./img/Package_diagram.jpg "Package diagram")
 
 ### Starter class diagram
-![ class diagram](./uml/app-class-diagram.jpg "App class diagram")
+![App class diagram](./img/app-class-diagram.jpg "App class")
+
+### Class Model
+![Model class diagram](./img/Model.jpg "Model class")
+
+### Class ViewModel
+![ViewModel class diagram](./img/ViewModel.PNG "ViewModel class")
+
+### Class Persistence
+![Persistence class diagram](./img/Persistence.jpg "Persistence class")
