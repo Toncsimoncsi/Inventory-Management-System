@@ -16,7 +16,7 @@ namespace IMS
     /// </summary>
     public partial class App : Application
     {
-        private IMSDataAccess _dataAccess;
+        private Persistence.IMSDataAccess _dataAccess;
         private IMSModel _model;
         private MainViewModel _viewModel;
         private MainWindow _view;
@@ -28,7 +28,7 @@ namespace IMS
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
-            _dataAccess = new IMSDataAccess();
+            _dataAccess = new Persistence.IMSDataAccess();
 
             _model = new IMSModel(_dataAccess);
 

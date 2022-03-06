@@ -8,5 +8,9 @@ namespace IMS.Persistence.Entity
 {
     public class Dock : Entity
     {
+        public Dock(int x, int y) :base (x,y)
+        {
+            isLocked = true ;
+        }
     }
 }

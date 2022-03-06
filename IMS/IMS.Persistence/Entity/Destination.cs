@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace IMS.Persistence.Entity
 {
-    public class Pod : Entity
+    public class Destination:Entity
     {
-        private int _ProductID;
-        public Pod(int x, int y,int productID) : base(x, y)
+        public Destination(int x, int y) : base(x, y)
         {
-            _ProductID = productID;
+            isLocked = true;
         }
     }
 }
