@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IMS.Persistence.Entity;
+using IMS.Persistence.Entities;
 
 namespace IMS.Persistence
 {

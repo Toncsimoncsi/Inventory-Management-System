@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Persistence.Entity
+namespace IMS.Persistence.Entities
 {
     public abstract class Entity
     {
@@ -15,8 +15,7 @@ namespace IMS.Persistence.Entity
         public Entity(int x,int y)
         {
             type = Type.Empty;
-            position.X = x;
-            position.Y = y;
+            position = new Pos(x, y);
             isLocked = false;
         }
 

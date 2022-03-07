@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IMS.Persistence.Entities;
 
 namespace IMS.Persistence
 {
     public class IMSDataAccess : IIMSDataAccess
     {
-        public Task<Dictionary<Int32, Entity.Entity>> LoadAsync(String path)
+        public Task<Entity[]> LoadAsync(String path)
         {
             return null;
         }
 
-        public Task SaveAsync(String path, Dictionary<Int32, Entity.Entity> table)
+        public Task SaveAsync(String path, Entity[] values)
         {
             return null;
         }

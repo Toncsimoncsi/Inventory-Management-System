@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Persistence.Entity
+namespace IMS.Persistence.Entities
 {
     public class Pos
     {

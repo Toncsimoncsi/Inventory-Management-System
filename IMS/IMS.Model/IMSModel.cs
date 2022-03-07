@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using IMS.Persistence;
-using IMS.Persistence.Entity;
+using IMS.Persistence.Entities;
 
 namespace IMS.Model
 {
