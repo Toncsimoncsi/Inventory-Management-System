@@ -8,15 +8,19 @@ namespace IMS.Persistence.Entities
 {
     public class Robot : Entity
     {
-        public enum Direction { LEFT, UP, RIGHT, DOWN };
-        private int _TotalEnergyUsed;
-        private int _Capacity;
-        private Direction _Dir;
-        public Robot(int x, int y, Direction direction,int Capacity) : base(x, y)
+        private Int32 _totalEnergyUsed;
+        private Int32 _capacity;
+
+        public Int32 TotalEnergyUsed { get { return _totalEnergyUsed; } }
+        public Int32 Capacity { get { return _capacity; } }
+        public Direction Direction { get { return _dir; } }
+
+        public Robot(int x, int y, Direction direction, int capacity) : base(x, y)
         {
-            _Capacity = Capacity;
-            _TotalEnergyUsed = 0;
-            _Dir=direction;
+            _type = EntityType.Robot;
+            _capacity = capacity;
+            _totalEnergyUsed = 0;
+            _dir=direction;
         }
     }
 }

@@ -10,7 +10,8 @@ namespace IMS.Persistence.Entities
     {
         public Destination(int x, int y) : base(x, y)
         {
-            isLocked = true;
+            _type = EntityType.Destination;
+            _isLocked = true;
         }
     }
 }

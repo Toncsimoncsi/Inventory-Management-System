@@ -10,7 +10,8 @@ namespace IMS.Persistence.Entities
     {
         public Dock(int x, int y) :base (x,y)
         {
-            isLocked = true ;
+            _type = EntityType.Dock;
+            _isLocked = true;
         }
     }
 }

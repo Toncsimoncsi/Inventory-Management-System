@@ -8,10 +8,14 @@ namespace IMS.Persistence.Entities
 {
     public class Pod : Entity
     {
-        private int _ProductID;
+        private int _productID;
+
+        public Int32 ProductID { get { return _productID; } }
+        
         public Pod(int x, int y,int productID) : base(x, y)
         {
-            _ProductID = productID;
+            _type = EntityType.Pod;
+            _productID = productID;
         }
     }
 }

@@ -10,7 +10,8 @@ namespace IMS.Persistence.Entities
     {
         public Empty(int x,int y) : base(x, y)
         {
-            isLocked = true;
+            _type = EntityType.Empty;
+            _isLocked = true;
         }
     }
 }

@@ -6,17 +6,25 @@ using System.Threading.Tasks;
 
 namespace IMS.Persistence.Entities
 {
+    public enum EntityType { Empty, Pod, Robot, Dock, Destination, RobotUnderPod }
+    public enum Direction { LEFT, UP, RIGHT, DOWN, NONE };
     public abstract class Entity
     {
-        public enum Type { Empty,Pod,Robot,Dock,Destination}
-        protected Pos position;
-        protected Boolean isLocked;
-        protected Type type;
+        protected Pos _position;
+        protected Boolean _isLocked;
+        protected EntityType _type;
+        protected Direction _dir;
+
+        public Pos Pos { get { return new Pos(_position.X,_position.Y); } }
+        public Boolean IsLocked { get { return _isLocked; } }
+        public EntityType Type { get { return _type; } }
+
         public Entity(int x,int y)
         {
-            type = Type.Empty;
-            position = new Pos(x, y);
-            isLocked = false;
+            _type = EntityType.Empty;
+            _dir = Direction.NONE;
+            _position = new Pos(x, y);
+            _isLocked = false;
         }
 
     }
