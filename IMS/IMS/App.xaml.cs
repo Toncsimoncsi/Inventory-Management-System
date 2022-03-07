@@ -28,7 +28,7 @@ namespace IMS
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
-            _dataAccess = new Persistence.IMSDataAccess();
+            _dataAccess = new IMSDataAccess();
 
             _model = new IMSModel(_dataAccess);
 
@@ -39,6 +39,8 @@ namespace IMS
                 DataContext = _viewModel
             };
             _view.Show();
+
+            _model.NewSimulation();
         }
     }
 }

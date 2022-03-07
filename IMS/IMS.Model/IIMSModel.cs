@@ -11,11 +11,6 @@ namespace IMS.Model
     {
 
         /// <summary>
-        /// Lépésszám lekérdezése.
-        /// </summary>
-        Int32 StepNumber { get; }
-
-        /// <summary>
         /// Mezőérték lekérdezése, vagy beállítása.
         /// </summary>
         /// <param name="x">Oszlop index.</param>
@@ -26,17 +21,12 @@ namespace IMS.Model
         /// <summary>
         ///  Játék kezdetének eseménye.
         /// </summary>
-        event EventHandler GameStarted;
+        //event EventHandler SimulationStarted;
 
         /// <summary>
         /// Játék végének eseménye.
         /// </summary>
-        event EventHandler GameOver;
-
-        /// <summary>
-        /// Játék megnyerésének eseménye.
-        /// </summary>
-        event EventHandler<GameWonEventArgs> GameWon;
+        //event EventHandler SimulationOver;
 
         /// <summary>
         /// Mezőváltozás eseménye.
@@ -46,25 +36,18 @@ namespace IMS.Model
         /// <summary>
         /// Új játék indítása.
         /// </summary>
-        void NewGame();
-
-        /// <summary>
-        /// Játék léptetése.
-        /// </summary>
-        /// <param name="x">Oszlop index.</param>
-        /// <param name="y">Sor index.</param>
-        void StepGame(Int32 x, Int32 y);
+        void NewSimulation();
 
         /// <summary>
         /// Játék betöltése.
         /// </summary>
         /// <param name="path">Elérési útvonal.</param>
-        Task LoadGameAsync(String path);
+        Task LoadSimulationAsync(String path);
 
         /// <summary>
         /// Játék mentése.
         /// </summary>
         /// <param name="path">Elérési útvonal.</param>
-        Task SaveGameAsync(String path);
+        Task SaveSimulationAsync(String path);
     }
 }

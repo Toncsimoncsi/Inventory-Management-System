@@ -18,6 +18,7 @@ namespace IMS.Persistence.Entities
         public Pos Pos { get { return new Pos(_position.X,_position.Y); } }
         public Boolean IsLocked { get { return _isLocked; } }
         public EntityType Type { get { return _type; } }
+        public Direction Direction { get { return _dir; } }
 
         public Entity(int x,int y)
         {

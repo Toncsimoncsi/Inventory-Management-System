@@ -16,16 +16,8 @@ namespace IMS.Model
         //hogy a termékeket az azonos számú célállomásokhoz vigyék (1-es termék az S1 célállomáshoz, 2-es az
         //S2-höz, stb.)
 
-        //private IMSDataAccess _dataAccess;
 
-        //public IMSModel(IMSDataAccess dataAccess)
-        //{
-        //    _dataAccess = dataAccess;
-        //}
-
-        private Entity _currentEntity; // aktuális játékos
         private Entity[,] _gameTable; // simtábla
-        private Int32 _stepNumber; // lépésszám
         private EntityData _entityData;
         private IMSDataAccess _dataAccess; // adatelérés
 
@@ -33,22 +25,11 @@ namespace IMS.Model
 
         #region Public properties
 
-        /// <summary>
-        /// Lépésszám lekérdezése.
-        /// </summary>
-        public Int32 StepNumber { get { return _stepNumber; } }
-
-        /// <summary>
-        /// Mezőérték lekérdezése, vagy beállítása.
-        /// </summary>
-        /// <param name="x">Oszlop index.</param>
-        /// <param name="y">Sor index.</param>
-        /// <returns>A mező értéke.</returns>
         public Entity this[Int32 x, Int32 y]
         {
             get
             {
-                if (x < 0 || x > _gameTable.GetLength(0)) // ellenőrizzük a tartományt
+                if (x < 0 || x > _gameTable.GetLength(0))
                     throw new ArgumentException("Bad column index.", "x");
                 if (y < 0 || y > _gameTable.GetLength(1))
                     throw new ArgumentException("Bad row index.", "y");
@@ -65,24 +46,9 @@ namespace IMS.Model
 
         #region Events
 
-        /// <summary>
-        ///  Játék kezdetének eseménye.
-        /// </summary>
-        public event EventHandler GameStarted;
-
-        /// <summary>
-        /// Játék végének eseménye.
-        /// </summary>
-        public event EventHandler GameOver;
-
-        /// <summary>
-        /// Játék megnyerésének eseménye.
-        /// </summary>
-        public event EventHandler<GameWonEventArgs> GameWon;
-
-        /// <summary>
-        /// Mezőváltozás eseménye.
-        /// </summary>
+        public event EventHandler<EventArgs> SimulationStarted;
+        public event EventHandler<EventArgs> SimulationOver;
+        public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
         public event EventHandler<FieldChangedEventArgs> FieldChanged;
 
 
@@ -90,87 +56,51 @@ namespace IMS.Model
 
         #region Constructors
 
-        /// <summary>
-        /// Tic-Tac-Toe játék modell példányosítása.
-        /// </summary>
         public IMSModel() : this(null) { }
 
-        /// <summary>
-        /// Tic-Tac-Toe játék modell példányosítása.
-        /// </summary>
-        /// <param name="dataAccess">Az adatelérés.</param>
         public IMSModel(IMSDataAccess dataAccess)
         {
-            _gameTable = new Entity[12, 12]; // mátrix létrehozása
+            _gameTable = new Entity[12, 12];
             _dataAccess = dataAccess;
 
-            NewGame();
+            //NewSimulation();
         }
 
         #endregion
 
         #region Public methods
 
-        /// <summary>
-        /// Új játék indítása.
-        /// </summary>
-        public void NewGame()
+        public void NewSimulation()
         {
-            for (Int32 i = 0; i < _gameTable.GetLength(0); i++) // végigmegyünk a mátrix elemein
+            for (Int32 i = 0; i < _gameTable.GetLength(0); i++)
+            {
                 for (Int32 j = 0; j < _gameTable.GetLength(1); j++)
                 {
-                _gameTable[i, j] = new Empty(i,j) ; // a játékosok pozícióit töröljük
+                    _gameTable[i, j] = new Empty(i, j);
                 }
+            }
 
-            _stepNumber = 0;
 
-            OnGameStarted();
+            OnSimulationCreated();
         }
-        /// <summary>
-        /// Játék léptetése.
-        /// </summary>
-        /// <param name="x">Oszlop index.</param>
-        /// <param name="y">Sor index.</param>
+
         public void Simulation(Int32 x, Int32 y)
         {
-            //CheckGame();
+
         }
 
-        /// <summary>
-        /// Játék léptetése.
-        /// </summary>
-        /// <param name="x">Oszlop index.</param>
-        /// <param name="y">Sor index.</param>
-        public void StepGame(Int32 x, Int32 y)
-        {
-            if (x < 0 || x > _gameTable.GetLength(0))
-                throw new ArgumentOutOfRangeException("x", "Bad column index.");
-            if (y < 0 || y > _gameTable.GetLength(1))
-                throw new ArgumentOutOfRangeException("y", "Bad row index.");
-            if (_stepNumber >= 9) // ellenőrizzük a lépésszámot
-                throw new InvalidOperationException("Game is over!");
-
-            OnFieldChanged(x, y, _currentEntity); // jelezzük egy eseménykiváltással, hogy változott a mező
-
-            _stepNumber++;
-        }
-
-        /// <summary>
-        /// Játék betöltése.
-        /// </summary>
-        /// <param name="path">Elérési útvonal.</param>
-        public async Task LoadGameAsync(String path)
+        public async Task LoadSimulationAsync(String path)
         {
             if (_dataAccess == null)
                 return;
 
-            // végrehajtjuk a betöltést
-            Entity[] values = await _dataAccess.LoadAsync(path);
+            
+            Entity[] values = await _dataAccess.LoadSimulationAsync(path);
 
+            /*
             if (values.Length != _gameTable.Length)
                 throw new IMSDataException("Error occurred during game loading.");
 
-            // beállítjuk az értékeket
             for (Int32 i = 0; i < _gameTable.GetLength(0); i++)
                 for (Int32 j = 0; j < _gameTable.GetLength(1); j++)
                 {
@@ -178,70 +108,34 @@ namespace IMS.Model
 
                     OnFieldChanged(i, j, _gameTable[i, j]);
                 }
+            */
 
-            OnGameStarted();
+            //OnSimulationCreated();
 
-            //CheckGame();
+            NewSimulation();
+
         }
 
-        /// <summary>
-        /// Játék mentése.
-        /// </summary>
-        /// <param name="path">Elérési útvonal.</param>
-        public async Task SaveGameAsync(String path)
+        public async Task SaveSimulationAsync(String path)
         {
             if (_dataAccess == null)
                 return;
 
-            // az értékeket kimásoljuk egy új tömbbe
             Entity[] values = new Entity[_gameTable.Length];
             for (Int32 i = 0; i < _gameTable.GetLength(0); i++)
+            {
                 for (Int32 j = 0; j < _gameTable.GetLength(1); j++)
                 {
                     values[i * _gameTable.GetLength(0) + j] = _gameTable[i, j];
                 }
-
-            // végrehajtjuk a mentést
-            await _dataAccess.SaveAsync(path, values);
+            }
+            await _dataAccess.SaveSimulationAsync(path, values);
         }
 
         #endregion
 
         #region Private methods
 
-        /// <summary>
-        /// Játék ellenőrzése.
-        /// </summary>/
-        /*
-        private void CheckGame()
-        {
-            Entity won = Entity.NoEntity;
-
-            for (int i = 0; i < 3; ++i) // ellenőrzések végrehajtása
-            {
-                if (_gameTable[i, 0] != 0 && _gameTable[i, 0] == _gameTable[i, 1] && _gameTable[i, 1] == _gameTable[i, 2])
-                    won = _gameTable[i, 0];
-            }
-            for (int i = 0; i < 3; ++i)
-            {
-                if (_gameTable[0, i] != 0 && _gameTable[0, i] == _gameTable[1, i] && _gameTable[1, i] == _gameTable[2, i])
-                    won = _gameTable[0, i];
-            }
-            if (_gameTable[0, 0] != 0 && _gameTable[0, 0] == _gameTable[1, 1] && _gameTable[1, 1] == _gameTable[2, 2])
-                won = _gameTable[0, 0];
-            if (_gameTable[0, 2] != 0 && _gameTable[0, 2] == _gameTable[1, 1] && _gameTable[1, 1] == _gameTable[2, 0])
-                won = _gameTable[0, 2];
-
-            if (won != Entity.NoEntity) // ha valaki győzött
-            {
-                OnGameWon(won); // esemény kiváltása
-            }
-            else if (_stepNumber == 9) // döntetlen játék
-            {
-                OnGameOver(); // esemény kiváltása
-            }
-        }
-    */
         #endregion
 
         #region Event triggers
@@ -249,29 +143,25 @@ namespace IMS.Model
         /// <summary>
         /// Játék kezdetének eseménykiváltása.
         /// </summary>
-        private void OnGameStarted()
+        private void OnSimulationStarted()
         {
-            if (GameStarted != null)
-                GameStarted(this, EventArgs.Empty);
+            if (SimulationStarted != null)
+                SimulationStarted(this, EventArgs.Empty);
+        }
+
+        private void OnSimulationCreated()
+        {
+            if (SimulationCreated != null)
+                SimulationCreated(this, EventArgs.Empty);
         }
 
         /// <summary>
         /// Játék végének eseménykiváltása.
         /// </summary>
-        private void OnGameOver()
+        private void OnSimulationOver()
         {
-            if (GameOver != null)
-                GameOver(this, EventArgs.Empty);
-        }
-
-        /// <summary>
-        /// Játék megnyerésének eseménykiváltása.
-        /// </summary>
-        /// <param name="Entity">A győztes játékos.</param>
-        private void OnGameWon(Entity Entity)
-        {
-            if (GameWon != null)
-                GameWon(this, new GameWonEventArgs(Entity));
+            if (SimulationOver != null)
+                SimulationOver(this, EventArgs.Empty);
         }
 
         /// <summary>

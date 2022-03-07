@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using IMS.Persistence.Entities;
 using IMS.Model;
 using IMS.ViewModel.Fields;
+using System.Diagnostics;
 
 namespace IMS.ViewModel
 {
@@ -62,6 +63,7 @@ namespace IMS.ViewModel
             Fields = new ObservableCollection<TableField>();
 
             _model = model;
+            _model.SimulationCreated += new EventHandler<EventArgs>(Model_SimulationCreated);
         }
 
         #endregion
@@ -74,6 +76,9 @@ namespace IMS.ViewModel
             return _entityToColor[type];
         }
 
+        /// <summary>
+        /// creates an empty viewmodel table (Fields)
+        /// </summary>
         private void GenerateTable()
         {
             Fields.Clear();
@@ -90,6 +95,27 @@ namespace IMS.ViewModel
                     });
                 }
             }
+            OnPropertyChanged(nameof(SizeX));
+            OnPropertyChanged(nameof(SizeY));
+        }
+
+        /// <summary>
+        /// syncs the model's table with a pre-existing
+        /// viewmodel table (Fields)
+        /// </summary>
+        private void SetupTable()
+        {
+            foreach (TableField field in Fields)
+            {
+                field.Color = EntityToColor(_model[field.X,field.Y].Type);
+                field.Direction = _model[field.X, field.Y].Direction.ToString();
+            }
+        }
+
+        private void Model_SimulationCreated(Object sender, EventArgs e)
+        {
+            GenerateTable();
+            SetupTable();
         }
 
 
