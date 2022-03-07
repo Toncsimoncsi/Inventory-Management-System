@@ -12,4 +12,7 @@
 /IMS/IMS.View/obj
 /IMS/IMS.Model/bin/Debug/net5.0
 /IMS/IMS.Model/obj
+/IMS/IMS.Persistence/bin
+/IMS/IMS.Persistence/bin/Debug/net5.0
+/IMS/IMS.Persistence/bin/Debug/net5.0/ref
 /IMS/IMS.Persistence/obj
