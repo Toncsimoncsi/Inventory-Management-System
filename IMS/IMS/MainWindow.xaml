@@ -16,42 +16,53 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Name="StartBtn" Width="50" Height="50" Margin="10" Command="{Binding StartSimulation}">START</Button>
-            <Button Grid.Row="1" Name="PauseBtn" Width="50" Height="50" Margin="10" Command="{Binding LoadSimulation}">LOAD</Button>
-            <Button Grid.Row="2" Name="SpeedUpBtn" Width="50" Height="50" Margin="10" Command="{Binding SpeedUp}">SPEED+</Button>
-            <Button Grid.Row="3" Name="SpeedDownBtn" Width="50" Height="50" Margin="10" Command="{Binding SpeedDown}">SPEED-</Button>
-            <Button Grid.Row="4" Name="SettingsBtn" Width="50" Height="50" Margin="10" Command="{Binding OpenSettings}">SETTINGS</Button>
-            <Button Grid.Row="5" Name="ExitBtn" Width="50" Height="50" Margin="10" Command="{Binding ExitSimulation}">EXIT</Button>
+            <Button Grid.Row="0" Name="StartBtn" Width="50" Height="50" Margin="10" Command="{Binding SaveSimulationCommand}">SAVE</Button>
+            <Button Grid.Row="1" Name="PauseBtn" Width="50" Height="50" Margin="10" Command="{Binding LoadSimulationCommand}">LOAD</Button>
+            <Button Grid.Row="2" Name="SpeedUpBtn" Width="50" Height="50" Margin="10" Command="{Binding FasterCommand}">SPEED+</Button>
+            <Button Grid.Row="3" Name="SpeedDownBtn" Width="50" Height="50" Margin="10" Command="{Binding SlowerCommand}">SPEED-</Button>
+            <Button Grid.Row="4" Name="SettingsBtn" Width="50" Height="50" Margin="10" Command="{Binding CreateSimulationCommand}">SETTINGS</Button>
+            <Button Grid.Row="5" Name="ExitBtn" Width="50" Height="50" Margin="10" Command="{Binding ExitCommand}">EXIT</Button>
         </Grid>
-        <StackPanel Width="100">
+        <StackPanel Margin="10 0 10 0">
             <Border BorderThickness="1" BorderBrush="Black" Margin="10 10 10 0">
-                <TextBlock >Pod info</TextBlock>
+                <TextBlock>Diary</TextBlock>
             </Border>
             <Border BorderThickness="1" BorderBrush="Black" Margin="10 0 10 0">
-                <TextBlock Name="PodInfoTextBlock" Height="100" Text="{Binding PodInfo}"></TextBlock>
+                <TextBlock Name="DiaryTextBlock" Height="100" Text="ide kellene a diary tartalma" TextWrapping="Wrap"></TextBlock>
             </Border>
 
             <Border BorderThickness="1" BorderBrush="Black" Margin="10 10 10 0">
-                <TextBlock>Robot info</TextBlock>
+                <Button Command="{Binding SaveDiaryCommand}">Save diary</Button>
             </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Margin="10 0 10 0">
-                <TextBlock Name="RobotInfoTextBlock" Height="50" Text="{Binding RobotInfo}"></TextBlock>
-            </Border>
+            
         </StackPanel>
         <Viewbox DockPanel.Dock="Right">
             <ItemsControl ItemsSource="{Binding Fields}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-
-                        <WrapPanel FlowDirection="LeftToRight" />
+                        <UniformGrid Rows="{Binding SizeX}" Columns="{Binding SizeY}" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
+
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-
-                        <Button Command="{Binding FieldChangeCommand}" CommandParameter="{Binding}"  />
+                        <Button IsEnabled="True">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="{Binding Color}" />
+                                </Style>
+                            </Button.Style>
+                        </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
+
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Grid.Row" Value="{Binding X}" />
+                        <Setter Property="Grid.Column" Value="{Binding Y}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
             </ItemsControl>
         </Viewbox>
     </DockPanel>

@@ -8,6 +8,7 @@ namespace IMS.Persistence.Entities
 {
     public class Pod : Entity
     {
+        //tobb product is lehet egy podon, nem?
         private int _productID;
 
         public Int32 ProductID { get { return _productID; } }
