@@ -3,6 +3,7 @@
 ################################################################################
 
 /.vs
+/IMS/.vs
 /IMS/IMS/bin/Debug/net5.0-windows
 /IMS/IMS/obj
 /inventory management
