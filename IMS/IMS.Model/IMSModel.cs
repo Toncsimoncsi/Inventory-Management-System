@@ -20,10 +20,18 @@ namespace IMS.Model
         private Entity[,] _gameTable; // simtábla
         private EntityData _entityData;
         private IMSDataAccess _dataAccess; // adatelérés
-
+        private Int32 _stepNumber;
+        private Int32 Ótime;
+        private Int32 Üspeed;
+        private IMSData _IMSData;
         #endregion
 
         #region Public properties
+
+        /// <summary>
+        /// Lépésszám lekérdezése.
+        /// </summary>
+        public Int32 StepNumber { get { return _stepNumber; } }
 
         public Entity this[Int32 x, Int32 y]
         {
@@ -45,11 +53,43 @@ namespace IMS.Model
         #endregion
 
         #region Events
-
-        public event EventHandler<EventArgs> SimulationStarted;
-        public event EventHandler<EventArgs> SimulationOver;
+        /// <summary>
+        ///  Simulation kezdetének eseménye.
+        /// </summary>
         public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
+
+        /// <summary>
+        /// Mező változásának eseménye.
+        /// </summary>
         public event EventHandler<FieldChangedEventArgs> FieldChanged;
+        /// <summary>
+        ///  Simulation kezdetének eseménye.
+        /// </summary>
+        public event EventHandler SimulationStarted;
+
+        /// <summary>
+        /// Simulation végének eseménye.
+        /// </summary>
+        public event EventHandler SimulationOver;
+
+        /// <summary>
+        /// Simulation végének eseménye.
+        /// </summary>
+        public event EventHandler SpeedChanged;
+
+
+        /// <summary>
+        /// Simulation végének eseménye.
+        /// </summary>
+        public event EventHandler TimePassed;
+
+
+
+        /// <summary>
+        /// Simulation megnyerésének eseménye.
+        /// </summary>
+        public event EventHandler<DiaryEventArgs> SimulationWon;
+
 
 
         #endregion
@@ -84,7 +124,7 @@ namespace IMS.Model
             OnSimulationCreated();
         }
 
-        public void Simulation(Int32 x, Int32 y)
+        public void Simulation(IMSData imsData)
         {
 
         }
@@ -164,6 +204,24 @@ namespace IMS.Model
                 SimulationOver(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Simulation megnyerésének eseménykiváltása.
+        /// </summary>
+        /// <param name="Entity">A győztes Simulationos.</param>
+        private void OnSpeedChanged(Int32 speed)
+        {
+            if (SimulationWon != null)
+                SpeedChanged(this, new SpeedChangedEventArgs(speed));
+        }
+        /// <summary>
+        /// Simulation megnyerésének eseménykiváltása.
+        /// </summary>
+        /// <param name="Entity">A győztes Simulationos.</param>
+        private void OnTimePassed(Int32 time)
+        {
+            if (SimulationWon != null)
+                TimePassed(this, new TimePassedEventArgs(time));
+        }
         /// <summary>
         /// Mezőváltozás eseménykiváltása.
         /// </summary>

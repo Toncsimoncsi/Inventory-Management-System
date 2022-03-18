@@ -19,14 +19,31 @@ namespace IMS.Model
         Entity this[Int32 x, Int32 y] { get; }
 
         /// <summary>
-        ///  Játék kezdetének eseménye.
+        /// Lépésszám lekérdezése.
         /// </summary>
-        //event EventHandler SimulationStarted;
+        Int32 StepNumber { get; }
 
         /// <summary>
-        /// Játék végének eseménye.
+        ///  Simulation kezdetének eseménye.
         /// </summary>
-        //event EventHandler SimulationOver;
+        event EventHandler SimulationStarted;
+
+        /// <summary>
+        /// Simulation végének eseménye.
+        /// </summary>
+        event EventHandler SimulationOver;
+
+        /// <summary>
+        /// Simulation végének eseménye.
+        /// </summary>
+        event EventHandler SpeedChanged;
+
+
+        /// <summary>
+        /// Simulation végének eseménye.
+        /// </summary>
+        event EventHandler TimePassed;
+
 
         /// <summary>
         /// Mezőváltozás eseménye.
