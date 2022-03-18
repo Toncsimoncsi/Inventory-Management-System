@@ -17,9 +17,7 @@ namespace IMS.ViewModel
 
         #endregion
 
-
         #region Properties
-
         public DelegateCommand LoadSimulationCommand { get; private set; }
         public DelegateCommand CreateSimulationCommand { get; private set; }
         public DelegateCommand SaveSimulationCommand { get; private set; }
@@ -64,6 +62,12 @@ namespace IMS.ViewModel
 
             _model = model;
             _model.SimulationCreated += new EventHandler<EventArgs>(Model_SimulationCreated);
+
+            LoadSimulationCommand = new DelegateCommand(param => OnLoadSimulation());
+            CreateSimulationCommand = new DelegateCommand(param => OnCreateSimulation());
+            SaveSimulationCommand = new DelegateCommand(param => OnSaveSimulation());
+            SaveDiaryCommand = new DelegateCommand(param => OnSaveDiary());
+            ExitCommand = new DelegateCommand(param => OnExitSimulation());
         }
 
         #endregion
