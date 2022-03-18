@@ -8,15 +8,14 @@ namespace IMS.Persistence.Entities
 {
     public class Pod : Entity
     {
-        //tobb product is lehet egy podon, nem?
-        private int _productID;
+        private Dictionary<Int32, Int32> _products;
 
-        public Int32 ProductID { get { return _productID; } }
+        public Dictionary<Int32, Int32> Products { get { return _products; } }
         
-        public Pod(int x, int y,int productID) : base(x, y)
+        public Pod(int x, int y, Dictionary<Int32, Int32> products) : base(x, y)
         {
             _type = EntityType.Pod;
-            _productID = productID;
+            _products = products;
         }
     }
 }

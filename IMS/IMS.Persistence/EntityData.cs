@@ -13,7 +13,5 @@ namespace IMS.Persistence
         private Destination[] DestinationData;
         private Dock[] dockData;
         private Robot[] robotData;
-        private int time;
-        private int TotalEnergyConsumption;
     }
 }

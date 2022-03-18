@@ -18,7 +18,7 @@ namespace IMS.Model
 
 
         private Entity[,] _gameTable; // simtábla
-        private EntityData _entityData;
+        private IMSData _IMSData;
         private IMSDataAccess _dataAccess; // adatelérés
 
         #endregion
@@ -95,7 +95,7 @@ namespace IMS.Model
                 return;
 
             
-            Entity[] values = await _dataAccess.LoadSimulationAsync(path);
+            IMSData values = await _dataAccess.LoadSimulationAsync(path);
 
             /*
             if (values.Length != _gameTable.Length)
@@ -121,15 +121,7 @@ namespace IMS.Model
             if (_dataAccess == null)
                 return;
 
-            Entity[] values = new Entity[_gameTable.Length];
-            for (Int32 i = 0; i < _gameTable.GetLength(0); i++)
-            {
-                for (Int32 j = 0; j < _gameTable.GetLength(1); j++)
-                {
-                    values[i * _gameTable.GetLength(0) + j] = _gameTable[i, j];
-                }
-            }
-            await _dataAccess.SaveSimulationAsync(path, values);
+            await _dataAccess.SaveSimulationAsync(path, _IMSData);
         }
 
         #endregion

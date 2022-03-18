@@ -9,12 +9,12 @@ namespace IMS.Persistence
 {
     public class IMSDataAccess : IIMSDataAccess
     {
-        public Task<Entity[]> LoadSimulationAsync(String path)
+        public Task<IMSData> LoadSimulationAsync(String path)
         {
             return null;
         }
 
-        public Task SaveSimulationAsync(String path, Entity[] values)
+        public Task SaveSimulationAsync(String path, IMSData values)
         {
             return null;
         }

@@ -11,6 +11,6 @@ namespace IMS.Persistence
     {
         private EntityData _entityData;
         private int _time;
-        private int[] _TotalEnergyConsumption;
+        private int _totalEnergyConsumption;
     }
 }
