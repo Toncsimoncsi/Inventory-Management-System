@@ -3,21 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using IMS.Persistence.Entities;
 
 namespace IMS.Model
 {
-    public class GameWonEventArgs:EventArgs
+    public class SpeedChangedEventArgs:EventArgs
     {
         /// <summary>
-        /// Játékos lekérdezése.
+        /// Ido lekérdezése.
         /// </summary>
-        public Entity Entity { get; private set; }
+        public Int32 Speed { get; private set; }
 
         /// <summary>
-        /// Játék megnyerésének eseményargumentuma
+        /// Ido eltelesenek eseményargumentuma
         /// </summary>
         /// <param name="player"></param>
-        public GameWonEventArgs(Entity entity) { Entity = entity; }
+        public SpeedChangedEventArgs(Int32 speed) { Speed = speed; }
     }
 }

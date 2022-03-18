@@ -29,6 +29,11 @@ namespace IMS.Model
 
         #region Public properties
 
+        /// <summary>
+        /// Lépésszám lekérdezése.
+        /// </summary>
+        public Int32 StepNumber { get { return _stepNumber; } }
+
         public Entity this[Int32 x, Int32 y]
         {
             get
@@ -52,12 +57,44 @@ namespace IMS.Model
         #endregion
 
         #region Events
+        /// <summary>
+        ///  Simulation kezdetének eseménye.
+        /// </summary>
+        public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
 
         public event EventHandler<EventArgs> SimulationStarted;
         public event EventHandler<EventArgs> SimulationOver;
         public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
         public event EventHandler<EventArgs> TableCreated; //created empty table on create mode
         public event EventHandler<FieldChangedEventArgs> FieldChanged;
+        /// <summary>
+        ///  Simulation kezdetének eseménye.
+        /// </summary>
+        public event EventHandler SimulationStarted;
+
+        /// <summary>
+        /// Simulation végének eseménye.
+        /// </summary>
+        public event EventHandler SimulationOver;
+
+        /// <summary>
+        /// Simulation végének eseménye.
+        /// </summary>
+        public event EventHandler SpeedChanged;
+
+
+        /// <summary>
+        /// Simulation végének eseménye.
+        /// </summary>
+        public event EventHandler TimePassed;
+
+
+
+        /// <summary>
+        /// Simulation megnyerésének eseménye.
+        /// </summary>
+        public event EventHandler<DiaryEventArgs> SimulationWon;
+
 
 
         #endregion
@@ -236,6 +273,24 @@ namespace IMS.Model
                 SimulationOver(this, EventArgs.Empty);
         }
 
+        /// <summary>
+        /// Simulation megnyerésének eseménykiváltása.
+        /// </summary>
+        /// <param name="Entity">A győztes Simulationos.</param>
+        private void OnSpeedChanged(Int32 speed)
+        {
+            if (SimulationWon != null)
+                SpeedChanged(this, new SpeedChangedEventArgs(speed));
+        }
+        /// <summary>
+        /// Simulation megnyerésének eseménykiváltása.
+        /// </summary>
+        /// <param name="Entity">A győztes Simulationos.</param>
+        private void OnTimePassed(Int32 time)
+        {
+            if (SimulationWon != null)
+                TimePassed(this, new TimePassedEventArgs(time));
+        }
         /// <summary>
         /// Mezőváltozás eseménykiváltása.
         /// </summary>
