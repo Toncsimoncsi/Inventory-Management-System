@@ -1,0 +1,82 @@
+﻿<Window x:Class="IMS.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IMS"
+        mc:Ignorable="d"
+        Title="Settings" Height="450" Width="800" FontFamily="Corbel">
+    <DockPanel Background="#ABB0B7">
+        <Grid DockPanel.Dock="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Vertical">
+                <Label Background="#343537" Foreground="White">Height and width:</Label>
+                <DockPanel Margin="10 5 10 5">
+                    <TextBox DockPanel.Dock="Left" Name="RowTextBox" Width="50" Height="20" Text="Heigth: " />
+                    <TextBox DockPanel.Dock="Right" Name="ColTextBox" Width="50" Height="20" Text="Width: "/>
+                </DockPanel>
+
+                <Button HorizontalAlignment="Center" Name="SetGridSize" Content="SET" Command="{Binding SetSize}" Style="{StaticResource BtnStyle}" Width="50" Margin="5 10 10 10"/>
+
+            </StackPanel>
+            <Grid Grid.Row="1" Background="#CAD0D8">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource MenuButtons}" Foreground="Black" Background="Yellow" Content="ROBOT" Margin="10"/>
+                <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource MenuButtons}" Background="DarkBlue" Content="DOCK" Margin="10"/>
+    
+                <Button Grid.Row="2" Grid.Column="0" Style="{StaticResource MenuButtons}" Background="Green" Content="TARGET" Margin="10"/>
+                <Button Grid.Row="2" Grid.Column="1" Style="{StaticResource MenuButtons}" Background="Gray" Content="POD" Margin="10"/>
+
+            </Grid>
+
+            <DockPanel Grid.Row="2">
+                <Button DockPanel.Dock="Left" Style="{StaticResource BtnStyle}" Width="50"  Margin="10" Command="{Binding StartSimulation}">START</Button>
+                <Button DockPanel.Dock="Right" Style="{StaticResource BtnStyle}" Width="50" Margin="10" Command="{Binding ResetSimulation}">RESET</Button>
+            </DockPanel>
+        </Grid>
+
+        <Viewbox DockPanel.Dock="Right">
+            <ItemsControl ItemsSource="{Binding Fields}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="{Binding SizeX}" Columns="{Binding SizeY}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button IsEnabled="True">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="{Binding Color}" />
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Grid.Row" Value="{Binding X}" />
+                        <Setter Property="Grid.Column" Value="{Binding Y}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+            </ItemsControl>
+        </Viewbox>
+    </DockPanel>
+</Window>

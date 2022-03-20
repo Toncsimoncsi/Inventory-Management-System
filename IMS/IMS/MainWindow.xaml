@@ -5,9 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IMS"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <DockPanel>
-        <Grid DockPanel.Dock="Left">
+        Title="Inventory Management Simulation" Height="450" Width="800" FontFamily="Corbel">
+    <Window.Resources>
+       
+    </Window.Resources>
+
+    <DockPanel Background="#ABB0B7">
+        <Grid DockPanel.Dock="Left" Background="#CAD0D8">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
@@ -16,24 +20,45 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Name="StartBtn" Width="50" Height="50" Margin="10" Command="{Binding SaveSimulationCommand}">SAVE</Button>
-            <Button Grid.Row="1" Name="PauseBtn" Width="50" Height="50" Margin="10" Command="{Binding LoadSimulationCommand}">LOAD</Button>
-            <Button Grid.Row="2" Name="SpeedUpBtn" Width="50" Height="50" Margin="10" Command="{Binding FasterCommand}">SPEED+</Button>
-            <Button Grid.Row="3" Name="SpeedDownBtn" Width="50" Height="50" Margin="10" Command="{Binding SlowerCommand}">SPEED-</Button>
-            <Button Grid.Row="4" Name="SettingsBtn" Width="50" Height="50" Margin="10" Command="{Binding CreateSimulationCommand}">SETTINGS</Button>
-            <Button Grid.Row="5" Name="ExitBtn" Width="50" Height="50" Margin="10" Command="{Binding ExitCommand}">EXIT</Button>
+
+            <Grid.Resources>
+                <ImageBrush x:Key="AddSetImg" ImageSource="img/settings-button.jpg" Stretch="UniformToFill"/>
+            </Grid.Resources>
+
+            <Button Grid.Row="0" Name="StartBtn" Style="{StaticResource MenuButtons}" Command="{Binding SaveSimulationCommand}">SAVE</Button>
+            <Button Grid.Row="1" Name="PauseBtn" Style="{StaticResource MenuButtons}"  Command="{Binding LoadSimulationCommand}">LOAD</Button>
+            <Button Grid.Row="2" Name="SpeedUpBtn" Style="{StaticResource MenuButtons}"  Command="{Binding FasterCommand}">SPEED+</Button>
+            <Button Grid.Row="3" Name="SpeedDownBtn" Style="{StaticResource MenuButtons}" Command="{Binding SlowerCommand}">SPEED-</Button>
+            <Button Grid.Row="4" Name="SettingsBtn" Style="{StaticResource MenuButtons}"  Command="{Binding CreateSimulationCommand}">SETTINGS</Button>
+            <Button Grid.Row="5" Name="ExitBtn" Style="{StaticResource MenuButtons}" Command="{Binding ExitCommand}">EXIT</Button>
         </Grid>
-        <StackPanel Margin="10 0 10 0">
-            <Border BorderThickness="1" BorderBrush="Black" Margin="10 10 10 0">
-                <TextBlock>Diary</TextBlock>
-            </Border>
-            <Border BorderThickness="1" BorderBrush="Black" Margin="10 0 10 0">
-                <TextBlock Name="DiaryTextBlock" Height="100" Text="ide kellene a diary tartalma" TextWrapping="Wrap"></TextBlock>
+        <StackPanel Width="Auto" Margin="10 0 10 0">
+            <Border BorderThickness="1" BorderBrush="Transparent" Margin="10 10 10 0">
+
+                <Grid Background="#343537">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Width="Auto" Padding="2" Foreground="White">Diary</TextBlock>
+                    <Label Grid.Row="1" Grid.Column="0" Padding="2" Background="#7e8185" Foreground="White">
+                        Steps:
+                    </Label>
+                    <TextBlock  Grid.Row="1" Grid.Column="1" Background="#7e8185" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Text="{Binding STEPS}" TextWrapping="Wrap"/>
+                    <Label Grid.Row="2" Grid.Column="0" Padding="2" Background="#7e8185" Foreground="White">
+                        All energy:
+                    </Label>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Background="#7e8185" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Text="{Binding ALLENERGY}" TextWrapping="Wrap"/>
+                </Grid>
             </Border>
 
-            <Border BorderThickness="1" BorderBrush="Black" Margin="10 10 10 0">
-                <Button Command="{Binding SaveDiaryCommand}">Save diary</Button>
-            </Border>
+            <Button Style="{StaticResource BtnStyle}" Command="{Binding SaveDiaryCommand}">Save diary</Button>
+ 
             
         </StackPanel>
         <Viewbox DockPanel.Dock="Right">
