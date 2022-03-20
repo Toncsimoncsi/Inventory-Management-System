@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using IMS.Persistence;
 using IMS.Persistence.Entities;
@@ -21,8 +21,8 @@ namespace IMS.Model
         private EntityData _entityData;
         private IMSDataAccess _dataAccess; // adatelérés
         private Int32 _stepNumber;
-        private Int32 Ótime;
-        private Int32 Üspeed;
+        private Int32 _time;
+        private Int32 _speed;
         private IMSData _IMSData;
         #endregion
 
