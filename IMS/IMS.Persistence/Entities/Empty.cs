@@ -11,7 +11,6 @@ namespace IMS.Persistence.Entities
         public Empty(int x,int y) : base(x, y)
         {
             _type = EntityType.Empty;
-            _isLocked = true;
         }
     }
 }

@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="img\exit-button.jpg" />
+    <None Remove="img\load-button.jpg" />
+    <None Remove="img\save-button.jpg" />
     <None Remove="img\settings-button.jpg" />
+    <None Remove="img\speed-down.jpg" />
+    <None Remove="img\speed-up.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,7 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="img\exit-button.jpg" />
+    <Resource Include="img\load-button.jpg" />
+    <Resource Include="img\save-button.jpg" />
     <Resource Include="img\settings-button.jpg" />
+    <Resource Include="img\speed-down.jpg" />
+    <Resource Include="img\speed-up.jpg" />
   </ItemGroup>
 
 </Project>

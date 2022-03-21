@@ -11,12 +11,10 @@ namespace IMS.Persistence.Entities
     public abstract class Entity
     {
         protected Pos _position;
-        protected Boolean _isLocked;
         protected EntityType _type;
         protected Direction _dir;
 
         public Pos Pos { get { return new Pos(_position.X,_position.Y); } }
-        public Boolean IsLocked { get { return _isLocked; } }
         public EntityType Type { get { return _type; } }
         public Direction Direction { get { return _dir; } }
 
@@ -25,7 +23,6 @@ namespace IMS.Persistence.Entities
             _type = EntityType.Empty;
             _dir = Direction.NONE;
             _position = new Pos(x, y);
-            _isLocked = false;
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using IMS.Persistence;
 using IMS.Persistence.Entities;
@@ -18,8 +19,11 @@ namespace IMS.Model
 
 
         private Entity[,] _gameTable; // simtábla
-        private EntityData _entityData;
+        private IMSData _IMSData;
         private IMSDataAccess _dataAccess; // adatelérés
+
+        private int _steps;
+        private int _allEnergy;
 
         #endregion
 
@@ -38,9 +42,12 @@ namespace IMS.Model
             }
         }
 
-        public Int32 SizeX { get { return _gameTable.GetLength(0); } }
+        public Int32 SizeX { get { return _gameTable.GetLength(0); } set { } }
 
-        public Int32 SizeY { get { return _gameTable.GetLength(1); } }
+        public Int32 SizeY { get { return _gameTable.GetLength(1); } set { } }
+
+        public int Steps { get { return _steps; } }
+        public int AllEnergy { get { return _allEnergy; } }
 
         #endregion
 
@@ -49,6 +56,7 @@ namespace IMS.Model
         public event EventHandler<EventArgs> SimulationStarted;
         public event EventHandler<EventArgs> SimulationOver;
         public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
+        public event EventHandler<EventArgs> TableCreated; //created empty table on create mode
         public event EventHandler<FieldChangedEventArgs> FieldChanged;
 
 
@@ -63,6 +71,9 @@ namespace IMS.Model
             _gameTable = new Entity[12, 12];
             _dataAccess = dataAccess;
 
+            _steps = 0;
+            _allEnergy = 0;
+
             //NewSimulation();
         }
 
@@ -72,6 +83,7 @@ namespace IMS.Model
 
         public void NewSimulation()
         {
+            /*
             for (Int32 i = 0; i < _gameTable.GetLength(0); i++)
             {
                 for (Int32 j = 0; j < _gameTable.GetLength(1); j++)
@@ -79,10 +91,25 @@ namespace IMS.Model
                     _gameTable[i, j] = new Empty(i, j);
                 }
             }
+            */
 
-
+            _gameTable = _createEmptyTable(_gameTable.GetLength(0),_gameTable.GetLength(1));
             OnSimulationCreated();
         }
+
+        public void GenerateEmtyTableForSettingsWindow(int x, int y)
+        {
+            _gameTable = new Entity[x, y];
+            for (Int32 i = 0; i < _gameTable.GetLength(0); i++)
+            {
+                for (Int32 j = 0; j < _gameTable.GetLength(1); j++)
+                {
+                    _gameTable[i, j] = new Empty(i, j);
+                }
+            }
+            OnTableCreated();
+        }
+
 
         public void Simulation(Int32 x, Int32 y)
         {
@@ -95,7 +122,10 @@ namespace IMS.Model
                 return;
 
             
-            Entity[] values = await _dataAccess.LoadSimulationAsync(path);
+            //IMSData values = await _dataAccess.LoadSimulationAsync(path);
+            _IMSData = await _dataAccess.LoadSimulationAsync(path);
+            _gameTable = _extractTableFromIMSData();
+
 
             /*
             if (values.Length != _gameTable.Length)
@@ -110,9 +140,9 @@ namespace IMS.Model
                 }
             */
 
-            //OnSimulationCreated();
+            OnSimulationCreated();
 
-            NewSimulation();
+            //NewSimulation();
 
         }
 
@@ -121,20 +151,56 @@ namespace IMS.Model
             if (_dataAccess == null)
                 return;
 
-            Entity[] values = new Entity[_gameTable.Length];
-            for (Int32 i = 0; i < _gameTable.GetLength(0); i++)
-            {
-                for (Int32 j = 0; j < _gameTable.GetLength(1); j++)
-                {
-                    values[i * _gameTable.GetLength(0) + j] = _gameTable[i, j];
-                }
-            }
-            await _dataAccess.SaveSimulationAsync(path, values);
+            await _dataAccess.SaveSimulationAsync(path, _IMSData);
         }
 
         #endregion
 
         #region Private methods
+
+        private Entity[,] _createEmptyTable(Int32 sizeX, Int32 sizeY)
+        {
+            Entity[,] table = new Entity[sizeX, sizeY];
+
+            for (Int32 i = 0; i < table.GetLength(0); i++)
+            {
+                for (Int32 j = 0; j < table.GetLength(1); j++)
+                {
+                    table[i, j] = new Empty(i, j);
+                }
+            }
+
+            return table;
+        }
+
+        private Entity[,] _extractTableFromIMSData()
+        {
+            //Entity[,] table = new Entity[_IMSData.SizeX, _IMSData.SizeY];
+
+            Entity[,] table = _createEmptyTable(_IMSData.SizeX, _IMSData.SizeY);
+
+            foreach (Robot robot in _IMSData.EntityData.RobotData){
+                table[robot.Pos.X, robot.Pos.Y] = robot;
+            }
+            foreach (Pod pod in _IMSData.EntityData.PodData)
+            {
+                table[pod.Pos.X, pod.Pos.Y] = pod;
+            }
+            foreach (RobotUnderPod robotUnderPod in _IMSData.EntityData.RobotUnderPodData)
+            {
+                table[robotUnderPod.Pos.X, robotUnderPod.Pos.Y] = robotUnderPod;
+            }
+            foreach (Destination destination in _IMSData.EntityData.DestinationData)
+            {
+                table[destination.Pos.X, destination.Pos.Y] = destination;
+            }
+            foreach (Dock dock in _IMSData.EntityData.DockData)
+            {
+                table[dock.Pos.X, dock.Pos.Y] = dock;
+            }
+
+            return table;
+        }
 
         #endregion
 
@@ -153,6 +219,11 @@ namespace IMS.Model
         {
             if (SimulationCreated != null)
                 SimulationCreated(this, EventArgs.Empty);
+        }
+        private void OnTableCreated()
+        {
+            if (TableCreated != null)
+                TableCreated(this, EventArgs.Empty);
         }
 
         /// <summary>

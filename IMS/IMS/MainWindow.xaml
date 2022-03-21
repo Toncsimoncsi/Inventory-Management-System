@@ -22,15 +22,21 @@
             </Grid.RowDefinitions>
 
             <Grid.Resources>
-                <ImageBrush x:Key="AddSetImg" ImageSource="img/settings-button.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="AddLoadImg" ImageSource="/img/load-button.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="AddSaveImg" ImageSource="/img/save-button.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="AddSpeedUpImg" ImageSource="/img/speed-up.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="AddSpeedDownImg" ImageSource="/img/speed-down.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="AddSetImg" ImageSource="/img/settings-button.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="AddExitImg" ImageSource="/img/exit-button.jpg" Stretch="UniformToFill"/>
             </Grid.Resources>
 
-            <Button Grid.Row="0" Name="StartBtn" Style="{StaticResource MenuButtons}" Command="{Binding SaveSimulationCommand}">SAVE</Button>
-            <Button Grid.Row="1" Name="PauseBtn" Style="{StaticResource MenuButtons}"  Command="{Binding LoadSimulationCommand}">LOAD</Button>
-            <Button Grid.Row="2" Name="SpeedUpBtn" Style="{StaticResource MenuButtons}"  Command="{Binding FasterCommand}">SPEED+</Button>
-            <Button Grid.Row="3" Name="SpeedDownBtn" Style="{StaticResource MenuButtons}" Command="{Binding SlowerCommand}">SPEED-</Button>
-            <Button Grid.Row="4" Name="SettingsBtn" Style="{StaticResource MenuButtons}"  Command="{Binding CreateSimulationCommand}">SETTINGS</Button>
-            <Button Grid.Row="5" Name="ExitBtn" Style="{StaticResource MenuButtons}" Command="{Binding ExitCommand}">EXIT</Button>
+            <Button Grid.Row="0" Style="{StaticResource MenuButtons}" Background="{StaticResource AddLoadImg}" Command="{Binding LoadSimulationCommand}"/>
+            <Button Grid.Row="1" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSaveImg}" Command="{Binding SaveSimulationCommand}"/>
+
+                <Button Grid.Row="2" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSpeedUpImg}" Command="{Binding FasterCommand}"/>
+                    <Button Grid.Row="3" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSpeedDownImg}" Command="{Binding SlowerCommand}"/>
+                        <Button Grid.Row="4" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSetImg}" Command="{Binding OpenSettingsCommand}"/>
+                            <Button Grid.Row="5" Style="{StaticResource MenuButtons}" Background="{StaticResource AddExitImg}" Command="{Binding ExitCommand}"/>
         </Grid>
         <StackPanel Width="Auto" Margin="10 0 10 0">
             <Border BorderThickness="1" BorderBrush="Transparent" Margin="10 10 10 0">
@@ -49,11 +55,11 @@
                     <Label Grid.Row="1" Grid.Column="0" Padding="2" Background="#7e8185" Foreground="White">
                         Steps:
                     </Label>
-                    <TextBlock  Grid.Row="1" Grid.Column="1" Background="#7e8185" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Text="{Binding STEPS}" TextWrapping="Wrap"/>
+                    <TextBlock  Grid.Row="1" Grid.Column="1" Background="#7e8185" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Text="{Binding STEPS, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
                     <Label Grid.Row="2" Grid.Column="0" Padding="2" Background="#7e8185" Foreground="White">
                         All energy:
                     </Label>
-                    <TextBlock Grid.Row="2" Grid.Column="1" Background="#7e8185" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Text="{Binding ALLENERGY}" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Background="#7e8185" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Text="{Binding ALLENERGY, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
                 </Grid>
             </Border>
 
@@ -71,10 +77,10 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button IsEnabled="True">
+                        <Button IsEnabled="True" Command="{Binding ViewField}" CommandParameter="{Binding Number}">
                             <Button.Style>
                                 <Style TargetType="Button">
-                                    <Setter Property="Background" Value="{Binding Color}" />
+                                    <Setter Property="Background" Value="{Binding Color, UpdateSourceTrigger=PropertyChanged}" />
                                 </Style>
                             </Button.Style>
                         </Button>
