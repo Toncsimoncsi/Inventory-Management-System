@@ -22,6 +22,9 @@ namespace IMS.Model
         private IMSData _IMSData;
         private IMSDataAccess _dataAccess; // adatelérés
 
+        private int _steps;
+        private int _allEnergy;
+
         #endregion
 
         #region Public properties
@@ -42,6 +45,9 @@ namespace IMS.Model
         public Int32 SizeX { get { return _gameTable.GetLength(0); } set { } }
 
         public Int32 SizeY { get { return _gameTable.GetLength(1); } set { } }
+
+        public int Steps { get { return _steps; } }
+        public int AllEnergy { get { return _allEnergy; } }
 
         #endregion
 
@@ -64,6 +70,9 @@ namespace IMS.Model
         {
             _gameTable = new Entity[12, 12];
             _dataAccess = dataAccess;
+
+            _steps = 0;
+            _allEnergy = 0;
 
             //NewSimulation();
         }

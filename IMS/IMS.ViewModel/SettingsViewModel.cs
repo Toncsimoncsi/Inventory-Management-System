@@ -20,7 +20,7 @@ namespace IMS.ViewModel
         private int _sizeX;
         private int _sizeY;
         private string _fieldColor;
-        private bool _robotRadioButtonIsChecked;
+        //private bool _robotRadioButtonIsChecked;
 
         #endregion
 
@@ -68,7 +68,7 @@ namespace IMS.ViewModel
             }
         }
 
-        public bool RobotBtnChecked
+        /*public bool RobotBtnChecked
         {
             get { return _robotRadioButtonIsChecked; }
             set
@@ -77,7 +77,7 @@ namespace IMS.ViewModel
                 _fieldColor = "Gold";
                 OnPropertyChanged(nameof(FieldColor));
             }
-        }
+        }*/
 
         #endregion
 

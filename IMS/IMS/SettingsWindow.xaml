@@ -35,11 +35,11 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
-                <RadioButton Grid.Row="1" Grid.Column="0" Style="{StaticResource RobotButton}"  IsChecked="{Binding RobotBtnChecked}" Content="ROBOT" Margin="10"/>
-                <RadioButton Grid.Row="1" Grid.Column="1" Style="{StaticResource DockButton}"  IsChecked="{Binding DockBtnChecked}" Content="DOCK" Margin="10"/>
+                <RadioButton Grid.Row="1" Grid.Column="0" Style="{StaticResource RobotButton}" Content="ROBOT" Margin="10"/>
+                <RadioButton Grid.Row="1" Grid.Column="1" Style="{StaticResource DockButton}" Content="DOCK" Margin="10"/>
 
-                <RadioButton Grid.Row="2" Grid.Column="0" Style="{StaticResource TargetButton}"  IsChecked="{Binding TargetBtnChecked}" Content="TARGET" Margin="10"/>
-                <RadioButton Grid.Row="2" Grid.Column="1" Style="{StaticResource PodButton}"  IsChecked="{Binding PodBtnChecked}" Content="POD" Margin="10"/>
+                <RadioButton Grid.Row="2" Grid.Column="0" Style="{StaticResource TargetButton}" Content="TARGET" Margin="10"/>
+                <RadioButton Grid.Row="2" Grid.Column="1" Style="{StaticResource PodButton}" Content="POD" Margin="10"/>
 
             </Grid>
 

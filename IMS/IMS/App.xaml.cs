@@ -147,9 +147,16 @@ namespace IMS
 
         private void SVM_CreateSimulation(object sender, EventArgs e)
         {
-            _viewModel.CurrentView = _viewModel;
-            _viewModel.CreateSimulationFromSettingsWindow();
-            _settings.Close();
+            if (_settingsViewModel.SizeX != 0 && _settingsViewModel.SizeY != 0)
+            {
+                _viewModel.CurrentView = _viewModel;
+                _viewModel.CreateSimulationFromSettingsWindow();
+                _settings.Close();
+            }
+            else
+            {
+                MessageBox.Show("Cannot start simulation without a table", "IMS", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void SVM_ResetSimulation(object sender, EventArgs e)

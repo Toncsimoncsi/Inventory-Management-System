@@ -32,6 +32,15 @@ namespace IMS.ViewModel
                 }
             }
         }
+
+        public int STEPS { 
+            get { return _model.Steps; }
+            private set { }
+        }
+        public int ALLENERGY {
+            get { return _model.AllEnergy; }
+            private set { }
+        }
         public DelegateCommand LoadSimulationCommand { get; private set; }
         public DelegateCommand OpenSettingsCommand { get; private set; }
         public DelegateCommand SaveSimulationCommand { get; private set; }
@@ -45,8 +54,6 @@ namespace IMS.ViewModel
         public ObservableCollection<TableField> Fields { get; private set; }
         public Int32 SizeX { get { return _model.SizeX; } }
         public Int32 SizeY { get { return _model.SizeY; } }
-
-
 
         #endregion
 
@@ -87,8 +94,6 @@ namespace IMS.ViewModel
             SaveDiaryCommand = new DelegateCommand(param => OnSaveDiary());
             ExitCommand = new DelegateCommand(param => OnExitSimulation());
             OpenSettingsCommand = new DelegateCommand(param => OnOpenSettings());
-
-
 
         }
 
