@@ -130,9 +130,68 @@ namespace IMS.Persistence
             }
         }
 
-        public Task SaveSimulationAsync(String path, IMSData values)
+        public async Task SaveSimulationAsync(String path, IMSData values)
         {
-            return null;
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(path))
+                {
+                    await writer.WriteLineAsync(values.SizeX.ToString() + " " + values.SizeY.ToString());
+                    await writer.WriteLineAsync(values.Time.ToString());
+                    await writer.WriteLineAsync((values.EntityData.PodData.Count+values.EntityData.RobotData.Count+values.EntityData.RobotUnderPodData.Count+values.EntityData.DestinationData.Count+values.EntityData.DockData.Count).ToString());
+                    foreach (Pod entity in values.EntityData.PodData)
+                    {
+                        await writer.WriteLineAsync("Pod");
+                        await writer.WriteLineAsync(entity.Pos.X.ToString()+" "+entity.Pos.Y.ToString());
+                        await writer.WriteLineAsync(entity.Products.Count.ToString());
+                        foreach (Int32 product in entity.Products.Keys)
+                        {
+                            await writer.WriteLineAsync(product.ToString() + " " + entity.Products[product]);
+                        }
+                    }
+                    foreach (Robot entity in values.EntityData.RobotData)
+                    {
+                        await writer.WriteLineAsync("Robot");
+                        await writer.WriteLineAsync(entity.Pos.X.ToString() + " " + entity.Pos.Y.ToString());
+                        await writer.WriteLineAsync(entity.Capacity.ToString());
+                        await writer.WriteLineAsync(entity.EnergyLeft.ToString());
+                        await writer.WriteLineAsync(entity.EnergyConsumption.ToString());
+                        await writer.WriteLineAsync(entity.Direction.ToString());
+                        await writer.WriteLineAsync(entity.DestinationID.ToString());
+                    }
+                    foreach (RobotUnderPod entity in values.EntityData.RobotUnderPodData)
+                    {
+                        await writer.WriteLineAsync("RobotUnderPod");
+                        await writer.WriteLineAsync(entity.Pos.X.ToString() + " " + entity.Pos.Y.ToString());
+                        await writer.WriteLineAsync(entity.Capacity.ToString());
+                        await writer.WriteLineAsync(entity.EnergyLeft.ToString());
+                        await writer.WriteLineAsync(entity.EnergyConsumption.ToString());
+                        await writer.WriteLineAsync(entity.Direction.ToString());
+                        await writer.WriteLineAsync(entity.DestinationID.ToString());
+
+                        await writer.WriteLineAsync(entity.Products.Count.ToString());
+                        foreach (Int32 product in entity.Products.Keys)
+                        {
+                            await writer.WriteLineAsync(product.ToString() + " " + entity.Products[product]);
+                        }
+                    }
+                    foreach (Dock entity in values.EntityData.DockData)
+                    {
+                        await writer.WriteLineAsync("Dock");
+                        await writer.WriteLineAsync(entity.Pos.X.ToString() + " " + entity.Pos.Y.ToString());
+                    }
+                    foreach (Destination entity in values.EntityData.DestinationData)
+                    {
+                        await writer.WriteLineAsync("Destination");
+                        await writer.WriteLineAsync(entity.Pos.X.ToString() + " " + entity.Pos.Y.ToString());
+                        await writer.WriteLineAsync(entity.ID.ToString());
+                    }
+                }
+            }
+            catch
+            {
+                throw new IMSDataException("");
+            }
         }
     }
 }

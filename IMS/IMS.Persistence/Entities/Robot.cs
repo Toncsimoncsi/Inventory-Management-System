@@ -16,7 +16,7 @@ namespace IMS.Persistence.Entities
         public Int32 EnergyConsumption { get { return _energyConsumption; } }
         public Int32 Capacity { get { return _capacity; } }
         public Int32 EnergyLeft { get { return _energyLeft; } }
-        public Int32 DestionationID { get { return _destinationID; } }
+        public Int32 DestinationID { get { return _destinationID; } }
 
         public Robot(int x, int y, Direction direction, int capacity, int energyLeft, int destinationID) : this(x, y, direction, capacity, energyLeft, destinationID, 0)
         {

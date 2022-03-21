@@ -14,10 +14,11 @@ namespace IMS.Persistence.Entities
         private Int32 _destinationID;
         private Dictionary<Int32, Int32> _products;
 
-        public Int32 TotalEnergyUsed { get { return _energyConsumption; } }
+        public Int32 EnergyConsumption { get { return _energyConsumption; } }
         public Int32 Capacity { get { return _capacity; } }
         public Int32 EnergyLeft { get { return _energyLeft; } }
         public Int32 DestinationID { get { return _destinationID; } }
+        public Dictionary<Int32, Int32> Products { get { return _products; } }
 
         public RobotUnderPod(int x, int y, Direction direction, int capacity, int energyLeft, int destinationID, int energyConsumption, Dictionary<Int32, Int32> products) : base(x, y)
         {
@@ -33,7 +34,7 @@ namespace IMS.Persistence.Entities
         {
         }
 
-        public RobotUnderPod(int x, int y, Robot robot, Pod pod) : this(x, y, robot.Direction, robot.Capacity, robot.EnergyLeft, robot.DestionationID, robot.EnergyConsumption, pod.Products)
+        public RobotUnderPod(int x, int y, Robot robot, Pod pod) : this(x, y, robot.Direction, robot.Capacity, robot.EnergyLeft, robot.DestinationID, robot.EnergyConsumption, pod.Products)
         {
         }
 
