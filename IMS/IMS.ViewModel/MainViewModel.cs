@@ -64,6 +64,13 @@ namespace IMS.ViewModel
 
             _model = model;
             _model.SimulationCreated += new EventHandler<EventArgs>(Model_SimulationCreated);
+
+            LoadSimulationCommand = new DelegateCommand(param => OnLoadSimulation());
+            CreateSimulationCommand = new DelegateCommand(param => OnCreateSimulation());
+            SaveSimulationCommand = new DelegateCommand(param => OnSaveSimulation());
+            SaveDiaryCommand = new DelegateCommand(param => OnSaveDiary());
+            ExitCommand = new DelegateCommand(param => OnExitSimulation());
+
         }
 
         #endregion
@@ -97,6 +104,7 @@ namespace IMS.ViewModel
             }
             OnPropertyChanged(nameof(SizeX));
             OnPropertyChanged(nameof(SizeY));
+            //OnPropertyChanged(nameof(Fields));
         }
 
         /// <summary>
@@ -108,12 +116,18 @@ namespace IMS.ViewModel
             foreach (TableField field in Fields)
             {
                 field.Color = EntityToColor(_model[field.X,field.Y].Type);
+                if(field.Color != "White")
+                {
+                    Debug.WriteLine("non-white field found, should be displayed");
+                }
                 field.Direction = _model[field.X, field.Y].Direction.ToString();
             }
+            //OnPropertyChanged(nameof(Fields));
         }
 
         private void Model_SimulationCreated(Object sender, EventArgs e)
         {
+            //Debug.WriteLine("Model_SimulationCreated called in viewmodel");
             GenerateTable();
             SetupTable();
         }
