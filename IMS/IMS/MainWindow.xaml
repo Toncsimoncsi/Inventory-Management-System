@@ -75,7 +75,7 @@
                         <Button IsEnabled="True">
                             <Button.Style>
                                 <Style TargetType="Button">
-                                    <Setter Property="Background" Value="{Binding Color}" />
+                                    <Setter Property="Background" Value="{Binding Color, UpdateSourceTrigger=PropertyChanged}" />
                                 </Style>
                             </Button.Style>
                         </Button>

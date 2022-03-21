@@ -8,30 +8,57 @@ namespace IMS.Persistence.Entities
 {
     public class RobotUnderPod : Entity
     {
-        private Int32 _totalEnergyUsed;
+        private Int32 _energyConsumption;
         private Int32 _capacity;
-        private Int32 _productID;
+        private Int32 _energyLeft;
+        private Int32 _destinationID;
+        private Dictionary<Int32, Int32> _products;
 
-        public Int32 TotalEnergyUsed { get { return _totalEnergyUsed; } }
+        public Int32 EnergyConsumption { get { return _energyConsumption; } }
         public Int32 Capacity { get { return _capacity; } }
-        public Int32 ProductID { get { return _productID; } }
-        public Direction Direction { get { return _dir; } }
+        public Int32 EnergyLeft { get { return _energyLeft; } }
+        public Int32 DestinationID { get { return _destinationID; } }
+        public Dictionary<Int32, Int32> Products { get { return _products; } }
 
-        public RobotUnderPod(int x, int y, Direction direction, int capacity) : base(x, y)
-        {
-            _type = EntityType.Robot;
-            _capacity = capacity;
-            _totalEnergyUsed = 0;
-            _dir = direction;
-        }
-
-        public RobotUnderPod(int x, int y, Robot robot, Pod pod) : base(x, y)
+        public RobotUnderPod(int x, int y, Direction direction, int capacity, int energyLeft, int destinationID, int energyConsumption, Dictionary<Int32, Int32> products) : base(x, y)
         {
             _type = EntityType.RobotUnderPod;
-            _capacity = robot.Capacity;
-            _totalEnergyUsed = robot.TotalEnergyUsed;
-            _dir = robot.Direction;
-            _productID = pod.ProductID;
+            _capacity = capacity;
+            _energyLeft = energyLeft;
+            _energyConsumption = energyConsumption;
+            _dir = direction;
+            _products = products;
+        }
+
+        public RobotUnderPod(int x, int y, Direction direction, int capacity, int energyLeft, int destinationID, Dictionary<Int32, Int32> products) : this(x, y, direction, capacity, energyLeft, destinationID, 0, products)
+        {
+        }
+
+        public RobotUnderPod(int x, int y, Robot robot, Pod pod) : this(x, y, robot.Direction, robot.Capacity, robot.EnergyLeft, robot.DestinationID, robot.EnergyConsumption, pod.Products)
+        {
+        }
+
+        public void RemoveProduct(int productID)
+        {
+            if (_products.ContainsKey(productID))
+            {
+                if (_products[productID] == 1)
+                {
+                    _products.Remove(productID);
+                }
+                else if (_products[productID] > 1)
+                {
+                    _products[productID] -= 1;
+                }
+                else
+                {
+                    //might need to throw an exception if this is even possible (products[productID] == 0 shouldn't be allowed)
+                }
+            }
+            else
+            {
+                //might need to throw an exception if someone is trying to remove a nonexistent productID
+            }
         }
     }
 }

@@ -8,19 +8,28 @@ namespace IMS.Persistence.Entities
 {
     public class Robot : Entity
     {
-        private Int32 _totalEnergyUsed;
+        private Int32 _energyConsumption;
         private Int32 _capacity;
+        private Int32 _energyLeft;
+        private Int32 _destinationID;
 
-        public Int32 TotalEnergyUsed { get { return _totalEnergyUsed; } }
+        public Int32 EnergyConsumption { get { return _energyConsumption; } }
         public Int32 Capacity { get { return _capacity; } }
-        public Direction Direction { get { return _dir; } }
+        public Int32 EnergyLeft { get { return _energyLeft; } }
+        public Int32 DestinationID { get { return _destinationID; } }
 
-        public Robot(int x, int y, Direction direction, int capacity) : base(x, y)
+        public Robot(int x, int y, Direction direction, int capacity, int energyLeft, int destinationID) : this(x, y, direction, capacity, energyLeft, destinationID, 0)
+        {
+        }
+
+        public Robot(int x, int y, Direction direction, int capacity, int energyLeft, int destinationID, int energyConsumption) : base(x, y)
         {
             _type = EntityType.Robot;
             _capacity = capacity;
-            _totalEnergyUsed = 0;
-            _dir=direction;
+            _energyConsumption = energyConsumption;
+            _dir = direction;
+            _energyLeft = energyLeft;
+            _destinationID = destinationID;
         }
     }
 }

@@ -9,6 +9,8 @@ using IMS.Persistence;
 using IMS.Model;
 using IMS.ViewModel;
 using Microsoft.Win32;
+using System.Diagnostics;
+
 
 namespace IMS
 {
@@ -29,6 +31,13 @@ namespace IMS
             Startup += App_Startup;
         }
 
+        public event EventHandler LoadSimulation;
+        public event EventHandler CreateSimulation;
+        public event EventHandler SaveSimulation;
+        public event EventHandler SaveDiary;
+        public event EventHandler ExitSimulation;
+
+
         private void App_Startup(object sender, StartupEventArgs e)
         {
             _dataAccess = new IMSDataAccess();
@@ -40,6 +49,7 @@ namespace IMS
             _viewModel.LoadSimulation += new EventHandler(ViewModel_LoadSimulation);
             _viewModel.SaveSimulation += new EventHandler(ViewModel_SaveSimulation);
             //_viewModel.CreateSimulation += new EventHandler(ViewModel_CreateSimulation);
+
             _viewModel.SaveDiary += new EventHandler(ViewModel_SaveDiary);
             _viewModel.ExitSimulation += new EventHandler(ViewModel_ExitSimulation);
             _viewModel.OpenSettings += new EventHandler(ViewModel_OpenSettings);
@@ -50,6 +60,7 @@ namespace IMS
             _settingsViewModel.ResetSimulation += new EventHandler(SVM_ResetSimulation);
             _settingsViewModel.SetSimulationSize += new EventHandler(SVM_SetSimultaionSize);
             _settingsViewModel.ColorChanged += new EventHandler(SVM_ChangeColor);
+
 
             _view = new MainWindow
             {
@@ -112,6 +123,7 @@ namespace IMS
 
         }
 
+
         private void ViewModel_CreateSimulation(object sender, EventArgs e)
         {
             /*_settings = new SettingsWindow
@@ -130,6 +142,8 @@ namespace IMS
             };
             _settings.ShowDialog();
         }
+
+
 
         private void SVM_CreateSimulation(object sender, EventArgs e)
         {
@@ -169,5 +183,8 @@ namespace IMS
         {
             Shutdown();
         }
+
     }
+
 }
+

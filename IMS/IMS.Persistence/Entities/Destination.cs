@@ -8,10 +8,13 @@ namespace IMS.Persistence.Entities
 {
     public class Destination:Entity
     {
-        public Destination(int x, int y) : base(x, y)
+        private Int32 _id;
+
+        public Int32 ID { get { return _id; } }
+        public Destination(int x, int y, int id) : base(x, y)
         {
             _type = EntityType.Destination;
-            _isLocked = true;
+            _id = id;
         }
     }
 }
