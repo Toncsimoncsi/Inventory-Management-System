@@ -53,6 +53,7 @@ namespace IMS
             _viewModel.SaveDiary += new EventHandler(ViewModel_SaveDiary);
             _viewModel.ExitSimulation += new EventHandler(ViewModel_ExitSimulation);
             _viewModel.OpenSettings += new EventHandler(ViewModel_OpenSettings);
+            _viewModel.ClickedOnTable += new EventHandler(ViewModel_EntityInfo);
 
             _settingsViewModel = new SettingsViewModel(_model);
 
@@ -141,6 +142,12 @@ namespace IMS
                 DataContext = _settingsViewModel
             };
             _settings.ShowDialog();
+        }
+
+        private void ViewModel_EntityInfo(object sender, EventArgs e)
+        {
+            MessageBox.Show(_viewModel.EntityInfo, "IMS", MessageBoxButton.OK, MessageBoxImage.Information);
+            //_model[0,0].GetType().ToString()
         }
 
 

@@ -16,6 +16,7 @@ namespace IMS.ViewModel
         private Dictionary<EntityType, String> _entityToColor;
 
         private ViewModelBase _currentView;
+        private string _entityInfo;
 
         #endregion
 
@@ -30,6 +31,15 @@ namespace IMS.ViewModel
                     _currentView = value;
                     OnPropertyChanged(nameof(CurrentView));
                 }
+            }
+        }
+
+        public string EntityInfo
+        {
+            get { return _entityInfo; }
+            set
+            {
+                _entityInfo = value;
             }
         }
 
@@ -66,6 +76,7 @@ namespace IMS.ViewModel
         public event EventHandler SaveSimulation;
         public event EventHandler SaveDiary;
         public event EventHandler ExitSimulation;
+        public event EventHandler ClickedOnTable;
 
         #endregion
 
@@ -94,6 +105,7 @@ namespace IMS.ViewModel
             SaveDiaryCommand = new DelegateCommand(param => OnSaveDiary());
             ExitCommand = new DelegateCommand(param => OnExitSimulation());
             OpenSettingsCommand = new DelegateCommand(param => OnOpenSettings());
+            //ViewField = new DelegateCommand(param => OnFieldClicked());
 
         }
 
@@ -122,7 +134,9 @@ namespace IMS.ViewModel
                         X = i,
                         Y = j,
                         Color = EntityToColor(EntityType.Empty),
-                        Direction = Direction.NONE.ToString()
+                        Direction = Direction.NONE.ToString(),
+                        Number = i * SizeX + j,
+                        ViewField = new DelegateCommand(param => ViewFieldInfo(Convert.ToInt32(param)))
                     });
                 }
             }
@@ -149,6 +163,47 @@ namespace IMS.ViewModel
             //OnPropertyChanged(nameof(Fields));
         }
 
+        private void ViewFieldInfo(int ind)
+        {
+            TableField field = Fields[ind];
+
+            switch (field.Color)
+            {
+                case "Yellow":
+                    _entityInfo = "Robot info\n";
+                    _entityInfo += "Battery: " + "\n";
+                    _entityInfo += "Direction: " + field.Direction + "\n";
+                    _entityInfo += "Consumed energy: " + "0" + "\n";
+                    break;
+                case "Green":
+                    _entityInfo = "Destination\n";
+                    break;
+                case "Blue":
+                    _entityInfo = "Dock\n";
+                    break;
+                case "Gray":
+                    _entityInfo = "Pod info\n";
+                    _entityInfo += "Pod content: " + "\n";
+                    break;
+                case "Purple":
+                    _entityInfo = "Robot under pod info\n";
+                    _entityInfo += "Robot battery: " + "\n";
+                    _entityInfo += "Robot direction: " + field.Direction + "\n";
+                    _entityInfo += "Consumed energy: " + "0" + "\n";
+                    _entityInfo += "Pod content: " + "\n";
+                    break;
+                case "White":
+                    _entityInfo = "Empty!\n";
+                    break;
+            }
+            _entityInfo += "Row: " + field.X.ToString() + "\nColumn: " + field.Y.ToString();
+
+            if (ClickedOnTable != null)
+                ClickedOnTable(this, EventArgs.Empty);
+
+            //az entitydataból kiszedni az infokat?
+        }
+
         private void Model_SimulationCreated(Object sender, EventArgs e)
         {
             //Debug.WriteLine("Model_SimulationCreated called in viewmodel");
@@ -165,19 +220,23 @@ namespace IMS.ViewModel
 
         #region Event methods
 
-        private void OnLoadSimulation()
-        {
-            if (LoadSimulation != null)
-                LoadSimulation(this, EventArgs.Empty);
-        }
-
         private void OnOpenSettings()
         {
             if (OpenSettings != null)
                 OpenSettings(this, EventArgs.Empty);
         }
 
+        private void OnFieldClicked()
+        {
+            if (ClickedOnTable != null)
+                ClickedOnTable(this, EventArgs.Empty);
+        }
 
+        private void OnLoadSimulation()
+        {
+            if (LoadSimulation != null)
+                LoadSimulation(this, EventArgs.Empty);
+        }
         private void OnSaveSimulation()
         {
             if (SaveSimulation != null)
@@ -189,6 +248,7 @@ namespace IMS.ViewModel
             if (SaveDiary != null)
                 SaveDiary(this, EventArgs.Empty);
         }
+
 
         private void OnExitSimulation()
         {

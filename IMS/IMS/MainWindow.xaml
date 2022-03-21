@@ -77,7 +77,7 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button IsEnabled="True">
+                        <Button IsEnabled="True" Command="{Binding ViewField}" CommandParameter="{Binding Number}">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Background" Value="{Binding Color, UpdateSourceTrigger=PropertyChanged}" />

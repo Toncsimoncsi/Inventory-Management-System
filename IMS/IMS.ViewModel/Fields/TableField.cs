@@ -47,6 +47,10 @@ namespace IMS.ViewModel.Fields
         /// </summary>
         public Int32 Y { get; set; }
 
+        public DelegateCommand ViewField { get; set; }
+
+        public Int32 Number { get; set; }
+
 
         /*
         public TableField(Int32 x, Int32 y, String color, Direction dir)
