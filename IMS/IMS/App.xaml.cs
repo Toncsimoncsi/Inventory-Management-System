@@ -31,13 +31,6 @@ namespace IMS
             Startup += App_Startup;
         }
 
-        public event EventHandler LoadSimulation;
-        public event EventHandler CreateSimulation;
-        public event EventHandler SaveSimulation;
-        public event EventHandler SaveDiary;
-        public event EventHandler ExitSimulation;
-
-
         private void App_Startup(object sender, StartupEventArgs e)
         {
             _dataAccess = new IMSDataAccess();
