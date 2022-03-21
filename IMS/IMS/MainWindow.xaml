@@ -25,11 +25,12 @@
                 <ImageBrush x:Key="AddSetImg" ImageSource="img/settings-button.jpg" Stretch="UniformToFill"/>
             </Grid.Resources>
 
-            <Button Grid.Row="0" Name="StartBtn" Style="{StaticResource MenuButtons}" Command="{Binding SaveSimulationCommand}">SAVE</Button>
-            <Button Grid.Row="1" Name="PauseBtn" Style="{StaticResource MenuButtons}"  Command="{Binding LoadSimulationCommand}">LOAD</Button>
+            <Button Grid.Row="0" Name="PauseBtn" Style="{StaticResource MenuButtons}"  Command="{Binding LoadSimulationCommand}">LOAD</Button>
+            <Button Grid.Row="1" Name="StartBtn" Style="{StaticResource MenuButtons}" Command="{Binding SaveSimulationCommand}">SAVE</Button>
+            
             <Button Grid.Row="2" Name="SpeedUpBtn" Style="{StaticResource MenuButtons}"  Command="{Binding FasterCommand}">SPEED+</Button>
             <Button Grid.Row="3" Name="SpeedDownBtn" Style="{StaticResource MenuButtons}" Command="{Binding SlowerCommand}">SPEED-</Button>
-            <Button Grid.Row="4" Name="SettingsBtn" Style="{StaticResource MenuButtons}"  Command="{Binding CreateSimulationCommand}">SETTINGS</Button>
+            <Button Grid.Row="4" Name="SettingsBtn" Style="{StaticResource MenuButtons}"  Command="{Binding OpenSettingsCommand}">SETTINGS</Button>
             <Button Grid.Row="5" Name="ExitBtn" Style="{StaticResource MenuButtons}" Command="{Binding ExitCommand}">EXIT</Button>
         </Grid>
         <StackPanel Width="Auto" Margin="10 0 10 0">

@@ -38,9 +38,9 @@ namespace IMS.Model
             }
         }
 
-        public Int32 SizeX { get { return _gameTable.GetLength(0); } }
+        public Int32 SizeX { get { return _gameTable.GetLength(0); } set { } }
 
-        public Int32 SizeY { get { return _gameTable.GetLength(1); } }
+        public Int32 SizeY { get { return _gameTable.GetLength(1); } set { } }
 
         #endregion
 
@@ -49,6 +49,7 @@ namespace IMS.Model
         public event EventHandler<EventArgs> SimulationStarted;
         public event EventHandler<EventArgs> SimulationOver;
         public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
+        public event EventHandler<EventArgs> TableCreated; //created empty table on create mode
         public event EventHandler<FieldChangedEventArgs> FieldChanged;
 
 
@@ -79,10 +80,22 @@ namespace IMS.Model
                     _gameTable[i, j] = new Empty(i, j);
                 }
             }
-
-
             OnSimulationCreated();
         }
+
+        public void GenerateEmtyTableForSettingsWindow(int x, int y)
+        {
+            _gameTable = new Entity[x, y];
+            for (Int32 i = 0; i < _gameTable.GetLength(0); i++)
+            {
+                for (Int32 j = 0; j < _gameTable.GetLength(1); j++)
+                {
+                    _gameTable[i, j] = new Empty(i, j);
+                }
+            }
+            OnTableCreated();
+        }
+
 
         public void Simulation(Int32 x, Int32 y)
         {
@@ -153,6 +166,11 @@ namespace IMS.Model
         {
             if (SimulationCreated != null)
                 SimulationCreated(this, EventArgs.Empty);
+        }
+        private void OnTableCreated()
+        {
+            if (TableCreated != null)
+                TableCreated(this, EventArgs.Empty);
         }
 
         /// <summary>

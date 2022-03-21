@@ -15,11 +15,25 @@ namespace IMS.ViewModel
         private IMSModel _model;
         private Dictionary<EntityType, String> _entityToColor;
 
+        private ViewModelBase _currentView;
+
         #endregion
 
         #region Properties
+        public ViewModelBase CurrentView
+        {
+            get { return _currentView; }
+            set
+            {
+                if (value != _currentView)
+                {
+                    _currentView = value;
+                    OnPropertyChanged(nameof(CurrentView));
+                }
+            }
+        }
         public DelegateCommand LoadSimulationCommand { get; private set; }
-        public DelegateCommand CreateSimulationCommand { get; private set; }
+        public DelegateCommand OpenSettingsCommand { get; private set; }
         public DelegateCommand SaveSimulationCommand { get; private set; }
         public DelegateCommand SaveDiaryCommand { get; private set; }
         public DelegateCommand ExitCommand { get; private set; }
@@ -32,13 +46,16 @@ namespace IMS.ViewModel
         public Int32 SizeX { get { return _model.SizeX; } }
         public Int32 SizeY { get { return _model.SizeY; } }
 
+
+
         #endregion
 
 
         #region Events
 
         public event EventHandler LoadSimulation;
-        public event EventHandler CreateSimulation;
+        //public event EventHandler CreateSimulation;
+        public event EventHandler OpenSettings;
         public event EventHandler SaveSimulation;
         public event EventHandler SaveDiary;
         public event EventHandler ExitSimulation;
@@ -64,10 +81,12 @@ namespace IMS.ViewModel
             _model.SimulationCreated += new EventHandler<EventArgs>(Model_SimulationCreated);
 
             LoadSimulationCommand = new DelegateCommand(param => OnLoadSimulation());
-            CreateSimulationCommand = new DelegateCommand(param => OnCreateSimulation());
+            //CreateSimulationCommand = new DelegateCommand(param => OnCreateSimulation());
             SaveSimulationCommand = new DelegateCommand(param => OnSaveSimulation());
             SaveDiaryCommand = new DelegateCommand(param => OnSaveDiary());
             ExitCommand = new DelegateCommand(param => OnExitSimulation());
+            OpenSettingsCommand = new DelegateCommand(param => OnOpenSettings());
+
         }
 
         #endregion
@@ -122,6 +141,14 @@ namespace IMS.ViewModel
             SetupTable();
         }
 
+        public void CreateSimulationFromSettingsWindow()
+        {
+            GenerateTable();
+            SetupTable();
+        }
+        #endregion
+
+        #region Event methods
 
         private void OnLoadSimulation()
         {
@@ -129,11 +156,12 @@ namespace IMS.ViewModel
                 LoadSimulation(this, EventArgs.Empty);
         }
 
-        private void OnCreateSimulation()
+        private void OnOpenSettings()
         {
-            if (CreateSimulation != null)
-                CreateSimulation(this, EventArgs.Empty);
+            if (OpenSettings != null)
+                OpenSettings(this, EventArgs.Empty);
         }
+
 
         private void OnSaveSimulation()
         {
