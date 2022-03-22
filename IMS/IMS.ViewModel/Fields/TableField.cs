@@ -11,6 +11,34 @@ namespace IMS.ViewModel.Fields
     {
         private String _color;
         private String _dir;
+        private EntityType _type;
+        private Entity _entity;
+
+        public EntityType Type
+        {
+            get { return _type; }
+            set
+            {
+                if (_type != value)
+                {
+                    _type = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public Entity Entity
+        {
+            get { return _entity; }
+            set
+            {
+                if (_entity != value)
+                {
+                    _entity = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public String Color
         {
