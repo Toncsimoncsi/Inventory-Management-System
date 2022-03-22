@@ -69,6 +69,7 @@ namespace IMS.Model
         public IMSModel(IMSDataAccess dataAccess)
         {
             _gameTable = new Entity[12, 12];
+            _IMSData = new IMSData(_gameTable.GetLength(0),_gameTable.GetLength(1));
             _dataAccess = dataAccess;
 
             _steps = 0;
