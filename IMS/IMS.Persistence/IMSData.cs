@@ -33,5 +33,9 @@ namespace IMS.Persistence
         public IMSData(List<Pod> podData, List<Destination> destinationData, List<Dock> dockData, List<Robot> robotData, List<RobotUnderPod> robotUnderPodData, int sizeX, int sizeY, int time,int totalEnergyConsumption) : this(new EntityData(podData,destinationData,dockData,robotData,robotUnderPodData), sizeX, sizeY, time, totalEnergyConsumption)
         {
         }
+
+        public IMSData(Int32 sizeX, Int32 sizeY) : this(new List<Pod>(), new List<Destination>(), new List<Dock>(), new List<Robot>(), new List<RobotUnderPod>(),sizeX,sizeY,0,0)
+        {
+        }
     }
 }
