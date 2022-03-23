@@ -29,11 +29,6 @@ namespace IMS.Model
 
         #region Public properties
 
-        /// <summary>
-        /// Lépésszám lekérdezése.
-        /// </summary>
-        public Int32 StepNumber { get { return _stepNumber; } }
-
         public Entity this[Int32 x, Int32 y]
         {
             get
@@ -57,44 +52,12 @@ namespace IMS.Model
         #endregion
 
         #region Events
-        /// <summary>
-        ///  Simulation kezdetének eseménye.
-        /// </summary>
-        public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
 
         public event EventHandler<EventArgs> SimulationStarted;
         public event EventHandler<EventArgs> SimulationOver;
         public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
         public event EventHandler<EventArgs> TableCreated; //created empty table on create mode
         public event EventHandler<FieldChangedEventArgs> FieldChanged;
-        /// <summary>
-        ///  Simulation kezdetének eseménye.
-        /// </summary>
-        public event EventHandler SimulationStarted;
-
-        /// <summary>
-        /// Simulation végének eseménye.
-        /// </summary>
-        public event EventHandler SimulationOver;
-
-        /// <summary>
-        /// Simulation végének eseménye.
-        /// </summary>
-        public event EventHandler SpeedChanged;
-
-
-        /// <summary>
-        /// Simulation végének eseménye.
-        /// </summary>
-        public event EventHandler TimePassed;
-
-
-
-        /// <summary>
-        /// Simulation megnyerésének eseménye.
-        /// </summary>
-        public event EventHandler<DiaryEventArgs> SimulationWon;
-
 
 
         #endregion
@@ -106,7 +69,7 @@ namespace IMS.Model
         public IMSModel(IMSDataAccess dataAccess)
         {
             _gameTable = new Entity[12, 12];
-            _IMSData = new IMSData(_gameTable.GetLength(0),_gameTable.GetLength(1));
+            _IMSData = new IMSData(_gameTable.GetLength(0), _gameTable.GetLength(1));
             _dataAccess = dataAccess;
 
             _steps = 0;
@@ -131,7 +94,7 @@ namespace IMS.Model
             }
             */
 
-            _gameTable = _createEmptyTable(_gameTable.GetLength(0),_gameTable.GetLength(1));
+            _gameTable = _createEmptyTable(_gameTable.GetLength(0), _gameTable.GetLength(1));
             OnSimulationCreated();
         }
 
@@ -159,7 +122,7 @@ namespace IMS.Model
             if (_dataAccess == null)
                 return;
 
-            
+
             //IMSData values = await _dataAccess.LoadSimulationAsync(path);
             _IMSData = await _dataAccess.LoadSimulationAsync(path);
             _gameTable = _extractTableFromIMSData();
@@ -217,7 +180,8 @@ namespace IMS.Model
 
             Entity[,] table = _createEmptyTable(_IMSData.SizeX, _IMSData.SizeY);
 
-            foreach (Robot robot in _IMSData.EntityData.RobotData){
+            foreach (Robot robot in _IMSData.EntityData.RobotData)
+            {
                 table[robot.Pos.X, robot.Pos.Y] = robot;
             }
             foreach (Pod pod in _IMSData.EntityData.PodData)
@@ -274,24 +238,6 @@ namespace IMS.Model
         }
 
         /// <summary>
-        /// Simulation megnyerésének eseménykiváltása.
-        /// </summary>
-        /// <param name="Entity">A győztes Simulationos.</param>
-        private void OnSpeedChanged(Int32 speed)
-        {
-            if (SimulationWon != null)
-                SpeedChanged(this, new SpeedChangedEventArgs(speed));
-        }
-        /// <summary>
-        /// Simulation megnyerésének eseménykiváltása.
-        /// </summary>
-        /// <param name="Entity">A győztes Simulationos.</param>
-        private void OnTimePassed(Int32 time)
-        {
-            if (SimulationWon != null)
-                TimePassed(this, new TimePassedEventArgs(time));
-        }
-        /// <summary>
         /// Mezőváltozás eseménykiváltása.
         /// </summary>
         /// <param name="x">Oszlop index.</param>
@@ -306,4 +252,5 @@ namespace IMS.Model
         #endregion
 
     }
+
 }

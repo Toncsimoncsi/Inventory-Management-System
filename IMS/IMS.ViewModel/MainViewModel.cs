@@ -43,11 +43,13 @@ namespace IMS.ViewModel
             }
         }
 
-        public int STEPS { 
+        public int STEPS
+        {
             get { return _model.Steps; }
             private set { }
         }
-        public int ALLENERGY {
+        public int ALLENERGY
+        {
             get { return _model.AllEnergy; }
             private set { }
         }
@@ -86,12 +88,12 @@ namespace IMS.ViewModel
         public MainViewModel(IMSModel model)
         {
             _entityToColor = new Dictionary<EntityType, String>();
-            _entityToColor.Add(EntityType.Destination,"Green");
-            _entityToColor.Add(EntityType.Robot,"Yellow");
-            _entityToColor.Add(EntityType.Dock,"Blue");
-            _entityToColor.Add(EntityType.Empty,"White");
-            _entityToColor.Add(EntityType.Pod,"Gray");
-            _entityToColor.Add(EntityType.RobotUnderPod,"Purple");
+            _entityToColor.Add(EntityType.Destination, "Green");
+            _entityToColor.Add(EntityType.Robot, "Yellow");
+            _entityToColor.Add(EntityType.Dock, "Blue");
+            _entityToColor.Add(EntityType.Empty, "White");
+            _entityToColor.Add(EntityType.Pod, "Gray");
+            _entityToColor.Add(EntityType.RobotUnderPod, "Purple");
 
             Fields = new ObservableCollection<TableField>();
 
@@ -153,8 +155,8 @@ namespace IMS.ViewModel
         {
             foreach (TableField field in Fields)
             {
-                field.Color = EntityToColor(_model[field.X,field.Y].Type);
-                if(field.Color != "White")
+                field.Color = EntityToColor(_model[field.X, field.Y].Type);
+                if (field.Color != "White")
                 {
                     Debug.WriteLine("non-white field found, should be displayed");
                 }
@@ -201,7 +203,7 @@ namespace IMS.ViewModel
             if (ClickedOnTable != null)
                 ClickedOnTable(this, EventArgs.Empty);
 
-            //az entitydataból kiszedni az infokat?
+            //az entitydatabl kiszedni az infokat?
         }
 
         private void Model_SimulationCreated(Object sender, EventArgs e)
@@ -258,4 +260,5 @@ namespace IMS.ViewModel
 
         #endregion
     }
+
 }

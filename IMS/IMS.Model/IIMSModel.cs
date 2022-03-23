@@ -10,6 +10,7 @@ namespace IMS.Model
     public interface IIMSModel
     {
 
+
         /// <summary>
         /// Mezőérték lekérdezése, vagy beállítása.
         /// </summary>
@@ -19,31 +20,14 @@ namespace IMS.Model
         Entity this[Int32 x, Int32 y] { get; }
 
         /// <summary>
-        /// Lépésszám lekérdezése.
+        ///  Játék kezdetének eseménye.
         /// </summary>
-        Int32 StepNumber { get; }
+        //event EventHandler SimulationStarted;
 
         /// <summary>
-        ///  Simulation kezdetének eseménye.
+        /// Játék végének eseménye.
         /// </summary>
-        event EventHandler SimulationStarted;
-
-        /// <summary>
-        /// Simulation végének eseménye.
-        /// </summary>
-        event EventHandler SimulationOver;
-
-        /// <summary>
-        /// Simulation végének eseménye.
-        /// </summary>
-        event EventHandler SpeedChanged;
-
-
-        /// <summary>
-        /// Simulation végének eseménye.
-        /// </summary>
-        event EventHandler TimePassed;
-
+        //event EventHandler SimulationOver;
 
         /// <summary>
         /// Mezőváltozás eseménye.
@@ -66,5 +50,6 @@ namespace IMS.Model
         /// </summary>
         /// <param name="path">Elérési útvonal.</param>
         Task SaveSimulationAsync(String path);
+
     }
 }

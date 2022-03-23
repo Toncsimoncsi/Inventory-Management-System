@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IMS.Persistence.Entities
 {
-    public class Destination:Entity
+    public class Destination : Entity
     {
         private Int32 _id;
 
@@ -17,4 +17,5 @@ namespace IMS.Persistence.Entities
             _id = id;
         }
     }
+
 }

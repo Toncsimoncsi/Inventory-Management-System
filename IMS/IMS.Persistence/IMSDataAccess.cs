@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IMS.Persistence.Entities;
 
+
 namespace IMS.Persistence
 {
     public class IMSDataAccess : IIMSDataAccess
@@ -17,13 +18,13 @@ namespace IMS.Persistence
             List<Dock> dockData = new List<Dock>();
             List<Robot> robotData = new List<Robot>();
             List<RobotUnderPod> robotUnderPodData = new List<RobotUnderPod>();
-            
+
             try
             {
                 using (StreamReader reader = new StreamReader(path))
                 {
                     //TODO: test if format is correct. For now we assume it is
-                    String line; 
+                    String line;
                     line = await reader.ReadLineAsync();
                     String[] numbers;
                     numbers = line.Split(' ');
@@ -59,13 +60,13 @@ namespace IMS.Persistence
 
                         if (type == EntityType.Dock)
                         {
-                            dockData.Add(new Dock(x,y));
+                            dockData.Add(new Dock(x, y));
                         }
                         else if (type == EntityType.Destination)
                         {
                             line = await reader.ReadLineAsync();
                             Int32 id = Int32.Parse(line);
-                            destinationData.Add(new Destination(x,y,id));
+                            destinationData.Add(new Destination(x, y, id));
                         }
                         else
                         {
@@ -85,7 +86,7 @@ namespace IMS.Persistence
                                 totalEnergyConsumption += energyConsumption;
 
                                 robot = new Robot(x, y, direction, capacity, energyLeft, destinationID, energyConsumption);
-                            
+
                                 if (type == EntityType.Robot)
                                 {
                                     robotData.Add(robot);
@@ -113,7 +114,7 @@ namespace IMS.Persistence
                                 {
                                     podData.Add(pod);
                                 }
-                                else if(type == EntityType.RobotUnderPod)
+                                else if (type == EntityType.RobotUnderPod)
                                 {
                                     robotUnderPodData.Add(new RobotUnderPod(x, y, robot, pod));
                                 }
@@ -138,11 +139,11 @@ namespace IMS.Persistence
                 {
                     await writer.WriteLineAsync(values.SizeX.ToString() + " " + values.SizeY.ToString());
                     await writer.WriteLineAsync(values.Time.ToString());
-                    await writer.WriteLineAsync((values.EntityData.PodData.Count+values.EntityData.RobotData.Count+values.EntityData.RobotUnderPodData.Count+values.EntityData.DestinationData.Count+values.EntityData.DockData.Count).ToString());
+                    await writer.WriteLineAsync((values.EntityData.PodData.Count + values.EntityData.RobotData.Count + values.EntityData.RobotUnderPodData.Count + values.EntityData.DestinationData.Count + values.EntityData.DockData.Count).ToString());
                     foreach (Pod entity in values.EntityData.PodData)
                     {
                         await writer.WriteLineAsync("Pod");
-                        await writer.WriteLineAsync(entity.Pos.X.ToString()+" "+entity.Pos.Y.ToString());
+                        await writer.WriteLineAsync(entity.Pos.X.ToString() + " " + entity.Pos.Y.ToString());
                         await writer.WriteLineAsync(entity.Products.Count.ToString());
                         foreach (Int32 product in entity.Products.Keys)
                         {
@@ -194,4 +195,5 @@ namespace IMS.Persistence
             }
         }
     }
+
 }

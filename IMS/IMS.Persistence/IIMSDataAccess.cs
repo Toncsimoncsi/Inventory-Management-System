@@ -21,4 +21,5 @@ namespace IMS.Persistence
         /// <param name="values">A mezőértékek.</param>
         Task SaveSimulationAsync(String path, IMSData values);
     }
+
 }
