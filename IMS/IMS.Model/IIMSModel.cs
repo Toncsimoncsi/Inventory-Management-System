@@ -22,34 +22,34 @@ namespace IMS.Model
         /// <summary>
         /// Lépésszám lekérdezése.
         /// </summary>
-        Int32 StepNumber { get; }
+        //Int32 StepNumber { get; }
 
         /// <summary>
         ///  Simulation kezdetének eseménye.
         /// </summary>
-        event EventHandler SimulationStarted;
+        //event EventHandler SimulationStarted;
 
         /// <summary>
         /// Simulation végének eseménye.
         /// </summary>
-        event EventHandler SimulationOver;
+        //event EventHandler SimulationOver;
 
         /// <summary>
         /// Simulation végének eseménye.
         /// </summary>
-        event EventHandler SpeedChanged;
+        //event EventHandler SpeedChanged;
 
 
         /// <summary>
         /// Simulation végének eseménye.
         /// </summary>
-        event EventHandler TimePassed;
+        //event EventHandler TimePassed;
 
 
         /// <summary>
         /// Mezőváltozás eseménye.
         /// </summary>
-        event EventHandler<FieldChangedEventArgs> FieldChanged;
+        //event EventHandler<FieldChangedEventArgs> FieldChanged;
 
         /// <summary>
         /// Új játék indítása.
