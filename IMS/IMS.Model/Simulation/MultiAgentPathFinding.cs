@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IMS.Model
+namespace IMS.Model.Simulation
 {
-    public class Simulation
+    public class MultiAgentPathFinding
     {
     }
 }

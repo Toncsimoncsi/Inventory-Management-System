@@ -11,6 +11,7 @@ namespace IMS.Persistence.Entities
         private Int32 _id;
 
         public Int32 ID { get { return _id; } }
+        //public Int32 Id{get;}
         public Destination(int x, int y, int id) : base(x, y)
         {
             _type = EntityType.Destination;

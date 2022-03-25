@@ -21,6 +21,13 @@ namespace IMS.Persistence
         public Int32 SizeX { get { return _sizeX; } }
         public Int32 SizeY { get { return _sizeY; } }
 
+        //public Int32 Time { get; set; }
+        //public Int32 TotalEnergyConsumption { get; set; }
+        //public Int32 SizeX { get; set; }
+        //public Int32 SizeY { get; set; }
+
+
+
         public IMSData(EntityData entityData, int sizeX, int sizeY, int time, int totalEnergyConsumption)
         {
             _sizeX = sizeX;

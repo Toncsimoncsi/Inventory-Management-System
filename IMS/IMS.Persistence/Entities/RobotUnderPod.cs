@@ -20,6 +20,13 @@ namespace IMS.Persistence.Entities
         public Int32 DestinationID { get { return _destinationID; } }
         public Dictionary<Int32, Int32> Products { get { return _products; } }
 
+        //public Int32 EnergyConsumption { get; }
+        //public Int32 Capacity { get; }
+        //public Int32 EnergyLeft { get; }
+        //public Int32 DestinationID { get; }
+        //public Dictionary<Int32, Int32> Products { get;  }
+
+
         public RobotUnderPod(int x, int y, Direction direction, int capacity, int energyLeft, int destinationID, int energyConsumption, Dictionary<Int32, Int32> products) : base(x, y)
         {
             _type = EntityType.RobotUnderPod;

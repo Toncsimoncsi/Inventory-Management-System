@@ -32,7 +32,7 @@ namespace IMS.Model
         /// <summary>
         /// Lépésszám lekérdezése.
         /// </summary>
-        public Int32 StepNumber { get { return _stepNumber; } }
+        //public Int32 StepNumber { get { return _stepNumber; } }
 
         public Entity this[Int32 x, Int32 y]
         {
@@ -54,28 +54,20 @@ namespace IMS.Model
         public int Steps { get { return _steps; } }
         public int AllEnergy { get { return _allEnergy; } }
 
+        //public int Steps { get; }
+        //public int AllEnergy {get;}
         #endregion
 
         #region Events
-        /// <summary>
-        ///  Simulation kezdetének eseménye.
-        /// </summary>
+            /// <summary>
+            ///  Simulation kezdetének eseménye.
+            /// </summary>
         public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
 
         public event EventHandler<EventArgs> SimulationStarted;
         public event EventHandler<EventArgs> SimulationOver;
-        public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
         public event EventHandler<EventArgs> TableCreated; //created empty table on create mode
         public event EventHandler<FieldChangedEventArgs> FieldChanged;
-        /// <summary>
-        ///  Simulation kezdetének eseménye.
-        /// </summary>
-        public event EventHandler SimulationStarted;
-
-        /// <summary>
-        /// Simulation végének eseménye.
-        /// </summary>
-        public event EventHandler SimulationOver;
 
         /// <summary>
         /// Simulation végének eseménye.
