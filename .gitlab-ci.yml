@@ -13,7 +13,7 @@ before_script:
 build_model:
   stage: build
   script:
-  	- dotnet build IMS
+    - dotnet build IMS
     - dotnet build IMS.Model
     - dotnet build IMS.Persistence
     - dotnet build IMS.ViewModel
