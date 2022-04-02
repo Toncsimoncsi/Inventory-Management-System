@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IMS.Persistence;
+using IMS.Persistence.Entities;
 
 namespace IMS.Model.Simulation
 {
     public class Astar
     {
 
-        Dictionary<GridPoint, bool> closedSet = new Dictionary<GridPoint, bool>();
-        Dictionary<GridPoint, bool> openSet = new Dictionary<GridPoint, bool>();
+        Dictionary<Pos, bool> closedSet = new Dictionary<Pos, bool>();
+        Dictionary<Pos, bool> openSet = new Dictionary<Pos, bool>();
 
         //cost of start to this key node
-        Dictionary<GridPoint, int> gScore = new Dictionary<GridPoint, int>();
+        Dictionary<Pos, int> gScore = new Dictionary<Pos, int>();
         //cost of start to goal, passing through key node
-        Dictionary<GridPoint, int> fScore = new Dictionary<GridPoint, int>();
+        Dictionary<Pos, int> fScore = new Dictionary<Pos, int>();
 
-        Dictionary<GridPoint, GridPoint> nodeLinks = new Dictionary<GridPoint, GridPoint>();
+        Dictionary<Pos, Pos> nodeLinks = new Dictionary<Pos, Pos>();
 
-        public List<GridPoint> FindPath(bool[][] graph, GridPoint start, GridPoint goal)
+        public List<Pos> FindPath(bool[][] graph, Pos start, Pos goal)
         {
 
             openSet[start] = true;
@@ -59,72 +61,72 @@ namespace IMS.Model.Simulation
             }
 
 
-            return new List<GridPoint>();
+            return new List<Pos>();
         }
 
-        private int Heuristic(GridPoint start, GridPoint goal)
+        private int Heuristic(Pos start, Pos goal)
         {
             var dx = goal.X - start.X;
             var dy = goal.Y - start.Y;
             return Math.Abs(dx) + Math.Abs(dy);
         }
 
-        private int getGScore(GridPoint pt)
+        private int getGScore(Pos pt)
         {
             int score = int.MaxValue;
             gScore.TryGetValue(pt, out score);
             return score;
         }
 
-        private int getFScore(GridPoint pt)
+        private int getFScore(Pos pt)
         {
             int score = int.MaxValue;
             fScore.TryGetValue(pt, out score);
             return score;
         }
 
-        public static IEnumerable<GridPoint> Neighbors(bool[][] graph, GridPoint center)
+        public static IEnumerable<Pos> Neighbors(bool[][] graph, Pos center)
         {
 
-            GridPoint pt = new GridPoint(center.X - 1, center.Y - 1);
+            Pos pt = new Pos(center.X - 1, center.Y - 1);
             if (IsValidNeighbor(graph, pt))
                 yield return pt;
 
-            pt = new GridPoint(center.X, center.Y - 1);
+            pt = new Pos(center.X, center.Y - 1);
             if (IsValidNeighbor(graph, pt))
                 yield return pt;
 
-            pt = new GridPoint(center.X + 1, center.Y - 1);
+            pt = new Pos(center.X + 1, center.Y - 1);
             if (IsValidNeighbor(graph, pt))
                 yield return pt;
 
             //middle row
-            pt = new GridPoint(center.X - 1, center.Y);
+            pt = new Pos(center.X - 1, center.Y);
             if (IsValidNeighbor(graph, pt))
                 yield return pt;
 
-            pt = new GridPoint(center.X + 1, center.Y);
+            pt = new Pos(center.X + 1, center.Y);
             if (IsValidNeighbor(graph, pt))
                 yield return pt;
 
 
             //bottom row
-            pt = new GridPoint(center.X - 1, center.Y + 1);
+            pt = new Pos(center.X - 1, center.Y + 1);
             if (IsValidNeighbor(graph, pt))
                 yield return pt;
 
-            pt = new GridPoint(center.X, center.Y + 1);
+            pt = new Pos(center.X, center.Y + 1);
             if (IsValidNeighbor(graph, pt))
                 yield return pt;
 
-            pt = new GridPoint(center.X + 1, center.Y + 1);
+            pt = new Pos(center.X + 1, center.Y + 1);
             if (IsValidNeighbor(graph, pt))
                 yield return pt;
 
 
         }
 
-        public static bool IsValidNeighbor(bool[][] matrix, GridPoint pt)
+        public static bool IsValidNeighbor(bool[][] matrix, Pos pt)
         {
             int x = pt.X;
             int y = pt.Y;
@@ -138,9 +140,9 @@ namespace IMS.Model.Simulation
 
         }
 
-        private List<GridPoint> Reconstruct(GridPoint current)
+        private List<Pos> Reconstruct(Pos current)
         {
-            List<GridPoint> path = new List<GridPoint>();
+            List<Pos> path = new List<Pos>();
             while (nodeLinks.ContainsKey(current))
             {
                 path.Add(current);
@@ -151,10 +153,10 @@ namespace IMS.Model.Simulation
             return path;
         }
 
-        private GridPoint nextBest()
+        private Pos nextBest()
         {
             int best = int.MaxValue;
-            GridPoint bestPt = null;
+            Pos bestPt = null;
             foreach (var node in openSet.Keys)
             {
                 var score = getFScore(node);
@@ -167,13 +169,6 @@ namespace IMS.Model.Simulation
 
 
             return bestPt;
-        }
-        public class GridPoint
-        {
-            public int X, Y;
-            public GridPoint(int x, int y) { X = x; Y = y; }
-            public GridPoint(float x, float y) { X = (int)x; Y = (int)y; }
-            //public GridPoint(Vector3 v3) { X = (int)v3.x; Y = (int)v3.y; }
-        }
+       }
     }
 }

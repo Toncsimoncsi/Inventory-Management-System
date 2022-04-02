@@ -43,6 +43,10 @@ namespace IMS.Persistence.Entities
             return HashCode.Combine(X, Y);
         }
 
+        public int Distance(Pos other)
+        {
+            return Math.Abs(this.X-other.Y)+Math.Abs(this.Y-other.Y);
+        }
         ///<summary>
         ///operators of the class
         ///</summary>

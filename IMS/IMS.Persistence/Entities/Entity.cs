@@ -14,7 +14,7 @@ namespace IMS.Persistence.Entities
         protected EntityType _type;
         protected Direction _dir;
 
-        public Pos Pos { get { return new Pos(_position.X,_position.Y); } }
+        public Pos Pos { get { return _position; }}
         public EntityType Type { get { return _type; } }
         public Direction Direction { get { return _dir; } }
 
