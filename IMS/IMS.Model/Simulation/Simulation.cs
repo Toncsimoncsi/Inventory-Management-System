@@ -11,7 +11,6 @@ namespace IMS.Model.Simulation
     public class Simulation
     {
         private Boolean[,] blocked; //convert from imsdata
-        // store constraint per path and recalculate it
         public IMSData IMSData { get; set; }
 
         public Simulation(IMSData data)
@@ -30,7 +29,7 @@ namespace IMS.Model.Simulation
         {
             Pos closestDockPos = new Pos();
             int shortestDistance = int.MaxValue;
-            foreach (Dock dock in IMSData.EntityData.DockData)
+            foreach (Dock dock in IMSData.EntityData.DockData) // iterate over all docks which is closer
             {
                 if (shortestDistance > robot.Pos.Distance(dock.Pos))
                 {
@@ -38,7 +37,21 @@ namespace IMS.Model.Simulation
                     closestDockPos = dock.Pos;
                 }
             }
-            return robot.EnergyLeft>shortestDistance;        }
+            return robot.EnergyLeft > shortestDistance;
+        }
+        //run the calculate paths on the table
+        public void Run(Pos[,] routes)
+        {
 
+            for (int i = 0; i < routes.GetLength(1); i++) //elso lepesben
+            {
+                for (int j = 0; j < routes.GetLength(0); j++) //mindegyik robot egymas utan egyet lep
+                {
+                    IMSData.EntityData.RobotData[j].Move(routes[j, i]);
+                }
+                //onTableChanged   
+            }
+
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace IMS.Persistence.Entities
 
         public Pos Destination { get { return _destination; } set { } }
         //move robot to given position and change fuel
-        public void MoveRobot(Pos other)
+        public void Move(Pos other)
         {
             if (_energyLeft <= _position.Distance(other))
                 return;
@@ -29,6 +29,22 @@ namespace IMS.Persistence.Entities
             _energyConsumption += _position.Distance(other);
             _position.X = other.X;
             _position.Y = _position.Y;
+        }
+
+        //finds closest charger and returns true it can get to destination false otherwise  
+        public Boolean EnoughCharge(IMSData IMSData)
+        {
+            Pos closestDockPos = new Pos();
+            int shortestDistance = int.MaxValue;
+            foreach (Dock dock in IMSData.EntityData.DockData) // iterate over all docks which is closer
+            {
+                if (shortestDistance > this.Pos.Distance(dock.Pos))
+                {
+                    shortestDistance = this.Pos.Distance(dock.Pos);
+                    closestDockPos = dock.Pos;
+                }
+            }
+            return this.EnergyLeft > shortestDistance;
         }
         //public Int32 EnergyConsumption { get; }
         //public Int32 Capacity { get;}

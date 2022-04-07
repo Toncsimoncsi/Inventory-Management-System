@@ -8,6 +8,12 @@ using IMS.Persistence.Entities;
 
 namespace IMS.Model.Simulation
 {
+    //Input:
+    //Boolean 2d array of blocked fields - Boolean[,]
+    //Starting Position - Pos
+    //Goal poisition - Pos
+    //Return:
+    //Path from Position to Goal- List<Pos>
     public class Astar
     {
 
