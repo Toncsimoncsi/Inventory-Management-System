@@ -14,6 +14,7 @@ namespace IMS.Model.Simulation
     //Goal poisition - Pos
     //Return:
     //Path from Position to Goal- List<Pos>
+    //https://www.superscarysnakes.com/blackfuture/2016/10/26/basic-astar/
     public class Astar
     {
 
@@ -27,7 +28,7 @@ namespace IMS.Model.Simulation
 
         Dictionary<Pos, Pos> nodeLinks = new Dictionary<Pos, Pos>();
 
-        public List<Pos> FindPath(bool[][] graph, Pos start, Pos goal)
+        public List<Pos> FindPath(bool[,] graph, Pos start, Pos goal)
         {
 
             openSet[start] = true;
@@ -91,7 +92,7 @@ namespace IMS.Model.Simulation
             return score;
         }
 
-        public static IEnumerable<Pos> Neighbors(bool[][] graph, Pos center)
+        public static IEnumerable<Pos> Neighbors(bool[,] graph, Pos center)
         {
 
             Pos pt = new Pos(center.X - 1, center.Y - 1);
@@ -132,17 +133,17 @@ namespace IMS.Model.Simulation
 
         }
 
-        public static bool IsValidNeighbor(bool[][] matrix, Pos pt)
+        public static bool IsValidNeighbor(bool[,] matrix, Pos pt)
         {
             int x = pt.X;
             int y = pt.Y;
-            if (x < 0 || x >= matrix.Length)
+            if (x < 0 || x >= matrix.GetLength(0))
                 return false;
 
-            if (y < 0 || y >= matrix[x].Length)
+            if (y < 0 || y >= matrix.GetLength(1))
                 return false;
 
-            return matrix[x][y];
+            return matrix[x,y];
 
         }
 

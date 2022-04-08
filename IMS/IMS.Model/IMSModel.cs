@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using IMS.Persistence;
 using IMS.Persistence.Entities;
+using IMS.Model.Simulation;
 
 namespace IMS.Model
 {
@@ -21,6 +22,7 @@ namespace IMS.Model
         private Entity[,] _gameTable; // simtábla
         private IMSData _IMSData;
         private IMSDataAccess _dataAccess; // adatelérés
+        private PathFinder _pathFinder;
 
         private int _steps;
         private int _allEnergy;
@@ -100,7 +102,7 @@ namespace IMS.Model
             _gameTable = new Entity[12, 12];
             _IMSData = new IMSData(_gameTable.GetLength(0), _gameTable.GetLength(1));
             _dataAccess = dataAccess;
-
+            _pathFinder = new PathFinder(_IMSData);
             _steps = 0;
             _allEnergy = 0;
 

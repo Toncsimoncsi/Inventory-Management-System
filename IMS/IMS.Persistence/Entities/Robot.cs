@@ -13,16 +13,20 @@ namespace IMS.Persistence.Entities
         private Int32 _energyLeft;
         private Int32 _destinationID;
         private Pos _destination;
+        private Boolean _underPod;
 
         public Int32 EnergyConsumption { get { return _energyConsumption; } }
         public Int32 Capacity { get { return _capacity; } }
         public Int32 EnergyLeft { get { return _energyLeft; } }
         public Int32 DestinationID { get { return _destinationID; } }
 
+        public Boolean UnderPod { get { return _underPod; } set { } }
+
         public Pos Destination { get { return _destination; } set { } }
         //move robot to given position and change fuel
         public void Move(Pos other)
         {
+
             if (_energyLeft <= _position.Distance(other))
                 return;
             _energyLeft += _position.Distance(other);
