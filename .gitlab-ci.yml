@@ -15,6 +15,7 @@ build_model:
     - cd IMS
     - dotnet build IMS.Model
     - dotnet build IMS.Persistence
+    - cd ..
 
 build_view:
   stage: build
