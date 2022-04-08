@@ -15,7 +15,6 @@ build_model:
     - cd IMS
     - dotnet build IMS.Model
     - dotnet build IMS.Persistence
-    - cd ..
 
 build_view:
   stage: build
@@ -24,7 +23,7 @@ build_view:
   image: mcr.microsoft.com/dotnet/framework/sdk:4.8
   tags: [windows]
   script:
-    - cd
+    - cd IMS
     - dotnet build IMS.sln
 
 # Test
