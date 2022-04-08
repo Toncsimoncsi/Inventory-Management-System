@@ -24,7 +24,7 @@ build_view:
   image: mcr.microsoft.com/dotnet/framework/sdk:4.8
   tags: [windows]
   script:
-    - echo current directory is %cd%
+    - cd
     - dotnet build IMS.sln
 
 # Test
