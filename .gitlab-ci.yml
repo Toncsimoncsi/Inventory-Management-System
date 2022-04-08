@@ -12,6 +12,7 @@ before_script:
 build_model:
   stage: build
   script:
+    - cd IMS
     - dotnet build IMS.Model
     - dotnet build IMS.Persistence
 
