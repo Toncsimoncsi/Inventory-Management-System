@@ -26,7 +26,7 @@ namespace IMS.Model.Simulation
                 int x = robot.Pos.X;
                 int y = robot.Pos.Y;
                 //blocked[x][y] = true;
-                blocked[x,y] = true;
+                blocked[x, y] = true;
             }
             routes = new Pos[4][];
             astar = new Astar();
@@ -50,7 +50,10 @@ namespace IMS.Model.Simulation
         public void Run(/*Pos[,] routes*/)
         {
             //put the routes in the table one by one
-            //routes[0]=astar.FindPath(blocked, IMSData.EntityData.RobotData[0].Pos, IMSData.EntityData.PodData[0].Pos);
+            routes[0] = astar.FindPath(blocked, IMSData.EntityData.RobotData[0].Pos, IMSData.EntityData.PodData[0].Pos).ToArray();
+            routes[1] = astar.FindPath(blocked, IMSData.EntityData.RobotData[1].Pos, IMSData.EntityData.PodData[1].Pos).ToArray();
+            routes[2] = astar.FindPath(blocked, IMSData.EntityData.RobotData[2].Pos, IMSData.EntityData.PodData[2].Pos).ToArray();
+            routes[3] = astar.FindPath(blocked, IMSData.EntityData.RobotData[3].Pos, IMSData.EntityData.PodData[3].Pos).ToArray();
             for (int i = 0; i < routes.GetLength(1); i++) //elso lepesben
             {
                 for (int j = 0; j < routes.GetLength(0); j++) //mindegyik robot egymas utan egyet lep
