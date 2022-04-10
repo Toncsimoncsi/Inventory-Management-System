@@ -49,7 +49,7 @@ namespace IMS.Model.Simulation
         //run the calculate paths on the table
         public void Run(/*Pos[,] routes*/)
         {
-            //put the routes in the table one by one
+            //put the routes in the table one by one from start to given pod (maybe not enough charge)
             routes[0] = astar.FindPath(blocked, IMSData.EntityData.RobotData[0].Pos, IMSData.EntityData.PodData[0].Pos).ToArray();
             routes[1] = astar.FindPath(blocked, IMSData.EntityData.RobotData[1].Pos, IMSData.EntityData.PodData[1].Pos).ToArray();
             routes[2] = astar.FindPath(blocked, IMSData.EntityData.RobotData[2].Pos, IMSData.EntityData.PodData[2].Pos).ToArray();
@@ -62,7 +62,25 @@ namespace IMS.Model.Simulation
                 }
                 //onTableChanged   
             }
-
+            for (int j = 0; j < routes.GetLength(0); j++) //mindegyik robot egymas utan egyet lep
+            {
+                //underpod true
+                IMSData.EntityData.RobotData[j].UnderPod=true;
+            }
+            //from pod to dest
+            routes[0] = astar.FindPath(blocked, IMSData.EntityData.RobotData[0].Pos, IMSData.EntityData.DestinationData[0].Pos).ToArray();
+            routes[1] = astar.FindPath(blocked, IMSData.EntityData.RobotData[1].Pos, IMSData.EntityData.DestinationData[1].Pos).ToArray();
+            routes[2] = astar.FindPath(blocked, IMSData.EntityData.RobotData[2].Pos, IMSData.EntityData.DestinationData[2].Pos).ToArray();
+            routes[3] = astar.FindPath(blocked, IMSData.EntityData.RobotData[3].Pos, IMSData.EntityData.DestinationData[3].Pos).ToArray();
+            
+            for (int i = 0; i < routes.GetLength(1); i++) //elso lepesben
+            {
+                for (int j = 0; j < routes.GetLength(0); j++) //mindegyik robot egymas utan egyet lep
+                {
+                    IMSData.EntityData.RobotData[j].Move(routes[j][i]);
+                }
+                //onTableChanged   
+            }
         }
     }
 }
