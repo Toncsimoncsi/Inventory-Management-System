@@ -44,7 +44,7 @@ namespace IMS
             //_viewModel.CreateSimulation += new EventHandler(ViewModel_CreateSimulation);
 
             _viewModel.SaveDiary += new EventHandler(ViewModel_SaveDiary);
-            _viewModel.ExitSimulation += new EventHandler(ViewModel_ExitSimulation);
+            _viewModel.StartStop += new EventHandler(ViewModel_StartStopSimulation);
             _viewModel.OpenSettings += new EventHandler(ViewModel_OpenSettings);
             _viewModel.ClickedOnTable += new EventHandler(ViewModel_EntityInfo);
 
@@ -186,9 +186,18 @@ namespace IMS
             //
         }
 
-        private void ViewModel_ExitSimulation(object sender, EventArgs e)
+        private void ViewModel_StartStopSimulation(object sender, EventArgs e)
         {
-            Shutdown();
+            if(_view.StartStopBtn.Content.ToString() == "▶️")
+            {
+                //_model start simulation
+                _view.StartStopBtn.Content = "⏸";
+            }
+            else
+            {
+                //_model stop simulation
+                _view.StartStopBtn.Content = "▶️";
+            }
         }
 
     }

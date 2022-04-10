@@ -57,7 +57,7 @@ namespace IMS.ViewModel
         public DelegateCommand OpenSettingsCommand { get; private set; }
         public DelegateCommand SaveSimulationCommand { get; private set; }
         public DelegateCommand SaveDiaryCommand { get; private set; }
-        public DelegateCommand ExitCommand { get; private set; }
+        public DelegateCommand StartStopCommand { get; private set; }
         public DelegateCommand SlowerCommand { get; private set; }
         public DelegateCommand FasterCommand { get; private set; }
         public DelegateCommand StopCommand { get; private set; }
@@ -77,7 +77,7 @@ namespace IMS.ViewModel
         public event EventHandler OpenSettings;
         public event EventHandler SaveSimulation;
         public event EventHandler SaveDiary;
-        public event EventHandler ExitSimulation;
+        public event EventHandler StartStop;
         public event EventHandler ClickedOnTable;
 
         #endregion
@@ -105,7 +105,7 @@ namespace IMS.ViewModel
             //CreateSimulationCommand = new DelegateCommand(param => OnCreateSimulation());
             SaveSimulationCommand = new DelegateCommand(param => OnSaveSimulation());
             SaveDiaryCommand = new DelegateCommand(param => OnSaveDiary());
-            ExitCommand = new DelegateCommand(param => OnExitSimulation());
+            StartStopCommand = new DelegateCommand(param => OnStartStopSimulation());
             OpenSettingsCommand = new DelegateCommand(param => OnOpenSettings());
             //ViewField = new DelegateCommand(param => OnFieldClicked());
 
@@ -252,10 +252,10 @@ namespace IMS.ViewModel
         }
 
 
-        private void OnExitSimulation()
+        private void OnStartStopSimulation()
         {
-            if (ExitSimulation != null)
-                ExitSimulation(this, EventArgs.Empty);
+            if (StartStop != null)
+                StartStop(this, EventArgs.Empty);
         }
 
         #endregion

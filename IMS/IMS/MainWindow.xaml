@@ -28,16 +28,20 @@
                 <ImageBrush x:Key="AddSpeedDownImg" ImageSource="/img/speed-down.jpg" Stretch="UniformToFill"/>
                 <ImageBrush x:Key="AddSetImg" ImageSource="/img/settings-button.jpg" Stretch="UniformToFill"/>
                 <ImageBrush x:Key="AddExitImg" ImageSource="/img/exit-button.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="Start" ImageSource="/img/start-button.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="Stop" ImageSource="/img/stop-button.jpg" Stretch="UniformToFill"/>
             </Grid.Resources>
 
             <Button Grid.Row="0" Style="{StaticResource MenuButtons}" Background="{StaticResource AddLoadImg}" Command="{Binding LoadSimulationCommand}"/>
             <Button Grid.Row="1" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSaveImg}" Command="{Binding SaveSimulationCommand}"/>
 
-                <Button Grid.Row="2" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSpeedUpImg}" Command="{Binding FasterCommand}"/>
-                    <Button Grid.Row="3" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSpeedDownImg}" Command="{Binding SlowerCommand}"/>
-                        <Button Grid.Row="4" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSetImg}" Command="{Binding OpenSettingsCommand}"/>
-                            <Button Grid.Row="5" Style="{StaticResource MenuButtons}" Background="{StaticResource AddExitImg}" Command="{Binding ExitCommand}"/>
+            <Button Grid.Row="2" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSpeedUpImg}" Command="{Binding FasterCommand}"/>
+            <Button Grid.Row="3" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSpeedDownImg}" Command="{Binding SlowerCommand}"/>
+            <Button Grid.Row="4" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSetImg}" Command="{Binding OpenSettingsCommand}"/>
+            <Button Grid.Row="5" x:Name="StartStopBtn" Style="{StaticResource StartStopBtnSztyle}" Content="▶️" Command="{Binding StartStopCommand}"/>
+            <!--⏸-->
         </Grid>
+        
         <StackPanel Width="Auto" Margin="10 0 10 0">
             <Border BorderThickness="1" BorderBrush="Transparent" Margin="10 10 10 0">
 
