@@ -17,6 +17,8 @@ namespace IMS.ViewModel
 
         private ViewModelBase _currentView;
         private string _entityInfo;
+        private int _speedText;
+        private int _timerText;
 
         #endregion
 
@@ -53,6 +55,27 @@ namespace IMS.ViewModel
             get { return _model.AllEnergy; }
             private set { }
         }
+
+        public int SpeedText
+        {
+            get { return _model.Speed; }
+            set
+            {
+                _speedText = value;
+                OnPropertyChanged();
+            }
+        }
+        
+
+        public int TimerText
+        {
+            get { return _model.Time; }
+            set
+            {
+                _timerText = value;
+                OnPropertyChanged();
+            }
+        }
         public DelegateCommand LoadSimulationCommand { get; private set; }
         public DelegateCommand OpenSettingsCommand { get; private set; }
         public DelegateCommand SaveSimulationCommand { get; private set; }
@@ -79,6 +102,8 @@ namespace IMS.ViewModel
         public event EventHandler SaveDiary;
         public event EventHandler StartStop;
         public event EventHandler ClickedOnTable;
+        public event EventHandler SpeedUp;
+        public event EventHandler SpeedDown;
 
         #endregion
 
@@ -107,7 +132,12 @@ namespace IMS.ViewModel
             SaveDiaryCommand = new DelegateCommand(param => OnSaveDiary());
             StartStopCommand = new DelegateCommand(param => OnStartStopSimulation());
             OpenSettingsCommand = new DelegateCommand(param => OnOpenSettings());
+            FasterCommand = new DelegateCommand(param => OnSpeedUp());
+            SlowerCommand = new DelegateCommand(param => OnSpeedDown());
             //ViewField = new DelegateCommand(param => OnFieldClicked());
+
+            _speedText = _model.Speed;
+            _timerText = _model.Time;
 
         }
 
@@ -249,6 +279,18 @@ namespace IMS.ViewModel
         {
             if (SaveDiary != null)
                 SaveDiary(this, EventArgs.Empty);
+        }
+
+        private void OnSpeedUp()
+        {
+            if (SpeedUp != null)
+                SpeedUp(this, EventArgs.Empty);
+        }
+
+        private void OnSpeedDown()
+        {
+            if (SpeedDown != null)
+                SpeedDown(this, EventArgs.Empty);
         }
 
 

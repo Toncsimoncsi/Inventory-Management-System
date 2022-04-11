@@ -26,6 +26,8 @@ namespace IMS.Model
 
         private int _steps;
         private int _allEnergy;
+        private int _speed;
+        private int _time;
 
 
         #endregion
@@ -54,18 +56,19 @@ namespace IMS.Model
 
         public Int32 SizeY { get { return _gameTable.GetLength(1); } set { } }
 
-        public Int32 Speed { get; set; }
         public int Steps { get { return _steps; } }
         public int AllEnergy { get { return _allEnergy; } }
+        public int Speed { get { return _speed; } }
+        public int Time { get { return _time; } }
 
         //public int Steps { get; }
         //public int AllEnergy {get;}
         #endregion
 
         #region Events
-            /// <summary>
-            ///  Simulation kezdetének eseménye.
-            /// </summary>
+        /// <summary>
+        ///  Simulation kezdetének eseménye.
+        /// </summary>
         public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
 
         public event EventHandler<EventArgs> SimulationStarted;
@@ -107,7 +110,9 @@ namespace IMS.Model
             _pathFinder = new PathFinder(_IMSData);
             _steps = 0;
             _allEnergy = 0;
-            Speed = 1;
+
+            _speed = 1;
+            _time = 0;
 
             //NewSimulation();
         }
@@ -143,6 +148,12 @@ namespace IMS.Model
                 }
             }
             OnTableCreated();
+        }
+
+        public void setSpeed(int n)
+        {
+            _speed += n;
+            OnSpeedChanged(_speed);
         }
 
 
@@ -240,6 +251,12 @@ namespace IMS.Model
             return table;
         }
 
+        public void AdvanceTime()
+        {
+            _time++;
+            OnTimePassed(_time);
+        }
+
         #endregion
 
         #region Event triggers
@@ -274,18 +291,18 @@ namespace IMS.Model
         }
 
         /// <summary>
-        /// Simulation megnyerésének eseménykiváltása.
+        /// Sebesség változásának eseménykiváltása.
         /// </summary>
-        /// <param name="Entity">A győztes Simulationos.</param>
+        /// <param name="speed">A sebesség.</param>
         private void OnSpeedChanged(Int32 speed)
         {
             if (SimulationWon != null)
                 SpeedChanged(this, new SpeedChangedEventArgs(speed));
         }
         /// <summary>
-        /// Simulation megnyerésének eseménykiváltása.
+        /// Idő múlásának eseménykiváltása.
         /// </summary>
-        /// <param name="Entity">A győztes Simulationos.</param>
+        /// <param name="time">Az idő.</param>
         private void OnTimePassed(Int32 time)
         {
             if (SimulationWon != null)
