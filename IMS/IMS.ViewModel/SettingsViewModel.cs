@@ -20,6 +20,7 @@ namespace IMS.ViewModel
         private int _sizeX;
         private int _sizeY;
         private string _fieldColor;
+        private string _whichEntity;
         //private bool _robotRadioButtonIsChecked;
 
         #endregion
@@ -33,7 +34,7 @@ namespace IMS.ViewModel
         public DelegateCommand SetSizeCommand { get; private set; }
         public DelegateCommand ChangeColorCommand { get; private set; }
 
-    public Int32 SizeX { 
+        public Int32 SizeX {
             get { return _sizeX; }
             set
             {
@@ -44,7 +45,7 @@ namespace IMS.ViewModel
                 }
             }
         }
-        public Int32 SizeY { 
+        public Int32 SizeY {
             get { return _sizeY; }
             set
             {
@@ -61,7 +62,7 @@ namespace IMS.ViewModel
             get { return _fieldColor; }
             set
             {
-                if( _fieldColor == "White") //ha a modelből az adott field empty
+                if (_fieldColor == "White") //ha a modelből az adott field empty
                 {
                     _fieldColor = value;
                 }
@@ -165,11 +166,52 @@ namespace IMS.ViewModel
             switch (FieldColor)
             {
                 case "Gold":
-                   // _model.setField(field.X, field.Y, "Robot");
+                    // _model.setField(field.X, field.Y, "Robot");
                     break;
             }
             GenerateTable();
             SetupTable();
+        }
+
+        public void AddNewField(int ind)
+        {
+            int i = ind / SizeX;
+            int j = ind % SizeX;
+            Fields.Add(new TableField
+            {
+                X = i,
+                Y = j,
+                Color = EntityToColor(stringToEntity(_whichEntity)),
+                Direction = Direction.NONE.ToString(),
+                Number = i * SizeX + j,
+                ViewField = new DelegateCommand(param => ChangeFieldInfo(Convert.ToInt32(param)))
+            });
+        }
+
+        private EntityType stringToEntity(string ent)
+        {
+            switch (ent)
+            {
+                case "Robot":
+                    return EntityType.Robot;
+
+                case "Pod":
+                    return EntityType.Pod;
+
+                case "Dock":
+                    return EntityType.Dock;
+
+                case "Target":
+                    return EntityType.Destination;
+
+                default:
+                    return EntityType.Empty;
+            }
+        }
+
+        public void ChangeFieldInfo(int ind)
+        {
+
         }
 
         private void Model_SimulationCreated(Object sender, EventArgs e)

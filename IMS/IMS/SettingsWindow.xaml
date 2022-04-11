@@ -63,6 +63,7 @@
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Background" Value="{Binding Color}" />
+                                    <Setter Property="BorderThickness" Value="0.01"/>
                                 </Style>
                             </Button.Style>
                         </Button>
