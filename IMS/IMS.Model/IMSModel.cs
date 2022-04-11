@@ -26,6 +26,7 @@ namespace IMS.Model
 
         private int _steps;
         private int _allEnergy;
+        private int _speed;
 
         #endregion
 
@@ -55,6 +56,7 @@ namespace IMS.Model
 
         public int Steps { get { return _steps; } }
         public int AllEnergy { get { return _allEnergy; } }
+        public int Speed { get { return _speed; } }
 
         //public int Steps { get; }
         //public int AllEnergy {get;}
@@ -105,6 +107,7 @@ namespace IMS.Model
             _pathFinder = new PathFinder(_IMSData);
             _steps = 0;
             _allEnergy = 0;
+            _speed = 5;
 
             //NewSimulation();
         }
@@ -140,6 +143,12 @@ namespace IMS.Model
                 }
             }
             OnTableCreated();
+        }
+
+        public void setSpeed(int n)
+        {
+            _speed += n;
+            OnSpeedChanged(_speed);
         }
 
 
@@ -269,18 +278,18 @@ namespace IMS.Model
         }
 
         /// <summary>
-        /// Simulation megnyerésének eseménykiváltása.
+        /// Sebesség változásának eseménykiváltása.
         /// </summary>
-        /// <param name="Entity">A győztes Simulationos.</param>
+        /// <param name="speed">A sebesség.</param>
         private void OnSpeedChanged(Int32 speed)
         {
             if (SimulationWon != null)
                 SpeedChanged(this, new SpeedChangedEventArgs(speed));
         }
         /// <summary>
-        /// Simulation megnyerésének eseménykiváltása.
+        /// Idő múlásának eseménykiváltása.
         /// </summary>
-        /// <param name="Entity">A győztes Simulationos.</param>
+        /// <param name="time">Az idő.</param>
         private void OnTimePassed(Int32 time)
         {
             if (SimulationWon != null)

@@ -16,7 +16,7 @@ namespace IMS.Model
         /// <summary>
         /// Ido eltelesenek eseményargumentuma
         /// </summary>
-        /// <param name="player"></param>
+        /// <param name="time"></param>
         public TimePassedEventArgs(Int32 time) { Time = time; }
     }
 }

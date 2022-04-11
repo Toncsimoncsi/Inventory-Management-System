@@ -68,8 +68,12 @@
             </Border>
 
             <Button Style="{StaticResource BtnStyle}" Command="{Binding SaveDiaryCommand}">Save diary</Button>
- 
-            
+
+            <StackPanel Orientation="Horizontal" Margin="10 10 10 10" >
+                <Label Content="Speed: " />
+                <TextBlock Text="{Binding SpeedText}" />
+            </StackPanel>
+
         </StackPanel>
         <Viewbox DockPanel.Dock="Right">
             <ItemsControl ItemsSource="{Binding Fields}">

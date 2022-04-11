@@ -9,14 +9,14 @@ namespace IMS.Model
     public class SpeedChangedEventArgs:EventArgs
     {
         /// <summary>
-        /// Ido lekérdezése.
+        /// Sebesség lekérdezése.
         /// </summary>
         public Int32 Speed { get; private set; }
 
         /// <summary>
-        /// Ido eltelesenek eseményargumentuma
+        /// Sebesség eltelesenek eseményargumentuma
         /// </summary>
-        /// <param name="player"></param>
+        /// <param name="speed"></param>
         public SpeedChangedEventArgs(Int32 speed) { Speed = speed; }
     }
 }

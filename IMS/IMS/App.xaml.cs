@@ -47,6 +47,9 @@ namespace IMS
             _viewModel.StartStop += new EventHandler(ViewModel_StartStopSimulation);
             _viewModel.OpenSettings += new EventHandler(ViewModel_OpenSettings);
             _viewModel.ClickedOnTable += new EventHandler(ViewModel_EntityInfo);
+            _viewModel.SpeedDown += new EventHandler(ViewModel_SpeedDown);
+            _viewModel.SpeedUp += new EventHandler(ViewModel_SpeedUp);
+
 
             _settingsViewModel = new SettingsViewModel(_model);
 
@@ -198,6 +201,21 @@ namespace IMS
                 //_model stop simulation
                 _view.StartStopBtn.Content = "▶️";
             }
+        }
+
+        private void ViewModel_SpeedDown(object sender, EventArgs e)
+        {
+            if (_model.Speed > 1)
+            {
+                _model.setSpeed(-1);
+            }
+            _viewModel.SpeedText = _model.Speed;
+        }
+
+        private void ViewModel_SpeedUp(object sender, EventArgs e)
+        {
+            _model.setSpeed(1);
+            _viewModel.SpeedText = _model.Speed;
         }
 
     }
