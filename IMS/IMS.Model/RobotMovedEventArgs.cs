@@ -7,7 +7,7 @@ using IMS.Persistence.Entities;
 
 namespace IMS.Model
 {
-    public class FieldChangedEventArgs :EventArgs
+    public class RobotMovedEventArgs :EventArgs
     {
         public Entity Entity { get; private set; }
         /// <summary>
@@ -25,7 +25,7 @@ namespace IMS.Model
         /// <param name="x">Oszlop index.</param>
         /// <param name="y">Sor index.</param>
         /// <param name="player">Játékos.</param>
-        public FieldChangedEventArgs(Int32 x, Int32 y, Entity entity)
+        public RobotMovedEventArgs(Int32 x, Int32 y, Entity entity)
         {
             Entity = entity;
             X = x;

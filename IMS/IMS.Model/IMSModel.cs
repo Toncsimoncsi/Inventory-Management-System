@@ -27,6 +27,7 @@ namespace IMS.Model
         private int _steps;
         private int _allEnergy;
 
+
         #endregion
 
         #region Public properties
@@ -53,6 +54,7 @@ namespace IMS.Model
 
         public Int32 SizeY { get { return _gameTable.GetLength(1); } set { } }
 
+        public Int32 Speed { get; set; }
         public int Steps { get { return _steps; } }
         public int AllEnergy { get { return _allEnergy; } }
 
@@ -69,7 +71,7 @@ namespace IMS.Model
         public event EventHandler<EventArgs> SimulationStarted;
         public event EventHandler<EventArgs> SimulationOver;
         public event EventHandler<EventArgs> TableCreated; //created empty table on create mode
-        public event EventHandler<FieldChangedEventArgs> FieldChanged;
+        public event EventHandler<RobotMovedEventArgs> FieldChanged;
 
         /// <summary>
         /// Simulation végének eseménye.
@@ -105,6 +107,7 @@ namespace IMS.Model
             _pathFinder = new PathFinder(_IMSData);
             _steps = 0;
             _allEnergy = 0;
+            Speed = 1;
 
             //NewSimulation();
         }
@@ -143,9 +146,11 @@ namespace IMS.Model
         }
 
 
-        public void Simulation(Int32 x, Int32 y)
+        public void Simulation()
         {
+            OnSimulationStarted();
 
+            _pathFinder.moveRobotsStartToPod();
         }
 
         public async Task LoadSimulationAsync(String path)
@@ -295,7 +300,7 @@ namespace IMS.Model
         private void OnFieldChanged(Int32 x, Int32 y, Entity Entity)
         {
             if (FieldChanged != null)
-                FieldChanged(this, new FieldChangedEventArgs(x, y, Entity));
+                FieldChanged(this, new RobotMovedEventArgs(x, y, Entity));
         }
 
         #endregion
