@@ -155,7 +155,7 @@ namespace IMS.Persistence
                         await writer.WriteLineAsync("Robot");
                         await writer.WriteLineAsync(entity.Pos.X.ToString() + " " + entity.Pos.Y.ToString());
                         await writer.WriteLineAsync(entity.Capacity.ToString());
-                        await writer.WriteLineAsync(entity.EnergyLeft.ToString());
+                        await writer.WriteLineAsync(entity.currentCapacity.ToString());
                         await writer.WriteLineAsync(entity.EnergyConsumption.ToString());
                         await writer.WriteLineAsync(entity.Direction.ToString());
                         await writer.WriteLineAsync(entity.DestinationID.ToString());

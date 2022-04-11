@@ -9,6 +9,7 @@ using IMS.Persistence;
 using IMS.Model;
 using IMS.ViewModel;
 using Microsoft.Win32;
+using System.Windows.Threading;
 using System.Diagnostics;
 
 
@@ -25,6 +26,7 @@ namespace IMS
         private SettingsViewModel _settingsViewModel;
         private MainWindow _view;
         private SettingsWindow _settings;
+        private DispatcherTimer _timer;
 
         public App()
         {
@@ -64,6 +66,11 @@ namespace IMS
                 DataContext = _viewModel
             };
             _view.Show();
+
+            // időzítő létrehozása
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += new EventHandler(Timer_Tick);
 
             _model.NewSimulation();
         }
@@ -194,12 +201,15 @@ namespace IMS
             if(_view.StartStopBtn.Content.ToString() == "▶️")
             {
                 //_model start simulation
+                _model.Simulation();
                 _view.StartStopBtn.Content = "⏸";
+                _timer.Start();
             }
             else
             {
                 //_model stop simulation
                 _view.StartStopBtn.Content = "▶️";
+                _timer.Stop();
             }
         }
 
@@ -208,14 +218,25 @@ namespace IMS
             if (_model.Speed > 1)
             {
                 _model.setSpeed(-1);
+                _timer.Interval = TimeSpan.FromSeconds(1) / _model.Speed;
             }
             _viewModel.SpeedText = _model.Speed;
         }
 
         private void ViewModel_SpeedUp(object sender, EventArgs e)
         {
-            _model.setSpeed(1);
+            if (_model.Speed <= 5)
+            {
+                _model.setSpeed(1);
+                _timer.Interval = TimeSpan.FromSeconds(1) / _model.Speed;
+            }
             _viewModel.SpeedText = _model.Speed;
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            _model.AdvanceTime();
+            _viewModel.TimerText = _model.Time;
         }
 
     }

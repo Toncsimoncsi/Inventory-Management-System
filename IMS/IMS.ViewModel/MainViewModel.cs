@@ -18,6 +18,7 @@ namespace IMS.ViewModel
         private ViewModelBase _currentView;
         private string _entityInfo;
         private int _speedText;
+        private int _timerText;
 
         #endregion
 
@@ -61,6 +62,17 @@ namespace IMS.ViewModel
             set
             {
                 _speedText = value;
+                OnPropertyChanged();
+            }
+        }
+        
+
+        public int TimerText
+        {
+            get { return _model.Time; }
+            set
+            {
+                _timerText = value;
                 OnPropertyChanged();
             }
         }
@@ -125,6 +137,7 @@ namespace IMS.ViewModel
             //ViewField = new DelegateCommand(param => OnFieldClicked());
 
             _speedText = _model.Speed;
+            _timerText = _model.Time;
 
         }
 

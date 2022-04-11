@@ -27,6 +27,7 @@ namespace IMS.Model
         private int _steps;
         private int _allEnergy;
         private int _speed;
+        private int _time;
 
 
         #endregion
@@ -55,19 +56,19 @@ namespace IMS.Model
 
         public Int32 SizeY { get { return _gameTable.GetLength(1); } set { } }
 
-        public Int32 Speed { get; set; }
         public int Steps { get { return _steps; } }
         public int AllEnergy { get { return _allEnergy; } }
         public int Speed { get { return _speed; } }
+        public int Time { get { return _time; } }
 
         //public int Steps { get; }
         //public int AllEnergy {get;}
         #endregion
 
         #region Events
-            /// <summary>
-            ///  Simulation kezdetének eseménye.
-            /// </summary>
+        /// <summary>
+        ///  Simulation kezdetének eseménye.
+        /// </summary>
         public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
 
         public event EventHandler<EventArgs> SimulationStarted;
@@ -109,11 +110,9 @@ namespace IMS.Model
             _pathFinder = new PathFinder(_IMSData);
             _steps = 0;
             _allEnergy = 0;
-<<<<<<< HEAD
-            _speed = 5;
-=======
-            Speed = 1;
->>>>>>> 1cd091a0c33e378e207be20d0c88309fe9181ed0
+
+            _speed = 1;
+            _time = 0;
 
             //NewSimulation();
         }
@@ -250,6 +249,12 @@ namespace IMS.Model
             }
 
             return table;
+        }
+
+        public void AdvanceTime()
+        {
+            _time++;
+            OnTimePassed(_time);
         }
 
         #endregion
