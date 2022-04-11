@@ -9,15 +9,15 @@ namespace IMS.Persistence.Entities
     public class Robot : Entity
     {
         private Int32 _energyConsumption;
-        private Int32 _capacity;
-        private Int32 _energyLeft;
+        private Int32 _capacity; //max
+        private Int32 _currentCapacity; //current
         private Int32 _destinationID;
         private Pos _destination;
         private Boolean _underPod;
 
         public Int32 EnergyConsumption { get { return _energyConsumption; } }
         public Int32 Capacity { get { return _capacity; } }
-        public Int32 EnergyLeft { get { return _energyLeft; } }
+        public Int32 currentCapacity { get { return _currentCapacity; } }
         public Int32 DestinationID { get { return _destinationID; } }
 
         public Boolean UnderPod { get { return _underPod; } set { } }
@@ -27,16 +27,24 @@ namespace IMS.Persistence.Entities
         public void Move(Pos other)
         {
 
-            if (_energyLeft <= _position.Distance(other))
+            if (_currentCapacity <= _position.Distance(other))
                 return;
-            _energyLeft += _position.Distance(other);
+            _currentCapacity += _position.Distance(other);
             _energyConsumption += _position.Distance(other);
             _position.X = other.X;
-            _position.Y = _position.Y;
+            _position.Y = other.Y;
         }
 
-        //finds closest charger and returns true it can get to destination false otherwise  
-        public Boolean EnoughCharge(IMSData IMSData)
+        //move robot to given position and change fuel
+        public void Rotate(Direction other)
+        {
+            if(this._dir != other)
+            {
+                _currentCapacity--;
+            }
+        }
+            //finds closest charger and returns true it can get to destination false otherwise  
+            public Boolean EnoughCharge(IMSData IMSData)
         {
             Pos closestDockPos = new Pos();
             int shortestDistance = int.MaxValue;
@@ -48,7 +56,7 @@ namespace IMS.Persistence.Entities
                     closestDockPos = dock.Pos;
                 }
             }
-            return this.EnergyLeft > shortestDistance;
+            return this.currentCapacity > shortestDistance;
         }
         //public Int32 EnergyConsumption { get; }
         //public Int32 Capacity { get;}
@@ -65,7 +73,7 @@ namespace IMS.Persistence.Entities
             _capacity = capacity;
             _energyConsumption = energyConsumption;
             _dir = direction;
-            _energyLeft = energyLeft;
+            _currentCapacity = energyLeft;
             _destinationID = destinationID;
         }
     }
