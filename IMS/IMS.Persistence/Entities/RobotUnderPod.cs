@@ -41,7 +41,7 @@ namespace IMS.Persistence.Entities
         {
         }
 
-        public RobotUnderPod(int x, int y, Robot robot, Pod pod) : this(x, y, robot.Direction, robot.Capacity, robot.EnergyLeft, robot.DestinationID, robot.EnergyConsumption, pod.Products)
+        public RobotUnderPod(int x, int y, Robot robot, Pod pod) : this(x, y, robot.Direction, robot.Capacity, robot.currentCapacity, robot.DestinationID, robot.EnergyConsumption, pod.Products)
         {
         }
 

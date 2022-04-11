@@ -74,6 +74,11 @@
                 <TextBlock Text="{Binding SpeedText}" />
             </StackPanel>
 
+            <StackPanel Orientation="Horizontal" Margin="10 10 10 10" >
+                <Label Content="Time: " />
+                <TextBlock Text="{Binding TimerText}" />
+            </StackPanel>
+
         </StackPanel>
         <Viewbox DockPanel.Dock="Right">
             <ItemsControl ItemsSource="{Binding Fields}">
