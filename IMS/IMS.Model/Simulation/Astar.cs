@@ -92,18 +92,11 @@ namespace IMS.Model.Simulation
             return score;
         }
 
+        //diagonal movement not allowed
         public static IEnumerable<Pos> Neighbors(bool[,] graph, Pos center)
         {
 
-            Pos pt = new Pos(center.X - 1, center.Y - 1);
-            if (IsValidNeighbor(graph, pt))
-                yield return pt;
-
-            pt = new Pos(center.X, center.Y - 1);
-            if (IsValidNeighbor(graph, pt))
-                yield return pt;
-
-            pt = new Pos(center.X + 1, center.Y - 1);
+            Pos pt = new Pos(center.X, center.Y - 1);
             if (IsValidNeighbor(graph, pt))
                 yield return pt;
 
@@ -116,20 +109,11 @@ namespace IMS.Model.Simulation
             if (IsValidNeighbor(graph, pt))
                 yield return pt;
 
-
             //bottom row
-            pt = new Pos(center.X - 1, center.Y + 1);
-            if (IsValidNeighbor(graph, pt))
-                yield return pt;
 
             pt = new Pos(center.X, center.Y + 1);
             if (IsValidNeighbor(graph, pt))
                 yield return pt;
-
-            pt = new Pos(center.X + 1, center.Y + 1);
-            if (IsValidNeighbor(graph, pt))
-                yield return pt;
-
 
         }
 
@@ -166,6 +150,7 @@ namespace IMS.Model.Simulation
             Pos bestPt = null;
             foreach (var node in openSet.Keys)
             {
+
                 var score = getFScore(node);
                 if (score < best)
                 {

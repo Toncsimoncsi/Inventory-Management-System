@@ -17,7 +17,7 @@ namespace IMS.Persistence.Entities
 
         public Int32 EnergyConsumption { get { return _energyConsumption; } }
         public Int32 Capacity { get { return _capacity; } }
-        public Int32 EnergyLeft { get { return EnergyLeft; } set { } }
+        public int EnergyLeft { get; set; }
         public Int32 DestinationID { get { return _destinationID; } }
 
         public Boolean UnderPod { get { return _underPod; } set { } }
@@ -27,14 +27,14 @@ namespace IMS.Persistence.Entities
         public void Move(Pos other)
         {
 
-            if (EnergyLeft <= _position.Distance(other))
-                return;
-            //EnergyLeft += _position.Distance(other);
+            //  if (EnergyLeft <= Pos.Distance(other))
+            //   return;
+            //EnergyLeft += Pos.Distance(other);
             EnergyLeft--;
-            //_energyConsumption += _position.Distance(other);
+            //_energyConsumption += Pos.Distance(other);
             _energyConsumption++;
-            _position.X = other.X;
-            _position.Y = other.Y;
+            Pos.X = other.X;
+            Pos.Y = other.Y;
         }
 
         //move robot to given position and change fuel

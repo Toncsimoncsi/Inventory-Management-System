@@ -44,7 +44,9 @@ namespace IMS.Persistence.Entities
         public RobotUnderPod(int x, int y, Robot robot, Pod pod) : this(x, y, robot.Direction, robot.Capacity, robot.EnergyLeft, robot.DestinationID, robot.EnergyConsumption, pod.Products)
         {
         }
-
+        public RobotUnderPod(Robot robot, Pod pod) : this(robot.Pos.X,robot.Pos.Y, robot.Direction, robot.Capacity, robot.EnergyLeft, robot.DestinationID, robot.EnergyConsumption, pod.Products)
+        {
+        }
         public void RemoveProduct(int productID)
         {
             if (_products.ContainsKey(productID))

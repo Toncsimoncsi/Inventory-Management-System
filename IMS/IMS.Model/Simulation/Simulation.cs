@@ -15,16 +15,14 @@ namespace IMS.Model.Simulation
         //private Pos[][] routes;
         private Astar astar;
 
+
+
         public IMSData IMSData { get; set; }
 
-  
+
         public event EventHandler<EventArgs> SimulationStarted;
-        public event EventHandler<EventArgs> SimulationOver;
-        public event EventHandler<EventArgs> RobotMoved;
-        /// <summary>
-        /// Simulation végének eseménye.
-        /// </summary>
-        public event EventHandler SpeedChanged;
+        public event EventHandler<EventArgs> TableChanged;
+
         /// <summary>
         /// Simulation végének eseménye.
         /// </summary>
@@ -42,13 +40,24 @@ namespace IMS.Model.Simulation
             //blocked = new Boolean[IMSData.SizeX][IMSData.SizeY];
             foreach (Robot robot in IMSData.EntityData.RobotData)
             {
-                int x = robot.Pos.X;
-                int y = robot.Pos.Y;
-                //blocked[x][y] = true;
-                blocked[x, y] = true;
+                //int x = robot.Pos.X;
+                //int y = robot.Pos.Y;
+                //blocked[robot.Pos.X][robot.Pos.Y;] = true;
+                blocked[robot.Pos.X, robot.Pos.Y] = true;
             }
             //routes = new Pos[4][];
             astar = new Astar();
+        }
+
+        private void updateBlock()
+        {
+            foreach (Robot robot in IMSData.EntityData.RobotData)
+            {
+                //int x = robot.Pos.X;
+                //int y = robot.Pos.Y;
+                //blocked[robot.Pos.X][robot.Pos.Y;] = true;
+                blocked[robot.Pos.X, robot.Pos.Y] = true;
+            }
         }
         //check if robot has enough energy to finish task
         private Dock closestDock(Robot robot)
@@ -64,6 +73,49 @@ namespace IMS.Model.Simulation
                 }
             }
             return closestDock;
+        }
+        private Entity[,] _createEmptyTable(Int32 sizeX, Int32 sizeY)
+        {
+            Entity[,] table = new Entity[sizeX, sizeY];
+
+            for (Int32 i = 0; i < table.GetLength(0); i++)
+            {
+                for (Int32 j = 0; j < table.GetLength(1); j++)
+                {
+                    table[i, j] = new Empty(i, j);
+                }
+            }
+
+            return table;
+        }
+        private Entity[,] _extractTableFromIMSData()
+        {
+            //Entity[,] table = new Entity[_IMSData.SizeX, _IMSData.SizeY];
+
+            Entity[,] table = _createEmptyTable(IMSData.SizeX, IMSData.SizeY);
+
+            foreach (Robot robot in IMSData.EntityData.RobotData)
+            {
+                table[robot.Pos.X, robot.Pos.Y] = robot;
+            }
+            foreach (Pod pod in IMSData.EntityData.PodData)
+            {
+                table[pod.Pos.X, pod.Pos.Y] = pod;
+            }
+            foreach (RobotUnderPod robotUnderPod in IMSData.EntityData.RobotUnderPodData)
+            {
+                table[robotUnderPod.Pos.X, robotUnderPod.Pos.Y] = robotUnderPod;
+            }
+            foreach (Destination destination in IMSData.EntityData.DestinationData)
+            {
+                table[destination.Pos.X, destination.Pos.Y] = destination;
+            }
+            foreach (Dock dock in IMSData.EntityData.DockData)
+            {
+                table[dock.Pos.X, dock.Pos.Y] = dock;
+            }
+
+            return table;
         }
         //run the calculate paths on the table
         private List<Direction> convertTurn(Pos[] route1, Robot robot)
@@ -94,16 +146,16 @@ namespace IMS.Model.Simulation
             return directionList;
         }
         //move robot to pod
-        public void moveRobotsStartToPod()
+        public void Run()
         {
             OnSimulationStarted();
             //need to not hard assign
-            Pos[][] routes = new Pos[IMSData.EntityData.RobotData.Count][] ;
+            Pos[][] routes = new Pos[IMSData.EntityData.RobotData.Count][];
             Direction[][] turns = new Direction[4][];
             //make routes and turns
-            for (int i = 0; i < routes.GetLength(0); i++)
+            for (int i = 0; i < routes.GetLength(0); i++) //for every robot
             {
-                
+                updateBlock(); 
                 //how much energy required from start to pod
                 List<Pos> routeStartToPod = astar.FindPath(blocked, IMSData.EntityData.RobotData[i].Pos, IMSData.EntityData.PodData[i].Pos);
                 int startToPod = routeStartToPod.Count;
@@ -116,7 +168,7 @@ namespace IMS.Model.Simulation
                         turnStartToPod++;
                     }
                 }
-                //how much energy required from pod to dest
+                //how much energy required from pod to dest and back
                 List<Pos> routePodToDest = astar.FindPath(blocked, IMSData.EntityData.PodData[i].Pos, IMSData.EntityData.DestinationData[i].Pos);
                 int PodToDest = routePodToDest.Count;
                 List<Direction> routeTurnPodToDest = convertTurn(routePodToDest.ToArray(), IMSData.EntityData.RobotData[i]);
@@ -131,15 +183,15 @@ namespace IMS.Model.Simulation
                 if (startToPod + turnStartToPod + PodToDest +turnPodToDest*2 < IMSData.EntityData.RobotData[i].EnergyLeft) //enough charge to go to destination
                 {
                     //not enough
-                    moveRobotToDock(IMSData.EntityData.RobotData[i], closestDock(IMSData.EntityData.RobotData[i]));
-                    moveDockToPod(IMSData.EntityData.RobotData[i], IMSData.EntityData.PodData[i]);
+                    moveRobotToDock(IMSData.EntityData.RobotData[i], closestDock(IMSData.EntityData.RobotData[i]));// to dock
+                    moveDockToPod(IMSData.EntityData.RobotData[i], IMSData.EntityData.PodData[i]); //to pod
                     OnTableChanged();
                 }
                 //enough
-;
-                routes[i] = routeStartToPod.ToArray();
+;               
+                routes[i] = astar.FindPath(blocked, IMSData.EntityData.RobotData[i].Pos, IMSData.EntityData.PodData[i].Pos).ToArray(); //robot to pod energy enough otherwise error
                 turns[i] = convertTurn(routes[i], IMSData.EntityData.RobotData[i]).ToArray();
-                //at pod go to dest and back (hard assign in order
+                //at pod go to dest and back (hard assign in order)
                 //need to implement not hard assign
                 moveRobotPodToDestThenPod(IMSData.EntityData.RobotData[i], IMSData.EntityData.DestinationData[i]);
             }
@@ -162,7 +214,10 @@ namespace IMS.Model.Simulation
             for (int j = 0; j < route.Count; j++) //mindegyik robot egymas utan egyet lep
             {
                 robot.Move(route[j]);
+                IMSData.StepCount++;
+                //OnTableChanged();
                 robot.Rotate(turnRobotToDock[j]);
+                IMSData.StepCount++;
                 OnTableChanged();
             }
             robot.UnderPod = true; //ala megy a podnak
@@ -177,7 +232,10 @@ namespace IMS.Model.Simulation
             for (int j = 0; j < routeRobotToPod.Count; j++) //mindegyik robot egymas utan egyet lep
             {
                 robot.Move(routeRobotToPod[j]);
+                IMSData.StepCount++;
+                //OnTableChanged();
                 robot.Rotate(turnRobotToPod[j]);
+                IMSData.StepCount++;
                 OnTableChanged();
             }
             robot.UnderPod = true;
@@ -205,7 +263,10 @@ namespace IMS.Model.Simulation
                 //}
                 //onTableChanged
                 robot.Move(routeRobotToDest[i]);
+                IMSData.StepCount++;
+                OnTableChanged();
                 robot.Rotate(turnRobotToPod[i]);
+                IMSData.StepCount++;
                 OnTableChanged();
             }
 
@@ -217,7 +278,10 @@ namespace IMS.Model.Simulation
                 //onorobotmoved
                 //}
                 robot.Move(routeRobotToDesReverse[i]);
+                IMSData.StepCount++;
+                OnTableChanged();
                 robot.Rotate(turnRobotToPodReverse[i]);
+                IMSData.StepCount++;
                 OnTableChanged();
             }
         }
@@ -239,6 +303,8 @@ namespace IMS.Model.Simulation
             if (SimulationWon != null)
                 TimePassed(this, new TimePassedEventArgs(time));
         }
+
+
         /// <summary>
         /// Mezőváltozás eseménykiváltása.
         /// </summary>
@@ -247,8 +313,8 @@ namespace IMS.Model.Simulation
         /// <param name="Entity">Játékos.</param>
         private void OnTableChanged()
         {
-            if (RobotMoved != null)
-                RobotMoved(this, EventArgs.Empty);
+            if (TableChanged != null)
+                TableChanged(this, EventArgs.Empty);
         }
     }
 }

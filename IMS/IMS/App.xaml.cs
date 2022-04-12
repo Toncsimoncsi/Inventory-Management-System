@@ -53,6 +53,7 @@ namespace IMS
             _viewModel.SpeedUp += new EventHandler(ViewModel_SpeedUp);
 
 
+
             _settingsViewModel = new SettingsViewModel(_model);
 
             _settingsViewModel.CreateSimulation += new EventHandler(SVM_CreateSimulation);

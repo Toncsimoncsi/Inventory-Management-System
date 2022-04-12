@@ -33,7 +33,7 @@ namespace IMS.ViewModel
         public DelegateCommand SetSizeCommand { get; private set; }
         public DelegateCommand ChangeColorCommand { get; private set; }
 
-    public Int32 SizeX { 
+        public Int32 SizeX { 
             get { return _sizeX; }
             set
             {

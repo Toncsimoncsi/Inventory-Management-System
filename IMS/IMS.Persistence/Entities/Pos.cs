@@ -28,6 +28,11 @@ namespace IMS.Persistence.Entities
 
         public override bool Equals(object obj)
         {
+            var item = obj as Pos;
+            if (item == null)
+            {
+                return false;
+            }
             return Equals(obj as Pos);
         }
 
@@ -45,7 +50,7 @@ namespace IMS.Persistence.Entities
 
         public int Distance(Pos other)
         {
-            return Math.Abs(this.X-other.Y)+Math.Abs(this.Y-other.Y);
+            return Math.Abs(this.X - other.Y) + Math.Abs(this.Y - other.Y);
         }
         ///<summary>
         ///operators of the class
@@ -53,7 +58,26 @@ namespace IMS.Persistence.Entities
         public static Pos operator +(Pos A, Pos B) => new Pos(A.X + B.X, A.Y + B.Y);
         public static Pos operator -(Pos A, Pos B) => new Pos(A.X - B.X, A.Y - B.Y);
 
-        public static bool operator ==(Pos A, Pos B) => A.Equals(B);
-        public static bool operator !=(Pos A, Pos B) => !A.Equals(B);
+        public static bool operator ==(Pos A, Pos B)
+        {
+            if (A is null)
+            {
+                if (B is null)
+                {
+                    // null == null = true.
+                    return true;
+                }
+
+                // Only the left side is null.
+                return false;
+            }
+            // Equals handles the case of null on right side.
+            return A.Equals(B);
+        }
+
+        public static bool operator !=(Pos A, Pos B) => !(A == B);
+        //XDDDDDDDDDDDDDDDDDDDDDDLOOL
+        //public static bool operator ==(Pos A, Pos B) => A.Equals(B);
+        //public static bool operator !=(Pos A, Pos B) => !A.Equals(B);
     }
 }

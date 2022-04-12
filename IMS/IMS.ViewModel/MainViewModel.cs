@@ -124,6 +124,8 @@ namespace IMS.ViewModel
 
             _model = model;
             _model.SimulationCreated += new EventHandler<EventArgs>(Model_SimulationCreated);
+            _model.TableChanged += new EventHandler<EventArgs>(Model_TableChanged);
+
 
             LoadSimulationCommand = new DelegateCommand(param => OnLoadSimulation());
 
@@ -237,6 +239,13 @@ namespace IMS.ViewModel
         }
 
         private void Model_SimulationCreated(Object sender, EventArgs e)
+        {
+            //Debug.WriteLine("Model_SimulationCreated called in viewmodel");
+            GenerateTable();
+            SetupTable();
+        }
+
+        private void Model_TableChanged(Object sender, EventArgs e)
         {
             //Debug.WriteLine("Model_SimulationCreated called in viewmodel");
             GenerateTable();

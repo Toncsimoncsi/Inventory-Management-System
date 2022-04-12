@@ -21,6 +21,8 @@ namespace IMS.Persistence
         public Int32 SizeX { get { return _sizeX; } }
         public Int32 SizeY { get { return _sizeY; } }
 
+        public int StepCount { get; set; }
+
         //public Int32 Time { get; set; }
         //public Int32 TotalEnergyConsumption { get; set; }
         //public Int32 SizeX { get; set; }
@@ -35,6 +37,7 @@ namespace IMS.Persistence
             _entityData = entityData;
             _time = time;
             _totalEnergyConsumption = totalEnergyConsumption;
+            StepCount = 0;
         }
 
         public IMSData(List<Pod> podData, List<Destination> destinationData, List<Dock> dockData, List<Robot> robotData, List<RobotUnderPod> robotUnderPodData, int sizeX, int sizeY, int time,int totalEnergyConsumption) : this(new EntityData(podData,destinationData,dockData,robotData,robotUnderPodData), sizeX, sizeY, time, totalEnergyConsumption)

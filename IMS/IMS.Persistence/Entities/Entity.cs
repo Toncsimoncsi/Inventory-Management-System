@@ -10,11 +10,11 @@ namespace IMS.Persistence.Entities
     public enum Direction { LEFT, UP, RIGHT, DOWN, NONE };
     public abstract class Entity
     {
-        protected Pos _position;
+        //protected Pos _position;
         protected EntityType _type;
         protected Direction _dir;
 
-        public Pos Pos { get { return _position; }}
+        public Pos Pos { get; set; }
         public EntityType Type { get { return _type; } }
         public Direction Direction { get { return _dir; } }
 
@@ -22,7 +22,7 @@ namespace IMS.Persistence.Entities
         {
             _type = EntityType.Empty;
             _dir = Direction.NONE;
-            _position = new Pos(x, y);
+            Pos = new Pos(x, y);
         }
 
     }
