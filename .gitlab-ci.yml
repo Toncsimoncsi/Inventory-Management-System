@@ -26,8 +26,9 @@ build_view:
     - cd IMS
     - dotnet build IMS.sln
 
-# Test
-#test_model:
-  #stage: test
-  #script:
-    #- dotnet test IMS.Test
+Test
+test_model:
+  stage: test
+  script:
+    - cd IMS
+    - dotnet test IMS.Test

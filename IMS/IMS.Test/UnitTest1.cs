@@ -113,7 +113,7 @@ namespace IMS.Test
             //TODO
         }
 
-        /*[TestMethod]
+        [TestMethod]
         public async Task GameModelLoadTest()
         {
             // kezdünk egy új játékot
@@ -123,8 +123,8 @@ namespace IMS.Test
             await _model.LoadSimulationAsync(String.Empty);
 
             // ellenõrizzük, hogy meghívták-e a Load mûveletet a megadott paraméterrel
-            _mock.Verify(dataAccess => dataAccess.LoadSimulationAsync(String.Empty), Times.Once());
-        }*/
+            //_mock.Verify(dataAccess => dataAccess.LoadSimulationAsync(String.Empty), Times.Once());
+        }
 
 
         [TestMethod]
