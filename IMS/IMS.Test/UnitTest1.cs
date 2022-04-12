@@ -97,6 +97,14 @@ namespace IMS.Test
         }
 
         [TestMethod]
+        public void StartSpeedTest()
+        {
+            _model.NewSimulation();
+
+            Assert.AreEqual(_model.Speed, 0);
+        }
+
+        [TestMethod]
         public void TimeTest()
         {
             _model.NewSimulation();
@@ -128,11 +136,18 @@ namespace IMS.Test
 
 
         [TestMethod]
-        public void SetSpeedTest()
+        public void SetSpeedTestSpeedUp()
         {
             int startSpeed = _model.Speed;
             _model.setSpeed(1);
             Assert.AreEqual(startSpeed + 1, _model.Speed);
+        }
+
+
+        [TestMethod]
+        public void SetSpeedTestSpeedDown()
+        {
+            int startSpeed = _model.Speed;
 
             _model.setSpeed(-1);
             Assert.AreEqual(startSpeed - 1, _model.Speed);
