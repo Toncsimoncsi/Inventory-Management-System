@@ -125,18 +125,18 @@ namespace IMS.ViewModel
         private void GenerateTable()
         {
             Fields.Clear();
-            for (Int32 i = 0; i < SizeX; ++i)
+            for (Int32 i = 0; i < SizeY; ++i)
             {
-                for (Int32 j = 0; j < SizeY; ++j)
+                for (Int32 j = 0; j < SizeX; ++j)
                 {
                     Fields.Add(new TableField
                     {
-                        X = i,
-                        Y = j,
+                        X = j,
+                        Y = i,
                         Color = EntityToColor(EntityType.Empty),
                         Direction = Direction.NONE.ToString(),
                         Type = EntityType.Empty,
-                        Entity = _model[i, j],
+                        Entity = _model[j, i],
                         Number = i * SizeX + j,
                         ViewFieldCommand = new DelegateCommand(param => ViewFieldInfo(Convert.ToInt32(param)))
                     });

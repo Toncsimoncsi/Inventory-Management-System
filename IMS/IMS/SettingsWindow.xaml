@@ -28,6 +28,8 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -40,6 +42,11 @@
 
                 <RadioButton Grid.Row="2" Grid.Column="0" Style="{StaticResource TargetButton}" Command="{Binding SelectDestinationCommand}" Content="TARGET" Margin="10"/>
                 <RadioButton Grid.Row="2" Grid.Column="1" Style="{StaticResource PodButton}" Command="{Binding SelectPodCommand}" Content="POD" Margin="10"/>
+
+                <RadioButton Grid.Row="3" Grid.Column="0" Style="{StaticResource PodButton}" Command="{Binding RelocationCommand}" Content="MOVE" Margin="10"/>
+                <RadioButton Grid.Row="3" Grid.Column="1" Style="{StaticResource PodButton}" Command="{Binding AddProductCommand}" Content="ADD" Margin="10"/>
+
+                <TextBox Grid.Row="4" Grid.Column="1" Name="ProductTextBox" Text="{Binding SelectedProduct}"/>
 
             </Grid>
 

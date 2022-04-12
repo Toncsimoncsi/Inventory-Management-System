@@ -101,6 +101,91 @@ namespace IMS.Model
             OnSimulationCreated();
         }
 
+        public void RelocationAttempt(int x1, int y1, int x2, int y2, int x, int y)
+        {
+            Debug.WriteLine("RelocationAttempt called");
+            Debug.WriteLine("x1: "+x1+", y1: "+y1+", x2: "+x2+", y2: "+y2+", x: "+x+", y: "+y);
+            int dx = x2 - x1;
+            int dy = y2 - y1;
+
+            if (x + dx < 0 || x + dx >= SizeX || y + dy < 0 || y + dy >= SizeY)
+            {
+                //this means the other corner of the rectangle would be outside the map
+                return;
+            }
+
+            if (dx < 0)
+            {
+                x1 = x2;
+                x += dx;
+                dx = -1 * dx;
+            }
+            if (dy < 0)
+            {
+                y1 = y2;
+                y += dy;
+                dy = -1 * dy;
+            }
+            //Debug.WriteLine("x1: " + x1 + ", y1: " + y1 + ", x: " + x + ", y: " + y + ", dx: " + dx + ", dy: " + dy);
+            //now: dx is the width, dy the height; x1, y1 the upper right corner of the 1st rectangle, x, y are the 2nd rect's pos
+
+            //if there's an overlap between them, it will fail
+            if (x1 < x + dx || x < x1 + dx || y1 < y + dy || y < y1 + dy)
+            {
+                //no overlap
+                for (int i = 0; i < dx + 1; ++i)
+                {
+                    for (int j = 0; j < dy + 1; ++j)
+                    {
+                        //Debug.WriteLine(_tempTable[x1 + i, y1 + j].Type.ToString());
+                        //Debug.WriteLine(i.ToString()+", "+j.ToString());
+                        if(_tempTable[x1+i,y1+j].Type == EntityType.Pod && _tempTable[x+i,y+j].Type == EntityType.Empty)
+                        {
+                            //Debug.WriteLine("switching");
+                            //swap only needs to happen in this case
+                            _tempTable[x + i, y + j] = _tempTable[x1 + i, y1 + j];
+                            _tempTable[x + i, y + j].Pos.X = x + i;
+                            _tempTable[x + i, y + j].Pos.Y = y + j;
+                            _tempTable[x1 + i, y1 + j] = new Empty(x1 + i, y1 + j);
+                            OnFieldChanged_SVM(x1 + i, y1 + j, _tempTable[x1 + i, y1 + j]);
+                            OnFieldChanged_SVM(x + i, y + j, _tempTable[x + i, y + j]);
+                            //Debug.WriteLine("done switching");
+                        }
+                    }
+                }
+
+
+
+            }
+            //else
+            //{
+                //overlap detected: abort
+            //    return;
+            //}
+
+            //signal for the creation of a new table
+        }
+
+        public void AddProduct(int x1, int y1, int x2, int y2, int productID)
+        {
+            for (int y = y1; y <= y2; ++y)
+            {
+                for (int x = x1; x <= x2; ++x)
+                {
+                    if (_tempTable[x,y].Type == EntityType.Destination)
+                    {
+                        ((Destination)_tempTable[x, y]).ID = productID;
+                        OnFieldChanged_SVM(x, y, _tempTable[x,y]);
+                    }
+                    if (_tempTable[x, y].Type == EntityType.Pod)
+                    {
+                        ((Pod)_tempTable[x, y]).Products.Add(productID,1);
+                        OnFieldChanged_SVM(x, y, _tempTable[x,y]);
+                    }
+                }
+            }
+        }
+
         public void GenerateEmtyTableForSettingsWindow(int x, int y)
         {
             _tempTable = new Entity[x, y];
@@ -136,7 +221,7 @@ namespace IMS.Model
         //note: empty (blank) entity is placed there of the specified type
         public void ChangeField(int x, int y, EntityType type)
         {
-            Debug.WriteLine("ChangeField: "+x.ToString()+", "+y.ToString());
+            //Debug.WriteLine("ChangeField: "+x.ToString()+", "+y.ToString());
             switch (type)
             {
                 case EntityType.Dock:
