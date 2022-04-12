@@ -19,6 +19,7 @@ namespace IMS.Model
 
 
         private Entity[,] _gameTable; // simtábla
+        private Entity[,] _tempTable;
         private IMSData _IMSData;
         private IMSDataAccess _dataAccess; // adatelérés
 
@@ -58,6 +59,9 @@ namespace IMS.Model
         public event EventHandler<EventArgs> SimulationCreated; //either loaded or created
         public event EventHandler<EventArgs> TableCreated; //created empty table on create mode
         public event EventHandler<FieldChangedEventArgs> FieldChanged;
+
+        public event EventHandler<EventArgs> TableCreated_SVM;
+        public event EventHandler<FieldChangedEventArgs> FieldChanged_SVM;
 
 
         #endregion
@@ -99,21 +103,56 @@ namespace IMS.Model
 
         public void GenerateEmtyTableForSettingsWindow(int x, int y)
         {
-            _gameTable = new Entity[x, y];
-            for (Int32 i = 0; i < _gameTable.GetLength(0); i++)
+            _tempTable = new Entity[x, y];
+            for (Int32 i = 0; i < _tempTable.GetLength(0); i++)
             {
-                for (Int32 j = 0; j < _gameTable.GetLength(1); j++)
+                for (Int32 j = 0; j < _tempTable.GetLength(1); j++)
                 {
-                    _gameTable[i, j] = new Empty(i, j);
+                    _tempTable[i, j] = new Empty(i, j);
                 }
             }
-            OnTableCreated();
+            OnTableCreated_SVM();
+        }
+
+        //makes _tempTable the official table (_gameTable) and creates a new IMSData
+        public void CreateTableFromSettings()
+        {
+            _IMSData = new IMSData(_tempTable);
+            _gameTable = _tempTable;
         }
 
 
         public void Simulation(Int32 x, Int32 y)
         {
 
+        }
+
+
+        //note: empty (blank) entity is placed there of the specified type
+        public void ChangeField(int x, int y, EntityType type)
+        {
+            switch (type)
+            {
+                case EntityType.Dock:
+                    _tempTable[x,y] = new Dock(x, y);
+                    break;
+                case EntityType.Destination:
+                    _tempTable[x, y] = new Destination(x, y);
+                    break;
+                case EntityType.Pod:
+                    _tempTable[x, y] = new Pod(x, y);
+                    break;
+                case EntityType.Robot:
+                    _tempTable[x, y] = new Robot(x, y);
+                    break;
+                case EntityType.RobotUnderPod:
+                    _tempTable[x, y] = new RobotUnderPod(x, y);
+                    break;
+            }
+
+            Debug.WriteLine("ChangeField called");
+
+            OnFieldChanged_SVM(x, y, _tempTable[x, y]);
         }
 
         public async Task LoadSimulationAsync(String path)
@@ -245,6 +284,18 @@ namespace IMS.Model
         {
             if (FieldChanged != null)
                 FieldChanged(this, new FieldChangedEventArgs(x, y, Entity));
+        }
+
+        private void OnFieldChanged_SVM(Int32 x, Int32 y, Entity Entity)
+        {
+            if (FieldChanged_SVM != null)
+                FieldChanged_SVM(this, new FieldChangedEventArgs(x, y, Entity));
+        }
+
+        private void OnTableCreated_SVM()
+        {
+            if (TableCreated_SVM != null)
+                TableCreated_SVM(this, EventArgs.Empty);
         }
 
         #endregion

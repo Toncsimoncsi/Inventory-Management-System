@@ -7,6 +7,7 @@ using IMS.Persistence.Entities;
 using IMS.Model;
 using IMS.ViewModel.Fields;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace IMS.ViewModel
 {
@@ -20,6 +21,7 @@ namespace IMS.ViewModel
         private int _sizeX;
         private int _sizeY;
         private string _fieldColor;
+        private EntityType _selectedType;
         //private bool _robotRadioButtonIsChecked;
 
         #endregion
@@ -28,12 +30,22 @@ namespace IMS.ViewModel
         public DelegateCommand CreateSimulationCommand { get; private set; }
         public DelegateCommand ResetSimulationCommand { get; private set; }
         public DelegateCommand ViewField { get; private set; }
-        public DelegateCommand ModifyField { get; private set; }
+        //public DelegateCommand ModifyField { get; private set; }
+        //public DelegateCommand SelectFieldCommand { get; private set; }
         public ObservableCollection<TableField> Fields { get; private set; }
         public DelegateCommand SetSizeCommand { get; private set; }
         public DelegateCommand ChangeColorCommand { get; private set; }
+        public DelegateCommand SelectDockCommand { get; private set; }
+        public DelegateCommand SelectPodCommand { get; private set; }
+        public DelegateCommand SelectDestinationCommand { get; private set; }
+        public DelegateCommand SelectRobotCommand { get; private set; }
 
-    public Int32 SizeX { 
+        public EntityType SelectedType
+        {
+            get { return _selectedType; }
+        }
+
+        public Int32 SizeX { 
             get { return _sizeX; }
             set
             {
@@ -86,6 +98,7 @@ namespace IMS.ViewModel
         public event EventHandler ResetSimulation;
         public event EventHandler SetSimulationSize;
         public event EventHandler ColorChanged;
+        public event EventHandler StartSimulation;
         #endregion
 
 
@@ -104,12 +117,18 @@ namespace IMS.ViewModel
 
             _model = model;
             _model.SimulationCreated += new EventHandler<EventArgs>(Model_SimulationCreated);
+            //_model.TableCreated_SVM += new EventHandler<EventArgs>(Model_TableCreated);
+            _model.FieldChanged_SVM += new EventHandler<FieldChangedEventArgs>(Model_FieldChanged_SVM);
 
             SetSizeCommand = new DelegateCommand(x => OnGenerateEmptyTable());
             CreateSimulationCommand = new DelegateCommand(param => OnCreateSimulation());
             ResetSimulationCommand = new DelegateCommand(param => OnResetSimulation());
             ChangeColorCommand = new DelegateCommand(param => OnColorChanged());
-
+            //SelectFieldCommand = new DelegateCommand(param => _changeSelection((String)param));
+            SelectRobotCommand = new DelegateCommand(param => _changeSelection(EntityType.Robot));
+            SelectPodCommand = new DelegateCommand(param => _changeSelection(EntityType.Pod));
+            SelectDestinationCommand = new DelegateCommand(param => _changeSelection(EntityType.Destination));
+            SelectDockCommand = new DelegateCommand(param => _changeSelection(EntityType.Dock));
 
             _fieldColor = "White";
 
@@ -128,6 +147,7 @@ namespace IMS.ViewModel
         /// </summary>
         public void GenerateTable()
         {
+            Debug.WriteLine("generate new table, SizeX: " + SizeX.ToString() + ", SizeY: " + SizeY.ToString());
             Fields.Clear();
             for (Int32 i = 0; i < SizeX; ++i)
             {
@@ -139,6 +159,9 @@ namespace IMS.ViewModel
                         Y = j,
                         Color = EntityToColor(EntityType.Empty),
                         Direction = Direction.NONE.ToString(),
+                        Number = i * SizeX + j,
+                        //PutField = new DelegateCommand(param => SelectEntityField((EntityType)Enum.Parse(typeof(EntityType), param.ToString())))
+                        PutFieldCommand = new DelegateCommand(param => PutEntity(Convert.ToInt32(param)))
                     });
                 }
             }
@@ -166,10 +189,24 @@ namespace IMS.ViewModel
             {
                 case "Gold":
                    // _model.setField(field.X, field.Y, "Robot");
-                    break;
+                   break;
             }
             GenerateTable();
             SetupTable();
+        }
+
+        /*
+        private void SelectEntityField(EntityType type)
+        {
+            _selectedType = type;
+        }
+        */
+
+        private void PutEntity(Int32 ind)
+        {
+            Debug.WriteLine("PutEntity called");
+            TableField field = Fields[ind];
+            _model.ChangeField(field.X,field.Y,_selectedType);
         }
 
         private void Model_SimulationCreated(Object sender, EventArgs e)
@@ -177,6 +214,29 @@ namespace IMS.ViewModel
             GenerateTable();
             SetupTable();
         }
+
+        private void Model_FieldChanged_SVM(Object sender, FieldChangedEventArgs e)
+        {
+            Fields[e.Y * _model.SizeX + _model.SizeY].Entity = _model[e.X, e.Y];
+            Fields[e.Y * _model.SizeX + _model.SizeY].Type = _model[e.X, e.Y].Type;
+            Fields[e.Y * _model.SizeX + _model.SizeY].Color = EntityToColor(_model[e.X, e.Y].Type);
+        }
+
+        /*
+        private void _changeSelection(String typeStr)
+        {
+            Debug.WriteLine("changed selection");
+            _selectedType = (EntityType)Enum.Parse(typeof(EntityType),typeStr);
+        }
+        */
+
+        private void _changeSelection(EntityType type)
+        {
+            Debug.WriteLine("changed selection");
+            //_selectedType = (EntityType)Enum.Parse(typeof(EntityType), typeStr);
+            _selectedType = type;
+        }
+
         #endregion
 
         #region Event methods
@@ -197,6 +257,7 @@ namespace IMS.ViewModel
 
         private void OnGenerateEmptyTable() 
         {
+            Debug.WriteLine("OnGenerateEmptyTable called");
             if (SetSimulationSize != null)
                 SetSimulationSize(this, EventArgs.Empty);
         }

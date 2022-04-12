@@ -16,5 +16,9 @@ namespace IMS.Persistence.Entities
             _type = EntityType.Destination;
             _id = id;
         }
+
+        public Destination(int x, int y) : this(x, y, -1)
+        {
+        }
     }
 }

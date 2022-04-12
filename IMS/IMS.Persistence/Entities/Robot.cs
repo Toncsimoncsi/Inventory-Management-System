@@ -31,5 +31,10 @@ namespace IMS.Persistence.Entities
             _energyLeft = energyLeft;
             _destinationID = destinationID;
         }
+
+        public Robot(int x, int y) : this(x,y,Direction.NONE,1,1,-1,0)
+        {
+
+        }
     }
 }

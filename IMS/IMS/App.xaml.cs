@@ -49,7 +49,6 @@ namespace IMS
             _viewModel.LoadSimulation += new EventHandler(ViewModel_LoadSimulation);
             _viewModel.SaveSimulation += new EventHandler(ViewModel_SaveSimulation);
             //_viewModel.CreateSimulation += new EventHandler(ViewModel_CreateSimulation);
-
             _viewModel.SaveDiary += new EventHandler(ViewModel_SaveDiary);
             _viewModel.ExitSimulation += new EventHandler(ViewModel_ExitSimulation);
             _viewModel.OpenSettings += new EventHandler(ViewModel_OpenSettings);
@@ -59,7 +58,7 @@ namespace IMS
 
             _settingsViewModel.CreateSimulation += new EventHandler(SVM_CreateSimulation);
             _settingsViewModel.ResetSimulation += new EventHandler(SVM_ResetSimulation);
-            _settingsViewModel.SetSimulationSize += new EventHandler(SVM_SetSimultaionSize);
+            _settingsViewModel.SetSimulationSize += new EventHandler(SVM_SetSimulationSize);
             _settingsViewModel.ColorChanged += new EventHandler(SVM_ChangeColor);
 
 
@@ -175,7 +174,7 @@ namespace IMS
             _settingsViewModel.SetupTable();
         }
 
-        private void SVM_SetSimultaionSize(object sender, EventArgs e)
+        private void SVM_SetSimulationSize(object sender, EventArgs e)
         {
             _model.GenerateEmtyTableForSettingsWindow(_settingsViewModel.SizeX, _settingsViewModel.SizeY);
             _settingsViewModel.GenerateTable();

@@ -59,7 +59,7 @@ namespace IMS.ViewModel
         public DelegateCommand SlowerCommand { get; private set; }
         public DelegateCommand FasterCommand { get; private set; }
         public DelegateCommand StopCommand { get; private set; }
-        public DelegateCommand ViewField { get; private set; }
+        //public DelegateCommand ViewField { get; private set; }
         public DelegateCommand ModifyField { get; private set; }
         public ObservableCollection<TableField> Fields { get; private set; }
         public Int32 SizeX { get { return _model.SizeX; } }
@@ -138,7 +138,7 @@ namespace IMS.ViewModel
                         Type = EntityType.Empty,
                         Entity = _model[i, j],
                         Number = i * SizeX + j,
-                        ViewField = new DelegateCommand(param => ViewFieldInfo(Convert.ToInt32(param)))
+                        ViewFieldCommand = new DelegateCommand(param => ViewFieldInfo(Convert.ToInt32(param)))
                     });
                 }
             }
@@ -228,6 +228,7 @@ namespace IMS.ViewModel
 
         public void CreateSimulationFromSettingsWindow()
         {
+            _model.CreateTableFromSettings();
             GenerateTable();
             SetupTable();
         }

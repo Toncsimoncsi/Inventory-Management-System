@@ -38,6 +38,11 @@ namespace IMS.Persistence.Entities
         {
         }
 
+        public RobotUnderPod(int x, int y) : this(x, y, Direction.NONE,1,1,-1,new Dictionary<int,int>())
+        {
+
+        }
+
         public void RemoveProduct(int productID)
         {
             if (_products.ContainsKey(productID))

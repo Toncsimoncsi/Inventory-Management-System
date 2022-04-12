@@ -75,7 +75,8 @@ namespace IMS.ViewModel.Fields
         /// </summary>
         public Int32 Y { get; set; }
 
-        public DelegateCommand ViewField { get; set; }
+        public DelegateCommand ViewFieldCommand { get; set; }
+        public DelegateCommand PutFieldCommand { get; set; }
 
         public Int32 Number { get; set; }
 

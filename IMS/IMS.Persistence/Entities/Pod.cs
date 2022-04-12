@@ -17,5 +17,9 @@ namespace IMS.Persistence.Entities
             _type = EntityType.Pod;
             _products = products;
         }
+
+        public Pod(int x, int y) : this(x,y,new Dictionary<int, int>())
+        {
+        }
     }
 }
