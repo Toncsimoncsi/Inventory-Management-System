@@ -19,7 +19,6 @@
     <ProjectReference Include="..\IMS.Model\IMS.Model.csproj" />
     <ProjectReference Include="..\IMS.Persistence\IMS.Persistence.csproj" />
     <ProjectReference Include="..\IMS.ViewModel\IMS.ViewModel.csproj" />
-    <ProjectReference Include="..\IMS.View\IMS.View.csproj" />
   </ItemGroup>
 
   <ItemGroup>

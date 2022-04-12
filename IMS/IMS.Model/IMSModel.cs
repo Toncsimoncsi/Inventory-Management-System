@@ -132,6 +132,11 @@ namespace IMS.Model
                 }
             }
             */
+            _steps = 0;
+            _allEnergy = 0;
+
+            _speed = 1;
+            _time = 0;
 
             _gameTable = _createEmptyTable(_gameTable.GetLength(0), _gameTable.GetLength(1));
             OnSimulationCreated();
@@ -154,6 +159,12 @@ namespace IMS.Model
         {
             _speed += n;
             OnSpeedChanged(_speed);
+        }
+
+        public void AdvanceTime()
+        {
+            _time++;
+            OnTimePassed(_time);
         }
 
 
@@ -201,6 +212,7 @@ namespace IMS.Model
 
             await _dataAccess.SaveSimulationAsync(path, _IMSData);
         }
+
 
         #endregion
 
@@ -251,11 +263,7 @@ namespace IMS.Model
             return table;
         }
 
-        public void AdvanceTime()
-        {
-            _time++;
-            OnTimePassed(_time);
-        }
+
 
         #endregion
 

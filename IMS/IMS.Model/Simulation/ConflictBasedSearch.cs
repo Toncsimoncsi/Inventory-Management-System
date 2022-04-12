@@ -72,7 +72,7 @@ namespace IMS.Model.Simulation
                     closestDockPos = dock.Pos;
                 }
             }
-            return robot.currentCapacity > shortestDistance;
+            return robot.EnergyLeft > shortestDistance;
         }
     }
 }

@@ -1,0 +1,64 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "IMS/1.0.0": {
+        "dependencies": {
+          "IMS.Model": "1.0.0",
+          "IMS.Persistence": "1.0.0",
+          "IMS.ViewModel": "1.0.0"
+        },
+        "runtime": {
+          "IMS.dll": {}
+        }
+      },
+      "IMS.Model/1.0.0": {
+        "dependencies": {
+          "IMS.Persistence": "1.0.0"
+        },
+        "runtime": {
+          "IMS.Model.dll": {}
+        }
+      },
+      "IMS.Persistence/1.0.0": {
+        "runtime": {
+          "IMS.Persistence.dll": {}
+        }
+      },
+      "IMS.ViewModel/1.0.0": {
+        "dependencies": {
+          "IMS.Model": "1.0.0"
+        },
+        "runtime": {
+          "IMS.ViewModel.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "IMS/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "IMS.Model/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "IMS.Persistence/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "IMS.ViewModel/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

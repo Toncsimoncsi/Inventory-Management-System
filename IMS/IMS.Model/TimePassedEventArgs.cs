@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IMS.Model
 {
-    class TimePassedEventArgs : EventArgs
+    public class TimePassedEventArgs : EventArgs
     {
         /// <summary>
         /// Ido lekérdezése.

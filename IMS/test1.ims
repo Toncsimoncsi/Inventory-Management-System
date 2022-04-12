@@ -1,13 +1,51 @@
 12 12
 0
-2
+12
 Robot
-1 1
+11 10
+5
+5
+0
+LEFT
+0
+Robot
+11 9
+5
+5
+0
+LEFT
+0
+Robot
+11 8
+5
+5
+0
+LEFT
+0
+Robot
+11 7
 5
 5
 0
 LEFT
 0
 Destination
-9 9
-0
+2 11
+1
+Destination
+4 11
+2
+Destination
+6 11
+3
+Destination
+8 11
+4
+Dock
+0 2
+Dock
+0 4
+Dock
+0 6
+Dock
+0 8
