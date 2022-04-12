@@ -35,11 +35,11 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
-                <RadioButton Grid.Row="1" Grid.Column="0" Style="{StaticResource RobotButton}" Content="ROBOT" Margin="10"/>
-                <RadioButton Grid.Row="1" Grid.Column="1" Style="{StaticResource DockButton}" Content="DOCK" Margin="10"/>
+                <RadioButton Grid.Row="1" Grid.Column="0" Style="{StaticResource RobotButton}" Command="{Binding SelectRobotCommand}" Content="ROBOT" Margin="10"/>
+                <RadioButton Grid.Row="1" Grid.Column="1" Style="{StaticResource DockButton}" Command="{Binding SelectDockCommand}" Content="DOCK" Margin="10"/>
 
-                <RadioButton Grid.Row="2" Grid.Column="0" Style="{StaticResource TargetButton}" Content="TARGET" Margin="10"/>
-                <RadioButton Grid.Row="2" Grid.Column="1" Style="{StaticResource PodButton}" Content="POD" Margin="10"/>
+                <RadioButton Grid.Row="2" Grid.Column="0" Style="{StaticResource TargetButton}" Command="{Binding SelectDestinationCommand}" Content="TARGET" Margin="10"/>
+                <RadioButton Grid.Row="2" Grid.Column="1" Style="{StaticResource PodButton}" Command="{Binding SelectPodCommand}" Content="POD" Margin="10"/>
 
             </Grid>
 
@@ -59,7 +59,7 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button IsEnabled="True"  >
+                        <Button IsEnabled="True" Command="{Binding PutFieldCommand}" CommandParameter="{Binding Number}">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Background" Value="{Binding Color}" />

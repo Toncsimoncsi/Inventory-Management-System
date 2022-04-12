@@ -44,9 +44,9 @@ namespace IMS.Model
         }
 
         public Int32 SizeX { get { return _gameTable.GetLength(0); } set { } }
-
         public Int32 SizeY { get { return _gameTable.GetLength(1); } set { } }
-
+        public Int32 TempSizeX { get { return _tempTable.GetLength(0); } set { } }
+        public Int32 TempSizeY { get { return _tempTable.GetLength(1); } set { } }
         public int Steps { get { return _steps; } }
         public int AllEnergy { get { return _allEnergy; } }
 
@@ -114,6 +114,11 @@ namespace IMS.Model
             OnTableCreated_SVM();
         }
 
+        public Entity GetTemp(Int32 x, Int32 y)
+        {
+            return _tempTable[x, y];
+        }
+
         //makes _tempTable the official table (_gameTable) and creates a new IMSData
         public void CreateTableFromSettings()
         {
@@ -131,6 +136,7 @@ namespace IMS.Model
         //note: empty (blank) entity is placed there of the specified type
         public void ChangeField(int x, int y, EntityType type)
         {
+            Debug.WriteLine("ChangeField: "+x.ToString()+", "+y.ToString());
             switch (type)
             {
                 case EntityType.Dock:
@@ -150,7 +156,7 @@ namespace IMS.Model
                     break;
             }
 
-            Debug.WriteLine("ChangeField called");
+            //Debug.WriteLine("ChangeField called");
 
             OnFieldChanged_SVM(x, y, _tempTable[x, y]);
         }

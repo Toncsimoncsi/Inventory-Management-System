@@ -125,10 +125,10 @@ namespace IMS.ViewModel
             ResetSimulationCommand = new DelegateCommand(param => OnResetSimulation());
             ChangeColorCommand = new DelegateCommand(param => OnColorChanged());
             //SelectFieldCommand = new DelegateCommand(param => _changeSelection((String)param));
-            SelectRobotCommand = new DelegateCommand(param => _changeSelection(EntityType.Robot));
-            SelectPodCommand = new DelegateCommand(param => _changeSelection(EntityType.Pod));
-            SelectDestinationCommand = new DelegateCommand(param => _changeSelection(EntityType.Destination));
-            SelectDockCommand = new DelegateCommand(param => _changeSelection(EntityType.Dock));
+            SelectRobotCommand = new DelegateCommand(x => _changeSelection(EntityType.Robot));
+            SelectPodCommand = new DelegateCommand(x => _changeSelection(EntityType.Pod));
+            SelectDestinationCommand = new DelegateCommand(x => _changeSelection(EntityType.Destination));
+            SelectDockCommand = new DelegateCommand(x => _changeSelection(EntityType.Dock));
 
             _fieldColor = "White";
 
@@ -159,7 +159,7 @@ namespace IMS.ViewModel
                         Y = j,
                         Color = EntityToColor(EntityType.Empty),
                         Direction = Direction.NONE.ToString(),
-                        Number = i * SizeX + j,
+                        Number = j * SizeX + i,
                         //PutField = new DelegateCommand(param => SelectEntityField((EntityType)Enum.Parse(typeof(EntityType), param.ToString())))
                         PutFieldCommand = new DelegateCommand(param => PutEntity(Convert.ToInt32(param)))
                     });
@@ -204,7 +204,7 @@ namespace IMS.ViewModel
 
         private void PutEntity(Int32 ind)
         {
-            Debug.WriteLine("PutEntity called");
+            //Debug.WriteLine("PutEntity called");
             TableField field = Fields[ind];
             _model.ChangeField(field.X,field.Y,_selectedType);
         }
@@ -217,9 +217,19 @@ namespace IMS.ViewModel
 
         private void Model_FieldChanged_SVM(Object sender, FieldChangedEventArgs e)
         {
-            Fields[e.Y * _model.SizeX + _model.SizeY].Entity = _model[e.X, e.Y];
-            Fields[e.Y * _model.SizeX + _model.SizeY].Type = _model[e.X, e.Y].Type;
-            Fields[e.Y * _model.SizeX + _model.SizeY].Color = EntityToColor(_model[e.X, e.Y].Type);
+            Debug.WriteLine("Model_FieldChanged_SVM called, "+e.X.ToString()+", "+e.Y.ToString());
+            //TODO: get values from _tempTable
+            //Fields[e.Y * _model.SizeX + _model.SizeY].Entity = _model[e.X, e.Y];
+            //Fields[e.Y * _model.SizeX + _model.SizeY].Type = _model[e.X, e.Y].Type;
+            //Fields[e.Y * _model.SizeX + _model.SizeY].Color = EntityToColor(_model[e.X, e.Y].Type);
+
+            Fields[e.Y * _model.TempSizeX + e.X].Entity = _model.GetTemp(e.X, e.Y);
+            Fields[e.Y * _model.TempSizeX + e.X].Type = _model.GetTemp(e.X, e.Y).Type;
+            Fields[e.Y * _model.TempSizeX + e.X].Color = EntityToColor(_model.GetTemp(e.X, e.Y).Type);
+            //Debug.WriteLine(Fields[e.Y * _model.SizeX + _model.SizeY].Entity.Pos.X.ToString());
+            //Debug.WriteLine(Fields[e.Y * _model.SizeX + _model.SizeY].Entity.Pos.Y.ToString());
+            //Debug.WriteLine(Fields[e.Y * _model.SizeX + _model.SizeY].X.ToString());
+            //Debug.WriteLine(Fields[e.Y * _model.SizeX + _model.SizeY].Y.ToString());
         }
 
         /*
@@ -232,7 +242,7 @@ namespace IMS.ViewModel
 
         private void _changeSelection(EntityType type)
         {
-            Debug.WriteLine("changed selection");
+            //Debug.WriteLine("changed selection");
             //_selectedType = (EntityType)Enum.Parse(typeof(EntityType), typeStr);
             _selectedType = type;
         }
