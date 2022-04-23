@@ -136,6 +136,7 @@ namespace IMS.ViewModel
             _model.SimulationCreated += new EventHandler<EventArgs>(Model_SimulationCreated);
             //_model.TableCreated_SVM += new EventHandler<EventArgs>(Model_TableCreated);
             _model.FieldChanged_SVM += new EventHandler<FieldChangedEventArgs>(Model_FieldChanged_SVM);
+            _model.SelectionChanged_SVM += new EventHandler<SelectionChangedEventArgs>(Model_SelectionChanged_SVM);
 
             SetSizeCommand = new DelegateCommand(x => OnGenerateEmptyTable());
             CreateSimulationCommand = new DelegateCommand(param => OnCreateSimulation());
@@ -179,6 +180,7 @@ namespace IMS.ViewModel
                         X = j,
                         Y = i,
                         Color = EntityToColor(EntityType.Empty),
+                        BorderColor = "Gray",
                         Direction = Direction.NONE.ToString(),
                         Number = i * SizeX + j,
                         //PutField = new DelegateCommand(param => SelectEntityField((EntityType)Enum.Parse(typeof(EntityType), param.ToString())))
@@ -199,6 +201,7 @@ namespace IMS.ViewModel
             foreach (TableField field in Fields)
             {
                 field.Color = EntityToColor(_model[field.X, field.Y].Type);
+                field.BorderColor = "Gray";
                 field.Direction = _model[field.X, field.Y].Direction.ToString();
             }
         }
@@ -238,6 +241,7 @@ namespace IMS.ViewModel
                 _x1 = field.X;
                 _y1 = field.Y;
                 ++_relocationStep;
+                _model.Selection(_x1, _y1);
             }
             else if (_relocationStep == 2)
             {
@@ -245,6 +249,7 @@ namespace IMS.ViewModel
                 _x2 = field.X;
                 _y2 = field.Y;
                 ++_relocationStep;
+                _model.Selection(_x2, _y2);
             }
             else if (_relocationStep == 3)
             {
@@ -269,6 +274,8 @@ namespace IMS.ViewModel
 
                 //reset:
                 _relocationStep = 0;
+
+                _model.EndSelection();
             }
             else if (_selectionStep == 1)
             {
@@ -310,6 +317,11 @@ namespace IMS.ViewModel
             //Debug.WriteLine(Fields[e.Y * _model.SizeX + _model.SizeY].Entity.Pos.Y.ToString());
             //Debug.WriteLine(Fields[e.Y * _model.SizeX + _model.SizeY].X.ToString());
             //Debug.WriteLine(Fields[e.Y * _model.SizeX + _model.SizeY].Y.ToString());
+        }
+
+        private void Model_SelectionChanged_SVM(Object sender, SelectionChangedEventArgs e)
+        {
+            Fields[e.Y * _model.TempSizeX + e.X].BorderColor = e.IsSelected ? "Red" : "Gray";
         }
 
         private void _startRelocation()

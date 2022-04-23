@@ -25,6 +25,10 @@ namespace IMS.Model
 
         private int _steps;
         private int _allEnergy;
+        private int _selectionX1;
+        private int _selectionY1;
+        private int _selectionX2;
+        private int _selectionY2;
 
         #endregion
 
@@ -62,6 +66,7 @@ namespace IMS.Model
 
         public event EventHandler<EventArgs> TableCreated_SVM;
         public event EventHandler<FieldChangedEventArgs> FieldChanged_SVM;
+        public event EventHandler<SelectionChangedEventArgs> SelectionChanged_SVM;
 
 
         #endregion
@@ -77,6 +82,11 @@ namespace IMS.Model
 
             _steps = 0;
             _allEnergy = 0;
+
+            _selectionX1 = -1;
+            _selectionY1 = -1;
+            _selectionX2 = -1;
+            _selectionY2 = -1;
 
             //NewSimulation();
         }
@@ -108,7 +118,7 @@ namespace IMS.Model
             int dx = x2 - x1;
             int dy = y2 - y1;
 
-            if (x + dx < 0 || x + dx >= SizeX || y + dy < 0 || y + dy >= SizeY)
+            if (x + dx < 0 || x + dx >= TempSizeX || y + dy < 0 || y + dy >= TempSizeY)
             {
                 //this means the other corner of the rectangle would be outside the map
                 return;
@@ -130,7 +140,8 @@ namespace IMS.Model
             //now: dx is the width, dy the height; x1, y1 the upper right corner of the 1st rectangle, x, y are the 2nd rect's pos
 
             //if there's an overlap between them, it will fail
-            if (x1 < x + dx || x < x1 + dx || y1 < y + dy || y < y1 + dy)
+            //TODO: maybe <= is needed. Check
+            if (x1 <= x + dx || x <= x1 + dx || y1 <= y + dy || y <= y1 + dy)
             {
                 //no overlap
                 for (int i = 0; i < dx + 1; ++i)
@@ -184,6 +195,63 @@ namespace IMS.Model
                     }
                 }
             }
+        }
+
+        public void Selection(int x, int y)
+        {
+            if (_selectionX1 == -1 && _selectionY1 == -1)
+            {
+                _selectionX1 = x;
+                _selectionY1 = y;
+                //change one field
+                OnSelectionChanged_SVM(x, y, true);
+            }
+            else
+            {
+                if (_selectionX1 > x)
+                {
+                    _selectionX2 = _selectionX1;
+                    _selectionX1 = x;
+                }
+                else
+                {
+                    _selectionX2 = x;
+                }
+                if (_selectionY1 > y)
+                {
+                    _selectionY2 = _selectionY1;
+                    _selectionY1 = y;
+                }
+                else
+                {
+                    _selectionY2 = y;
+                }
+                //change multiple fields
+                for (int _y = _selectionY1; _y <= _selectionY2; ++_y)
+                {
+                    for (int _x = _selectionX1; _x <= _selectionX2; ++_x)
+                    {
+                        OnSelectionChanged_SVM(_x, _y, true);
+                    }
+                }
+            }
+            //if only one of the xs or ys is -1, there's an error
+        }
+
+        public void EndSelection()
+        {
+            //this doesn't test it if it's not used correctly
+            for (int y = _selectionY1; y <= _selectionY2; ++y)
+            {
+                for (int x = _selectionX1; x <= _selectionX2; ++x)
+                {
+                    OnSelectionChanged_SVM(x, y, false);
+                }
+            }
+            _selectionX1 = -1;
+            _selectionY1 = -1;
+            _selectionX2 = -1;
+            _selectionY2 = -1;
         }
 
         public void GenerateEmtyTableForSettingsWindow(int x, int y)
@@ -381,6 +449,12 @@ namespace IMS.Model
         {
             if (FieldChanged_SVM != null)
                 FieldChanged_SVM(this, new FieldChangedEventArgs(x, y, Entity));
+        }
+
+        private void OnSelectionChanged_SVM(Int32 x, Int32 y, Boolean isSelected)
+        {
+            if (SelectionChanged_SVM != null)
+                SelectionChanged_SVM(this, new SelectionChangedEventArgs(x, y, isSelected));
         }
 
         private void OnTableCreated_SVM()
