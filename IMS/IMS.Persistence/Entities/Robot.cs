@@ -32,7 +32,29 @@ namespace IMS.Persistence.Entities
             _destinationID = destinationID;
         }
 
-        public Robot(int x, int y) : this(x,y,Direction.NONE,1,1,-1,0)
+        public Robot(int x, int y) : this(x,y,Direction.UP,1,1,-1,0)
+        {
+
+        }
+
+        public Robot(int x, int y, int capacity) : this(x,y,Direction.UP,capacity,capacity,-1)
+        {
+
+        }
+
+        public Robot(int x, int y, Direction direction, int capacity) : this(x, y, direction, capacity, capacity, -1)
+        {
+
+        }
+
+        /*
+        public Robot(int x, int y, Direction direction, int capacity, int energyLeft, int energyConsumption) : this(x, y, direction, capacity, energyLeft, -1, energyConsumption)
+        {
+
+        }
+        */
+
+        public Robot(Robot robot, Direction direction) : this(robot.Pos.X, robot.Pos.Y, direction, robot.Capacity, robot.EnergyLeft, robot.DestinationID, robot.EnergyConsumption)
         {
 
         }

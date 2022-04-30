@@ -82,6 +82,11 @@ namespace IMS.ViewModel
             get; set;
         }
 
+        public Int32 SelectedCapacity
+        {
+            get; set;
+        }
+
         public String FieldColor
         {
             get { return _fieldColor; }
@@ -230,10 +235,24 @@ namespace IMS.ViewModel
         {
             TableField field = Fields[ind];
             Debug.WriteLine("PutEntity called");
-            if (_relocationStep == 0 && _selectionStep == 0)
+            if (_relocationStep == 0 && _selectionStep == 0)//changing field
             {
                 Debug.WriteLine("putting down entity");
-                _model.ChangeField(field.X, field.Y, _selectedType);
+                if (_selectedType == EntityType.Robot && SelectedCapacity > 0)//only put it down if the capacity value is valid
+                {
+                    if (field.Type == EntityType.Robot)
+                    {
+                        _model.RotateRobot(field.X, field.Y);
+                    }
+                    else
+                    {
+                        _model.ChangeField(field.X, field.Y, _selectedType, SelectedCapacity);
+                    }
+                }
+                else
+                {
+                    _model.ChangeField(field.X, field.Y, _selectedType);
+                }
             }
             else if (_relocationStep == 1)
             {
@@ -270,7 +289,7 @@ namespace IMS.ViewModel
 
                 _model.RelocationAttempt(_x1, _y1, _x2, _y2, x, y);
 
-                
+
 
                 //reset:
                 _relocationStep = 0;
@@ -282,6 +301,7 @@ namespace IMS.ViewModel
                 _x1 = field.X;
                 _y1 = field.Y;
                 ++_selectionStep;
+                _model.AddProductSelection(_x1, _y1);
             }
             else if (_selectionStep == 2)
             {
@@ -328,6 +348,7 @@ namespace IMS.ViewModel
         {
             //Debug.WriteLine("starting relocation");
             _relocationStep = 1;
+            _stopSelection();
         }
 
         private void _stopRelocation()
@@ -338,6 +359,7 @@ namespace IMS.ViewModel
         private void _startSelection()
         {
             _selectionStep = 1;
+            _stopRelocation();
         }
 
         private void _stopSelection()

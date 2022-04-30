@@ -179,6 +179,8 @@ namespace IMS.Model
 
         public void AddProduct(int x1, int y1, int x2, int y2, int productID)
         {
+            OnSelectionChanged_SVM(x1, y1, false);
+            /*
             for (int y = y1; y <= y2; ++y)
             {
                 for (int x = x1; x <= x2; ++x)
@@ -195,6 +197,30 @@ namespace IMS.Model
                     }
                 }
             }
+            */
+            int yInc = y1 <= y2 ? 1 : -1;
+            int xInc = x1 <= x2 ? 1 : -1;
+            for (int y = y1; yInc == 1 ? y <= y2 : y >= y2; y += yInc)
+            {
+                for (int x = x1; xInc == 1 ? x <= x2 : x >= x2; x += xInc)
+                {
+                    if (_tempTable[x, y].Type == EntityType.Destination)
+                    {
+                        ((Destination)_tempTable[x, y]).ID = productID;
+                        OnFieldChanged_SVM(x, y, _tempTable[x, y]);
+                    }
+                    if (_tempTable[x, y].Type == EntityType.Pod)
+                    {
+                        ((Pod)_tempTable[x, y]).Products.Add(productID, 1);
+                        OnFieldChanged_SVM(x, y, _tempTable[x, y]);
+                    }
+                }
+            }
+        }
+
+        public void AddProductSelection(int x, int y)
+        {
+            OnSelectionChanged_SVM(x, y, true);
         }
 
         public void Selection(int x, int y)
@@ -312,6 +338,43 @@ namespace IMS.Model
             //Debug.WriteLine("ChangeField called");
 
             OnFieldChanged_SVM(x, y, _tempTable[x, y]);
+        }
+
+        public void ChangeField(int x, int y, EntityType type, int capacity)
+        {
+            if (type == EntityType.Robot && capacity > 0)
+            {
+                _tempTable[x, y] = new Robot(x, y, capacity);
+                OnFieldChanged_SVM(x, y, _tempTable[x, y]);
+            }
+            //if it's not a robot then do nothing
+        }
+
+        public void RotateRobot(int x, int y) // clockwise rotation
+        {
+            if (_tempTable[x, y].Type == EntityType.Robot && _tempTable[x, y].Direction != Direction.NONE)
+            {
+                Direction newDirection = _tempTable[x, y].Direction;
+                switch (_tempTable[x, y].Direction)
+                {
+                    case Direction.UP:
+                        newDirection = Direction.RIGHT;
+                        break;
+                    case Direction.RIGHT:
+                        newDirection = Direction.DOWN;
+                        break;
+                    case Direction.DOWN:
+                        newDirection = Direction.LEFT;
+                        break;
+                    case Direction.LEFT:
+                        newDirection = Direction.UP;
+                        break;
+                }
+                //_tempTable[x, y] = new Robot(x, y, newDirection, ((Robot)_tempTable[x, y]).Capacity, );
+                _tempTable[x, y] = new Robot((Robot)_tempTable[x, y], newDirection);
+
+                OnFieldChanged_SVM(x, y, _tempTable[x, y]);
+            }
         }
 
         public async Task LoadSimulationAsync(String path)
