@@ -48,12 +48,20 @@ namespace IMS.ViewModel
         public int STEPS
         {
             get { return _model.Steps; }
-            private set { }
+            set
+            {
+                STEPS = value;
+                OnPropertyChanged();
+            }
         }
         public int ALLENERGY
         {
             get { return _model.AllEnergy; }
-            private set { }
+            private set
+            {
+                ALLENERGY = value;
+                OnPropertyChanged();
+            }
         }
 
         public int SpeedText
@@ -65,7 +73,7 @@ namespace IMS.ViewModel
                 OnPropertyChanged();
             }
         }
-        
+
 
         public int TimerText
         {

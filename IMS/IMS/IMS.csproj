@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="HungarianAlgorithm" Version="2.2.9" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\IMS.Model\IMS.Model.csproj" />
     <ProjectReference Include="..\IMS.Persistence\IMS.Persistence.csproj" />
     <ProjectReference Include="..\IMS.ViewModel\IMS.ViewModel.csproj" />

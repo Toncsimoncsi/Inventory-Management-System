@@ -10,43 +10,170 @@ namespace IMS.Model.Simulation
 {
     public class PathFinder
     {
-        private Boolean[,] blocked; //convert from imsdata
-        //private Boolean[][] blocked; //convert from imsdata
-        //private Pos[][] routes;
-        private Astar astar;
+        //private Boolean[,] blocked; //convert from imsdata
+        private Dictionary<int, HashSet<Pos>>[] blocked;
+        private IMSData _IMSData;
+        private AstarSpacetime astar;
+        //private List<Pos>[] routes;
+        //private List<Direction>[] rotations;
+        private ConflictBasedSearch cbs;
+        private Dictionary<Robot, List<Pos>> routes;
+        private Dictionary<Robot, List<Direction>> rotations;
+        private int time;
 
-
+        private Assign assign;
+        private int[] assignment;
 
         public IMSData IMSData { get; set; }
 
+        public bool IsFinished { get; set; }
 
-        public event EventHandler<EventArgs> SimulationStarted;
-        public event EventHandler<EventArgs> TableChanged;
-
-        /// <summary>
-        /// Simulation végének eseménye.
-        /// </summary>
-        public event EventHandler TimePassed;
-
-        /// <summary>
-        /// Simulation megnyerésének eseménye.
-        /// </summary>
-        public event EventHandler<DiaryEventArgs> SimulationWon;
 
         public PathFinder(IMSData data)
         {
             IMSData = data;
-            blocked = new Boolean[IMSData.SizeX, IMSData.SizeY];
-            //blocked = new Boolean[IMSData.SizeX][IMSData.SizeY];
+            blocked = new Dictionary<int, HashSet<Pos>>[IMSData.EntityData.RobotData.Count];
+            routes = new Dictionary<Robot, List<Pos>>();
+            rotations= new Dictionary<Robot, List<Direction>>();
             foreach (Robot robot in IMSData.EntityData.RobotData)
             {
-                //int x = robot.Pos.X;
-                //int y = robot.Pos.Y;
-                //blocked[robot.Pos.X][robot.Pos.Y;] = true;
-                blocked[robot.Pos.X, robot.Pos.Y] = true;
+                routes[robot] = new List<Pos>();
+                rotations[robot] = new List<Direction>();
+                //blocked[robot.Pos.X, robot.Pos.Y] = true;
             }
-            //routes = new Pos[4][];
-            astar = new Astar();
+            astar = new AstarSpacetime();
+            //AstarSpaceTime = new AstarSpacetime();
+            assign = new Assign();
+        }
+
+        //move robot to pod
+        public void FindPaths()
+        {
+
+            /////////////////
+            //assign with hungarian-algorithm (lowest combined cost)
+            List<Pos> robotsPos = IMSData.EntityData.RobotData.Select(item => item.Pos).ToList();
+            List<Pos> podsPos = IMSData.EntityData.PodData.Select(item => item.Pos).ToList();
+
+            //int[x0]=y0 where x0 th robot going to y0 th pod;
+            assignment=assign.Assigner(robotsPos,podsPos);
+
+            //make routes and turns
+            for (int i = 0; i < _IMSData.EntityData.RobotData.Count; i++) //for every robot
+            {
+                CalculatePath(_IMSData.EntityData.RobotData[i], _IMSData.EntityData.PodData[assignment[i]], _IMSData.EntityData.DestinationData[assignment[i]],i);
+            }
+            IsFinished = true;
+        }
+        /// <summary>
+        /// Calculate path for a single robot going to pod and to destination back to pod (whilst checking charging
+        /// </summary>
+        /// <param name="robot"></param>
+        private void CalculatePath(Robot robot, Pod pod, Destination dest, int index)
+        {
+            updateBlock();
+            time = 0;
+            moveRobotToPod(robot, pod, index); 
+            robot.UnderPod = true;
+            moveRobotPodToDestThenPod(pod, dest, index, robot);
+
+        }
+
+        /// <summary>
+        /// Check if robot has enough energy
+        /// if yes does the job
+        /// if not charges and and goes to pod (if not enough charge after charge then fail)
+        /// </summary>
+        /// <param name="robot"></param>
+        /// <param name="pod"></param>
+        /// <param name="index"></param>
+        private void moveRobotToPod(Robot robot, Pod pod, int index)
+        {
+            //how much energy required from start to pod
+            List<Pos> routeStartToPod = new AstarSpacetime().FindPath(blocked[index], time , robot.Pos, pod.Pos);
+            int startToPodMove = routeStartToPod.Count;
+            time += startToPodMove;
+            List<Direction> turnStartToPod = convertTurn(routeStartToPod.ToArray(), robot);
+            int startToPodTurns = convertTurnTime(turnStartToPod);
+            time += startToPodTurns;
+
+            //how much energy required from pod to dest and back
+            List<Pos> routePodToDest = new AstarSpacetime().FindPath(blocked[index], time, pod.Pos, _IMSData.EntityData.DestinationData[assignment[index]].Pos);
+            int podToDestMove = routePodToDest.Count;
+            time += podToDestMove;
+            List<Direction> turnPodToDest = convertTurn(routePodToDest.ToArray(), robot);
+            int podToDestTurns = convertTurnTime(turnPodToDest);
+            time += podToDestTurns;
+
+            if (startToPodMove + startToPodTurns + podToDestMove + (podToDestTurns * 2) > robot.EnergyLeft) //is enough charge to go to destination
+            {
+                //not enough
+                List<Pos> routeRobotToDock = new AstarSpacetime().FindPath(blocked[index],time, robot.Pos, closestDock(robot).Pos);
+                List<Direction> turnRobotToDock = convertTurn(routeRobotToDock.ToArray(), robot);
+                routes[robot].AddRange(routeRobotToDock);
+                time += routeRobotToDock.Count;
+                rotations[robot].AddRange(turnRobotToDock);
+                time += convertTurnTime(turnRobotToDock);
+
+                //wait 5
+
+
+                List<Pos> waitRobot = Enumerable.Repeat(closestDock(robot).Pos, 5).ToList();
+                List<Direction> waitRobotRotate = Enumerable.Repeat(turnRobotToDock.Last(), 5).ToList();
+                routes[robot].AddRange(waitRobot);
+                rotations[robot].AddRange(waitRobotRotate);
+                time += 5;
+
+                //to pod
+                List<Pos> routeRobotToPod = new AstarSpacetime().FindPath(blocked[index],time, closestDock(robot).Pos, pod.Pos);
+                List<Direction> turnRobotToPod = convertTurn(routeRobotToPod.ToArray(), robot);
+                
+
+                routes[robot].AddRange(routeRobotToPod);
+                rotations[robot].AddRange(turnRobotToPod);
+                time += routeRobotToPod.Count;
+                time += convertTurnTime(turnRobotToPod);
+                //return;
+            }
+            else
+            {
+                //enough so straight to pod
+                routes[robot].AddRange(routeStartToPod);
+                rotations[robot].AddRange(turnStartToPod);
+                time += routeStartToPod.Count;
+                time += convertTurnTime(turnStartToPod);
+
+            }
+        }
+
+        //move robot from pod to dest
+        private void moveRobotPodToDestThenPod(Pod pod, Destination dest, int index, Robot robot)
+        {
+            List<Pos> routePodToDest = new AstarSpacetime().FindPath(blocked[index],time , pod.Pos, dest.Pos);
+            List<Direction> turnPodToDest = convertTurn(routePodToDest.ToArray(), robot);
+            routes[robot].AddRange(routePodToDest);
+            rotations[robot].AddRange(turnPodToDest);
+            time += routePodToDest.Count;
+            time += convertTurnTime(turnPodToDest);
+
+
+            //List<Pos> routeRobotToDesReverse = Enumerable.Reverse(routeRobotToDest).ToList();
+            List<Pos> routeDesToPod= new AstarSpacetime().FindPath(blocked[index], time, dest.Pos, pod.Pos);
+            //add last field budget fix
+            routeDesToPod.Add(pod.Pos);
+            //List<Direction> turnRobotToPodReverse = convertTurn(routeRobotToDesReverse.ToArray(), robot);
+            List<Direction> turnDesToPod = convertTurn(routeDesToPod.ToArray(), robot);
+
+            routes[robot].AddRange(routeDesToPod);
+            rotations[robot].AddRange(turnDesToPod);
+            time += routeDesToPod.Count;
+            time += convertTurnTime(turnDesToPod);
+            //cbs.checkConflicts();
+        }
+
+        private void constraintTree()
+        {
+
         }
 
         private void updateBlock()
@@ -56,7 +183,7 @@ namespace IMS.Model.Simulation
                 //int x = robot.Pos.X;
                 //int y = robot.Pos.Y;
                 //blocked[robot.Pos.X][robot.Pos.Y;] = true;
-                blocked[robot.Pos.X, robot.Pos.Y] = true;
+                //blocked[robot.Pos.X, robot.Pos.Y] = true;
             }
         }
         //check if robot has enough energy to finish task
@@ -74,48 +201,18 @@ namespace IMS.Model.Simulation
             }
             return closestDock;
         }
-        private Entity[,] _createEmptyTable(Int32 sizeX, Int32 sizeY)
-        {
-            Entity[,] table = new Entity[sizeX, sizeY];
 
-            for (Int32 i = 0; i < table.GetLength(0); i++)
+        private int convertTurnTime(List<Direction> rotations)
+        {
+            int temp = 0;
+            for (int j = 0; j < rotations.Count - 1; j++)
             {
-                for (Int32 j = 0; j < table.GetLength(1); j++)
+                if (rotations[j + 1] == rotations[j])
                 {
-                    table[i, j] = new Empty(i, j);
+                    temp++;
                 }
             }
-
-            return table;
-        }
-        private Entity[,] _extractTableFromIMSData()
-        {
-            //Entity[,] table = new Entity[_IMSData.SizeX, _IMSData.SizeY];
-
-            Entity[,] table = _createEmptyTable(IMSData.SizeX, IMSData.SizeY);
-
-            foreach (Robot robot in IMSData.EntityData.RobotData)
-            {
-                table[robot.Pos.X, robot.Pos.Y] = robot;
-            }
-            foreach (Pod pod in IMSData.EntityData.PodData)
-            {
-                table[pod.Pos.X, pod.Pos.Y] = pod;
-            }
-            foreach (RobotUnderPod robotUnderPod in IMSData.EntityData.RobotUnderPodData)
-            {
-                table[robotUnderPod.Pos.X, robotUnderPod.Pos.Y] = robotUnderPod;
-            }
-            foreach (Destination destination in IMSData.EntityData.DestinationData)
-            {
-                table[destination.Pos.X, destination.Pos.Y] = destination;
-            }
-            foreach (Dock dock in IMSData.EntityData.DockData)
-            {
-                table[dock.Pos.X, dock.Pos.Y] = dock;
-            }
-
-            return table;
+            return temp;
         }
         //run the calculate paths on the table
         private List<Direction> convertTurn(Pos[] route1, Robot robot)
@@ -144,177 +241,6 @@ namespace IMS.Model.Simulation
                 directionList.Add(direction);
             }
             return directionList;
-        }
-        //move robot to pod
-        public void Run()
-        {
-            OnSimulationStarted();
-            //need to not hard assign
-            Pos[][] routes = new Pos[IMSData.EntityData.RobotData.Count][];
-            Direction[][] turns = new Direction[4][];
-            //make routes and turns
-            for (int i = 0; i < routes.GetLength(0); i++) //for every robot
-            {
-                updateBlock(); 
-                //how much energy required from start to pod
-                List<Pos> routeStartToPod = astar.FindPath(blocked, IMSData.EntityData.RobotData[i].Pos, IMSData.EntityData.PodData[i].Pos);
-                int startToPod = routeStartToPod.Count;
-                List<Direction> routeTurnStartToPod = convertTurn(routeStartToPod.ToArray(),IMSData.EntityData.RobotData[i]);
-                int turnStartToPod = 0;
-                for (int j=0; j<routeTurnStartToPod.Count-1; j++)
-                {
-                    if (routeTurnStartToPod[j+1]== routeTurnStartToPod[j])
-                    {
-                        turnStartToPod++;
-                    }
-                }
-                //how much energy required from pod to dest and back
-                List<Pos> routePodToDest = astar.FindPath(blocked, IMSData.EntityData.PodData[i].Pos, IMSData.EntityData.DestinationData[i].Pos);
-                int PodToDest = routePodToDest.Count;
-                List<Direction> routeTurnPodToDest = convertTurn(routePodToDest.ToArray(), IMSData.EntityData.RobotData[i]);
-                int turnPodToDest = 0;
-                for (int j = 0; j < routeTurnPodToDest.Count - 1; j++)
-                {
-                    if (routeTurnPodToDest[j + 1] == routeTurnPodToDest[j])
-                    {
-                        turnPodToDest++;
-                    }
-                }
-                if (startToPod + turnStartToPod + PodToDest +turnPodToDest*2 < IMSData.EntityData.RobotData[i].EnergyLeft) //enough charge to go to destination
-                {
-                    //not enough
-                    moveRobotToDock(IMSData.EntityData.RobotData[i], closestDock(IMSData.EntityData.RobotData[i]));// to dock
-                    moveDockToPod(IMSData.EntityData.RobotData[i], IMSData.EntityData.PodData[i]); //to pod
-                    OnTableChanged();
-                }
-                //enough
-;               
-                routes[i] = astar.FindPath(blocked, IMSData.EntityData.RobotData[i].Pos, IMSData.EntityData.PodData[i].Pos).ToArray(); //robot to pod energy enough otherwise error
-                turns[i] = convertTurn(routes[i], IMSData.EntityData.RobotData[i]).ToArray();
-                //at pod go to dest and back (hard assign in order)
-                //need to implement not hard assign
-                moveRobotPodToDestThenPod(IMSData.EntityData.RobotData[i], IMSData.EntityData.DestinationData[i]);
-            }
-
-            for (int j = 0; j < routes.GetLength(0); j++) //mindegyik robot egymas utan egyet lep
-            {
-                //underpod true
-                IMSData.EntityData.RobotData[j].UnderPod = true;
-
-            }
-        }
-
-        //not enough charge
-        public void moveRobotToDock(Robot robot,Dock dock)
-        {
-            List<Pos> route = new ();
-            List<Pos> routeRobotToDock = astar.FindPath(blocked, robot.Pos, dock.Pos);
-            List<Direction> turnRobotToDock= convertTurn(routeRobotToDock.ToArray(), robot);
-
-            for (int j = 0; j < route.Count; j++) //mindegyik robot egymas utan egyet lep
-            {
-                robot.Move(route[j]);
-                IMSData.StepCount++;
-                //OnTableChanged();
-                robot.Rotate(turnRobotToDock[j]);
-                IMSData.StepCount++;
-                OnTableChanged();
-            }
-            robot.UnderPod = true; //ala megy a podnak
-        }
-
-        //after charged it does its job (picks up shelf)
-        public void moveDockToPod(Robot robot,Pod pod)
-        {
-            List<Pos> routeRobotToPod = astar.FindPath(blocked, robot.Pos, pod.Pos);
-            List<Direction> turnRobotToPod = convertTurn(routeRobotToPod.ToArray(), robot);
-
-            for (int j = 0; j < routeRobotToPod.Count; j++) //mindegyik robot egymas utan egyet lep
-            {
-                robot.Move(routeRobotToPod[j]);
-                IMSData.StepCount++;
-                //OnTableChanged();
-                robot.Rotate(turnRobotToPod[j]);
-                IMSData.StepCount++;
-                OnTableChanged();
-            }
-            robot.UnderPod = true;
-            //return;
-
-        }
-        //move robot from pod to dest
-        public void moveRobotPodToDestThenPod(Robot robot, Destination dest)
-        {
-            List<Pos> routeRobotToDest = astar.FindPath(blocked, robot.Pos, dest.Pos);
-            List<Direction> turnRobotToPod = convertTurn(routeRobotToDest.ToArray(), robot);
-            //routes[0] = astar.FindPath(blocked, IMSData.EntityData.RobotData[0].Pos, IMSData.EntityData.DestinationData[0].Pos).ToArray();
-            //routes[1] = astar.FindPath(blocked, IMSData.EntityData.RobotData[1].Pos, IMSData.EntityData.DestinationData[1].Pos).ToArray();
-            //routes[2] = astar.FindPath(blocked, IMSData.EntityData.RobotData[2].Pos, IMSData.EntityData.DestinationData[2].Pos).ToArray();
-            //routes[3] = astar.FindPath(blocked, IMSData.EntityData.RobotData[3].Pos, IMSData.EntityData.DestinationData[3].Pos).ToArray();
-            List<Pos> routeRobotToDesReverse = Enumerable.Reverse(routeRobotToDest).ToList();
-            List<Direction> turnRobotToPodReverse = convertTurn(routeRobotToDesReverse.ToArray(), robot);
-
-            for (int i = 0; i < routeRobotToDest.Count; i++) //elso lepesben
-            {
-                //for (int j = 0; j < routes.GetLength(0); j++) //mindegyik robot egymas utan egyet lep
-                //{
-                //    IMSData.EntityData.RobotData[j].Move(routes[j][i]);
-                //onorobotmoved
-                //}
-                //onTableChanged
-                robot.Move(routeRobotToDest[i]);
-                IMSData.StepCount++;
-                OnTableChanged();
-                robot.Rotate(turnRobotToPod[i]);
-                IMSData.StepCount++;
-                OnTableChanged();
-            }
-
-            for (int i = 0; i < routeRobotToDest.Count; i++) //elso lepesben
-            {
-                //for (int j = 0; j < routes.GetLength(0); j++) //mindegyik robot egymas utan egyet lep
-                //{
-                //    IMSData.EntityData.RobotData[j].Move(routes[j][i]);
-                //onorobotmoved
-                //}
-                robot.Move(routeRobotToDesReverse[i]);
-                IMSData.StepCount++;
-                OnTableChanged();
-                robot.Rotate(turnRobotToPodReverse[i]);
-                IMSData.StepCount++;
-                OnTableChanged();
-            }
-        }
-
-        /// <summary>
-        /// Játék kezdetének eseménykiváltása.
-        /// </summary>
-        private void OnSimulationStarted()
-        {
-            if (SimulationStarted != null)
-                SimulationStarted(this, EventArgs.Empty);
-        }
-        /// <summary>
-        /// Simulation megnyerésének eseménykiváltása.
-        /// </summary>
-        /// <param name="Entity">A győztes Simulationos.</param>
-        private void OnTimePassed(Int32 time)
-        {
-            if (SimulationWon != null)
-                TimePassed(this, new TimePassedEventArgs(time));
-        }
-
-
-        /// <summary>
-        /// Mezőváltozás eseménykiváltása.
-        /// </summary>
-        /// <param name="x">Oszlop index.</param>
-        /// <param name="y">Sor index.</param>
-        /// <param name="Entity">Játékos.</param>
-        private void OnTableChanged()
-        {
-            if (TableChanged != null)
-                TableChanged(this, EventArgs.Empty);
         }
     }
 }

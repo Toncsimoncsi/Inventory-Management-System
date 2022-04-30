@@ -17,6 +17,7 @@ namespace IMS.Persistence.Entities
         {
             _type = EntityType.Pod;
             _products = products;
+            Pos = new Pos(x, y);
         }
     }
 }

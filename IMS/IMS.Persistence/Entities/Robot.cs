@@ -79,5 +79,46 @@ namespace IMS.Persistence.Entities
             EnergyLeft = energyLeft;
             _destinationID = destinationID;
         }
+
+        public override bool Equals(object obj)
+        {
+            var item = obj as Robot;
+            if (item == null)
+            {
+                return false;
+            }
+            return Equals(obj as Robot);
+        }
+
+        public bool Equals(Robot other)
+        {
+            return other != null &&
+                   Pos.X == other.Pos.X &&
+                   Pos.Y == other.Pos.Y;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Pos.X, Pos.Y);
+        }
+
+        public static bool operator ==(Robot A, Robot B)
+        {
+            if (A is null)
+            {
+                if (B is null)
+                {
+                    // null == null = true.
+                    return true;
+                }
+
+                // Only the left side is null.
+                return false;
+            }
+            // Equals handles the case of null on right side.
+            return A.Equals(B);
+        }
+
+        public static bool operator !=(Robot A, Robot B) => !(A == B);
     }
 }

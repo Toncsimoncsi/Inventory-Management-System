@@ -9,14 +9,40 @@ using IMS.Persistence.Entities;
 
 namespace IMS.Model.Simulation
 {
-    //runs the a* on 2 robots
-    //if find conflict (intersecting at same time/not enough charge reroute reruns it
-    //
+    //    Constraint Tree
+
+    //The core of the algorithm is the maintenance of a constraint tree(a binary min-heap in my implementation). The nodes in the constraint tree have 3 component:
+
+    //    constraints - detailing what each agent should avoid in space-time
+    //    solution - path for each agent
+    //    cost - the sum of the cost of individual paths
+
+    //The low-level STA* planner can take the constraints for an agent and calculate a collison-free path for that agent.
+    //node = Find paths for individual agents with no constraints.
+    //Add node to the constraint tree.
+
+    //while constraint tree is not empty:
+    //  best = node with the lowest cost in the constraint tree
+
+    //  Validate the solution in best until a conflict occurs.
+    //  if there is no conflict:
+    //    return best
+
+    //  conflict = Find the first 2 agents with conflicting paths.
+
+    //  new_node1 = node where the 1st agent avoid the 2nd agent
+    //  Add new_node1 to the constraint tree.
+
+    //  new_node2 = node where the 2nd agent avoid the 1st agent
+    //  Add new_node2 to the constraint tree.
+    //https://github.com/GavinPHR/Multi-Agent-Path-Finding
     public class ConflictBasedSearch
     {
         public IMSData IMSData { get; set; }
 
-
+        private Dictionary<Robot, List<Pos>> routes;
+        private Dictionary<Robot, List<Direction>> rotations;
+        private Dictionary<int, HashSet<Pos>>[] blocked;
         private Dictionary<Int32, Pos> constraint = new Dictionary<Int32, Pos>();
         //Finds time-space conflict of given routes
         private Boolean hasConflict(Pos[] route1, Pos[] route2)
@@ -73,6 +99,18 @@ namespace IMS.Model.Simulation
                 }
             }
             return robot.EnergyLeft > shortestDistance;
+        }
+
+        private void checkConflicts() { 
+        
+        
+        
+        
+        
+        
+        
+        
+        
         }
     }
 }

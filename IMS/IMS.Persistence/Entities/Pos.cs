@@ -76,7 +76,6 @@ namespace IMS.Persistence.Entities
         }
 
         public static bool operator !=(Pos A, Pos B) => !(A == B);
-        //XDDDDDDDDDDDDDDDDDDDDDDLOOL
         //public static bool operator ==(Pos A, Pos B) => A.Equals(B);
         //public static bool operator !=(Pos A, Pos B) => !A.Equals(B);
     }
