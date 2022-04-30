@@ -210,6 +210,16 @@ namespace IMS.Model
             await _dataAccess.SaveSimulationAsync(path, _IMSData);
         }
 
+        public async Task SaveDiaryAsync(String path)
+        {
+            if (_dataAccess == null)
+                return;
+
+            _IMSData.StepCount = _steps;
+
+            await _dataAccess.SaveDiaryAsync(path, _IMSData);
+        }
+
         #endregion
 
         #region Private methods
