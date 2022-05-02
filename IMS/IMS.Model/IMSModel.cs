@@ -26,7 +26,7 @@ namespace IMS.Model
         private IMSDataAccess _dataAccess; // adatelérés
         private Boolean[,] blocked;
         private List<Dictionary<int, HashSet<Pos>>>[] obstacles;
-        private Dictionary<int, HashSet<Pos>>[] blocked;
+        //private Dictionary<int, HashSet<Pos>>[] blocked;
 
         //private Pos[][] routes;
         //private Astar astar;
@@ -482,7 +482,9 @@ namespace IMS.Model
             _counter2 = 0;
             OnTableChanged();
             OnSimulationStarted();
-            PathFinder pf = new PathFinder(IMSData);
+            Dictionary<Robot, Dictionary<int, HashSet<Pos>>> blocked = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>();
+            Constraints cs = new Constraints(blocked);
+            PathFinder pf = new PathFinder(IMSData,blocked);
             pf.FindPaths();
             SimulationFinished = true;
         }

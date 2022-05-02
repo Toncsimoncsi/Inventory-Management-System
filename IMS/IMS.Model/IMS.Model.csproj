@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MoreComplexDataStructures" Version="1.9.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\IMS.Persistence\IMS.Persistence.csproj" />
   </ItemGroup>
 

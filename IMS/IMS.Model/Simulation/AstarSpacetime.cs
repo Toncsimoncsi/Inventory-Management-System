@@ -33,9 +33,7 @@ namespace IMS.Model.Simulation
 
         Dictionary<Pos, Pos> nodeLinks = new Dictionary<Pos, Pos>();
 
-        //
-        Dictionary<int, HashSet<Pos>> dynamic_obstacles = new Dictionary<int, HashSet<Pos>>();
-        Dictionary<int, HashSet<Pos>> semi_dynamics_obstacles = new Dictionary<int, HashSet<Pos>>();
+
         public List<Pos> FindPath(Dictionary<int, HashSet<Pos>> dynamic_obstacles, int startTime, Pos start, Pos goal)
         {
 

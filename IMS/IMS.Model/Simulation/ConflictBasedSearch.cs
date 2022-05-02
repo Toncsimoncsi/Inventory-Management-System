@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IMS.Persistence;
 using IMS.Persistence.Entities;
+using MoreComplexDataStructures;
 
 namespace IMS.Model.Simulation
 {
@@ -39,21 +40,31 @@ namespace IMS.Model.Simulation
     public class ConflictBasedSearch
     {
         public IMSData IMSData { get; set; }
+        public ConflictBasedSearch()
+        {
+
+        }
 
         private Dictionary<Robot, List<Pos>> routes;
         private Dictionary<Robot, List<Direction>> rotations;
-        private Dictionary<int, HashSet<Pos>>[] blocked;
+        private Dictionary<Robot, Dictionary<int, HashSet<Pos>>> blocked;
         private Dictionary<Int32, Pos> constraint = new Dictionary<Int32, Pos>();
-        //Finds time-space conflict of given routes
-        private Boolean hasConflict(Pos[] route1, Pos[] route2)
+        private MinHeap<CTNode> constraintTree;
+        /// <summary>
+        /// return time of conflict or -1 if no conflicts
+        /// </summary>
+        /// <param name="route1">robot 1 route</param>
+        /// <param name="route2">robot 2 route </param>
+        /// <returns></returns>
+        private int hasConflict(Dictionary<Robot, List<Pos>> solution, Robot robot1, Robot robot2)
         {
-            int min_index = Math.Min(route1.Length, route2.Length);
+            int min_index = Math.Min(solution[robot1].Count, solution[robot2].Count);
             for (int i = 0; i < min_index; i++)
             {
-                if (route1[i] == route2[i])
-                    return true;
+                if (solution[robot1][i] == solution[robot2][i])
+                    return i;
             }
-            return false;
+            return -1;
         }
 
         private List<Direction> convertTurn(Pos[] route1, Robot robot)
@@ -101,16 +112,54 @@ namespace IMS.Model.Simulation
             return robot.EnergyLeft > shortestDistance;
         }
 
-        private void checkConflicts() { 
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        private void checkConflicts(CTNode ctnode)
+        {
+            //CTNode ctnode = new CTNode();
+            //solution = dict((agent, self.calculate_path(agent, constraints, None)) for agent in self.agents)
+            foreach (Robot robot1 in IMSData.EntityData.RobotData)
+            {
+                foreach (Robot robot2 in IMSData.EntityData.RobotData)
+                {
+                    int conflictTime = hasConflict(routes, robot1, robot2);
+                    if (conflictTime != -1)
+                    {
+                        // Calculate new constraints
+
+                        Constraints robot1Constraint = calculateConstraints(ctnode, robot2, robot1, conflictTime);
+                        Constraints robot2Constraint = calculateConstraints(ctnode, robot1, robot2, conflictTime);
+                        // Calculate new paths
+                        //TODO:convert constraints to Dictionary<int, HashSet<Pos>>
+                        List<Pos> robot1Path = new AstarSpacetime().FindPath(robot1Constraint.agent_Constraints[robot2], conflictTime, robot1.Pos, robot1.Pos);
+                        List<Pos> robot2Path= new AstarSpacetime().FindPath(robot1Constraint.agent_Constraints[robot1], conflictTime, robot1.Pos, robot1.Pos);
+                        //Replace old paths with new ones in solution
+
+                        //add nodes to min heap
+                    }
+                }
+            }
+            // If there is not conflict, validate_paths returns (None, None, -1)
+
+
+
         }
+        private Constraints calculateConstraints(CTNode ctnode, Robot robot1, Robot robot2, int time)
+        {
+            List<Pos> contrained_path = ctnode.Solution[robot1];
+            List<Pos> unchanged_path = ctnode.Solution[robot2];
+
+            Pos pivot = unchanged_path[time];
+            return ctnode.Constraints.Extend(robot1, pivot, time, time);
+        }
+        private Constraints calculatePath()
+        {
+            return null;
+        }
+
+        private int[] calculateGoalTimes()
+        {
+            return null;
+        }
+
+
     }
 }

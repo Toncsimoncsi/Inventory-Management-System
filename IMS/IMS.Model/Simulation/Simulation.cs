@@ -8,10 +8,14 @@ using System.Threading.Tasks;
 
 namespace IMS.Model.Simulation
 {
+    /// <summary>
+    /// https://github.com/GavinPHR/Multi-Agent-Path-Finding
+    /// </summary>
     public class PathFinder
     {
-        //private Boolean[,] blocked; //convert from imsdata
-        private Dictionary<int, HashSet<Pos>>[] blocked;
+        //private Boolean[,] constraints; //convert from imsdata
+        private Dictionary<Robot,Dictionary<int, HashSet<Pos>>> constraints;
+        private List<Pos> static_obstacles; //not moving
         private IMSData _IMSData;
         private AstarSpacetime astar;
         //private List<Pos>[] routes;
@@ -29,17 +33,17 @@ namespace IMS.Model.Simulation
         public bool IsFinished { get; set; }
 
 
-        public PathFinder(IMSData data)
+        public PathFinder(IMSData data, Dictionary<Robot, Dictionary<int, HashSet<Pos>>> constraints)
         {
             IMSData = data;
-            blocked = new Dictionary<int, HashSet<Pos>>[IMSData.EntityData.RobotData.Count];
+            constraints = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>();
             routes = new Dictionary<Robot, List<Pos>>();
             rotations= new Dictionary<Robot, List<Direction>>();
             foreach (Robot robot in IMSData.EntityData.RobotData)
             {
                 routes[robot] = new List<Pos>();
                 rotations[robot] = new List<Direction>();
-                //blocked[robot.Pos.X, robot.Pos.Y] = true;
+                //constraints[robot.Pos.X, robot.Pos.Y] = true;
             }
             astar = new AstarSpacetime();
             //AstarSpaceTime = new AstarSpacetime();
@@ -90,7 +94,7 @@ namespace IMS.Model.Simulation
         private void moveRobotToPod(Robot robot, Pod pod, int index)
         {
             //how much energy required from start to pod
-            List<Pos> routeStartToPod = new AstarSpacetime().FindPath(blocked[index], time , robot.Pos, pod.Pos);
+            List<Pos> routeStartToPod = new AstarSpacetime().FindPath(constraints[robot], time , robot.Pos, pod.Pos);
             int startToPodMove = routeStartToPod.Count;
             time += startToPodMove;
             List<Direction> turnStartToPod = convertTurn(routeStartToPod.ToArray(), robot);
@@ -98,7 +102,7 @@ namespace IMS.Model.Simulation
             time += startToPodTurns;
 
             //how much energy required from pod to dest and back
-            List<Pos> routePodToDest = new AstarSpacetime().FindPath(blocked[index], time, pod.Pos, _IMSData.EntityData.DestinationData[assignment[index]].Pos);
+            List<Pos> routePodToDest = new AstarSpacetime().FindPath(constraints[robot], time, pod.Pos, _IMSData.EntityData.DestinationData[assignment[index]].Pos);
             int podToDestMove = routePodToDest.Count;
             time += podToDestMove;
             List<Direction> turnPodToDest = convertTurn(routePodToDest.ToArray(), robot);
@@ -108,7 +112,7 @@ namespace IMS.Model.Simulation
             if (startToPodMove + startToPodTurns + podToDestMove + (podToDestTurns * 2) > robot.EnergyLeft) //is enough charge to go to destination
             {
                 //not enough
-                List<Pos> routeRobotToDock = new AstarSpacetime().FindPath(blocked[index],time, robot.Pos, closestDock(robot).Pos);
+                List<Pos> routeRobotToDock = new AstarSpacetime().FindPath(constraints[robot],time, robot.Pos, closestDock(robot).Pos);
                 List<Direction> turnRobotToDock = convertTurn(routeRobotToDock.ToArray(), robot);
                 routes[robot].AddRange(routeRobotToDock);
                 time += routeRobotToDock.Count;
@@ -125,7 +129,7 @@ namespace IMS.Model.Simulation
                 time += 5;
 
                 //to pod
-                List<Pos> routeRobotToPod = new AstarSpacetime().FindPath(blocked[index],time, closestDock(robot).Pos, pod.Pos);
+                List<Pos> routeRobotToPod = new AstarSpacetime().FindPath(constraints[robot],time, closestDock(robot).Pos, pod.Pos);
                 List<Direction> turnRobotToPod = convertTurn(routeRobotToPod.ToArray(), robot);
                 
 
@@ -149,7 +153,7 @@ namespace IMS.Model.Simulation
         //move robot from pod to dest
         private void moveRobotPodToDestThenPod(Pod pod, Destination dest, int index, Robot robot)
         {
-            List<Pos> routePodToDest = new AstarSpacetime().FindPath(blocked[index],time , pod.Pos, dest.Pos);
+            List<Pos> routePodToDest = new AstarSpacetime().FindPath(constraints[robot],time , pod.Pos, dest.Pos);
             List<Direction> turnPodToDest = convertTurn(routePodToDest.ToArray(), robot);
             routes[robot].AddRange(routePodToDest);
             rotations[robot].AddRange(turnPodToDest);
@@ -158,7 +162,7 @@ namespace IMS.Model.Simulation
 
 
             //List<Pos> routeRobotToDesReverse = Enumerable.Reverse(routeRobotToDest).ToList();
-            List<Pos> routeDesToPod= new AstarSpacetime().FindPath(blocked[index], time, dest.Pos, pod.Pos);
+            List<Pos> routeDesToPod= new AstarSpacetime().FindPath(constraints[robot], time, dest.Pos, pod.Pos);
             //add last field budget fix
             routeDesToPod.Add(pod.Pos);
             //List<Direction> turnRobotToPodReverse = convertTurn(routeRobotToDesReverse.ToArray(), robot);
@@ -182,8 +186,8 @@ namespace IMS.Model.Simulation
             {
                 //int x = robot.Pos.X;
                 //int y = robot.Pos.Y;
-                //blocked[robot.Pos.X][robot.Pos.Y;] = true;
-                //blocked[robot.Pos.X, robot.Pos.Y] = true;
+                //constraints[robot.Pos.X][robot.Pos.Y;] = true;
+                //constraints[robot.Pos.X, robot.Pos.Y] = true;
             }
         }
         //check if robot has enough energy to finish task
