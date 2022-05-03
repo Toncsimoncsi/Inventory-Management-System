@@ -11,7 +11,7 @@ namespace IMS.Model.Simulation
     //Constraints Tree node, for the binary tree
     public class CTNode: IComparable<CTNode>
     {
-        public CTNode(Constraints constraints,  Dictionary<Robot, List<Pos>> Solution)
+        public CTNode(Constraints constraints, Dictionary<Robot, List<Pos>> Solution)
         {
             this.Solution = Solution;
             this.Cost = sic();

@@ -14,15 +14,13 @@ namespace IMS.Model.Simulation
     public class PathFinder
     {
         //private Boolean[,] constraints; //convert from imsdata
-        private Dictionary<Robot,Dictionary<int, HashSet<Pos>>> constraints;
+        private Dictionary<Robot, Dictionary<int, HashSet<Pos>>> constraints;
         private List<Pos> static_obstacles; //not moving
         private IMSData _IMSData;
         private AstarSpacetime astar;
-        //private List<Pos>[] routes;
-        //private List<Direction>[] rotations;
+        //private List<Pos>[] Routes;
+        //private List<Direction>[] Rotations;
         private ConflictBasedSearch cbs;
-        private Dictionary<Robot, List<Pos>> routes;
-        private Dictionary<Robot, List<Direction>> rotations;
         private int time;
 
         private Assign assign;
@@ -32,17 +30,19 @@ namespace IMS.Model.Simulation
 
         public bool IsFinished { get; set; }
 
+        public Dictionary<Robot, List<Pos>> Routes { get; set; }
 
+        public Dictionary<Robot, List<Direction>> Rotations { get; set; }
         public PathFinder(IMSData data, Dictionary<Robot, Dictionary<int, HashSet<Pos>>> constraints)
         {
             IMSData = data;
             constraints = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>();
-            routes = new Dictionary<Robot, List<Pos>>();
-            rotations= new Dictionary<Robot, List<Direction>>();
+            Routes = new Dictionary<Robot, List<Pos>>();
+            Rotations = new Dictionary<Robot, List<Direction>>();
             foreach (Robot robot in IMSData.EntityData.RobotData)
             {
-                routes[robot] = new List<Pos>();
-                rotations[robot] = new List<Direction>();
+                Routes[robot] = new List<Pos>();
+                Rotations[robot] = new List<Direction>();
                 //constraints[robot.Pos.X, robot.Pos.Y] = true;
             }
             astar = new AstarSpacetime();
@@ -60,12 +60,12 @@ namespace IMS.Model.Simulation
             List<Pos> podsPos = IMSData.EntityData.PodData.Select(item => item.Pos).ToList();
 
             //int[x0]=y0 where x0 th robot going to y0 th pod;
-            assignment=assign.Assigner(robotsPos,podsPos);
+            assignment = assign.Assigner(robotsPos, podsPos);
 
-            //make routes and turns
+            //make Routes and turns
             for (int i = 0; i < _IMSData.EntityData.RobotData.Count; i++) //for every robot
             {
-                CalculatePath(_IMSData.EntityData.RobotData[i], _IMSData.EntityData.PodData[assignment[i]], _IMSData.EntityData.DestinationData[assignment[i]],i);
+                CalculatePath(_IMSData.EntityData.RobotData[i], _IMSData.EntityData.PodData[assignment[i]], _IMSData.EntityData.DestinationData[assignment[i]], i);
             }
             IsFinished = true;
         }
@@ -77,7 +77,7 @@ namespace IMS.Model.Simulation
         {
             updateBlock();
             time = 0;
-            moveRobotToPod(robot, pod, index); 
+            moveRobotToPod(robot, pod, index);
             robot.UnderPod = true;
             moveRobotPodToDestThenPod(pod, dest, index, robot);
 
@@ -94,10 +94,10 @@ namespace IMS.Model.Simulation
         private void moveRobotToPod(Robot robot, Pod pod, int index)
         {
             //how much energy required from start to pod
-            List<Pos> routeStartToPod = new AstarSpacetime().FindPath(constraints[robot], time , robot.Pos, pod.Pos);
-            int startToPodMove = routeStartToPod.Count;
+            List<Pos> RoutestartToPod = new AstarSpacetime().FindPath(constraints[robot], time, robot.Pos, pod.Pos);
+            int startToPodMove = RoutestartToPod.Count;
             time += startToPodMove;
-            List<Direction> turnStartToPod = convertTurn(routeStartToPod.ToArray(), robot);
+            List<Direction> turnStartToPod = convertTurn(RoutestartToPod.ToArray(), robot);
             int startToPodTurns = convertTurnTime(turnStartToPod);
             time += startToPodTurns;
 
@@ -112,11 +112,11 @@ namespace IMS.Model.Simulation
             if (startToPodMove + startToPodTurns + podToDestMove + (podToDestTurns * 2) > robot.EnergyLeft) //is enough charge to go to destination
             {
                 //not enough
-                List<Pos> routeRobotToDock = new AstarSpacetime().FindPath(constraints[robot],time, robot.Pos, closestDock(robot).Pos);
+                List<Pos> routeRobotToDock = new AstarSpacetime().FindPath(constraints[robot], time, robot.Pos, closestDock(robot).Pos);
                 List<Direction> turnRobotToDock = convertTurn(routeRobotToDock.ToArray(), robot);
-                routes[robot].AddRange(routeRobotToDock);
+                Routes[robot].AddRange(routeRobotToDock);
                 time += routeRobotToDock.Count;
-                rotations[robot].AddRange(turnRobotToDock);
+                Rotations[robot].AddRange(turnRobotToDock);
                 time += convertTurnTime(turnRobotToDock);
 
                 //wait 5
@@ -124,17 +124,17 @@ namespace IMS.Model.Simulation
 
                 List<Pos> waitRobot = Enumerable.Repeat(closestDock(robot).Pos, 5).ToList();
                 List<Direction> waitRobotRotate = Enumerable.Repeat(turnRobotToDock.Last(), 5).ToList();
-                routes[robot].AddRange(waitRobot);
-                rotations[robot].AddRange(waitRobotRotate);
+                Routes[robot].AddRange(waitRobot);
+                Rotations[robot].AddRange(waitRobotRotate);
                 time += 5;
 
                 //to pod
-                List<Pos> routeRobotToPod = new AstarSpacetime().FindPath(constraints[robot],time, closestDock(robot).Pos, pod.Pos);
+                List<Pos> routeRobotToPod = new AstarSpacetime().FindPath(constraints[robot], time, closestDock(robot).Pos, pod.Pos);
                 List<Direction> turnRobotToPod = convertTurn(routeRobotToPod.ToArray(), robot);
-                
 
-                routes[robot].AddRange(routeRobotToPod);
-                rotations[robot].AddRange(turnRobotToPod);
+
+                Routes[robot].AddRange(routeRobotToPod);
+                Rotations[robot].AddRange(turnRobotToPod);
                 time += routeRobotToPod.Count;
                 time += convertTurnTime(turnRobotToPod);
                 //return;
@@ -142,9 +142,9 @@ namespace IMS.Model.Simulation
             else
             {
                 //enough so straight to pod
-                routes[robot].AddRange(routeStartToPod);
-                rotations[robot].AddRange(turnStartToPod);
-                time += routeStartToPod.Count;
+                Routes[robot].AddRange(RoutestartToPod);
+                Rotations[robot].AddRange(turnStartToPod);
+                time += RoutestartToPod.Count;
                 time += convertTurnTime(turnStartToPod);
 
             }
@@ -153,23 +153,23 @@ namespace IMS.Model.Simulation
         //move robot from pod to dest
         private void moveRobotPodToDestThenPod(Pod pod, Destination dest, int index, Robot robot)
         {
-            List<Pos> routePodToDest = new AstarSpacetime().FindPath(constraints[robot],time , pod.Pos, dest.Pos);
+            List<Pos> routePodToDest = new AstarSpacetime().FindPath(constraints[robot], time, pod.Pos, dest.Pos);
             List<Direction> turnPodToDest = convertTurn(routePodToDest.ToArray(), robot);
-            routes[robot].AddRange(routePodToDest);
-            rotations[robot].AddRange(turnPodToDest);
+            Routes[robot].AddRange(routePodToDest);
+            Rotations[robot].AddRange(turnPodToDest);
             time += routePodToDest.Count;
             time += convertTurnTime(turnPodToDest);
 
 
             //List<Pos> routeRobotToDesReverse = Enumerable.Reverse(routeRobotToDest).ToList();
-            List<Pos> routeDesToPod= new AstarSpacetime().FindPath(constraints[robot], time, dest.Pos, pod.Pos);
+            List<Pos> routeDesToPod = new AstarSpacetime().FindPath(constraints[robot], time, dest.Pos, pod.Pos);
             //add last field budget fix
             routeDesToPod.Add(pod.Pos);
             //List<Direction> turnRobotToPodReverse = convertTurn(routeRobotToDesReverse.ToArray(), robot);
             List<Direction> turnDesToPod = convertTurn(routeDesToPod.ToArray(), robot);
 
-            routes[robot].AddRange(routeDesToPod);
-            rotations[robot].AddRange(turnDesToPod);
+            Routes[robot].AddRange(routeDesToPod);
+            Rotations[robot].AddRange(turnDesToPod);
             time += routeDesToPod.Count;
             time += convertTurnTime(turnDesToPod);
             //cbs.checkConflicts();
@@ -206,12 +206,12 @@ namespace IMS.Model.Simulation
             return closestDock;
         }
 
-        private int convertTurnTime(List<Direction> rotations)
+        private int convertTurnTime(List<Direction> Rotations)
         {
             int temp = 0;
-            for (int j = 0; j < rotations.Count - 1; j++)
+            for (int j = 0; j < Rotations.Count - 1; j++)
             {
-                if (rotations[j + 1] == rotations[j])
+                if (Rotations[j + 1] == Rotations[j])
                 {
                     temp++;
                 }

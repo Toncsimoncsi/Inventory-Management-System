@@ -11,11 +11,11 @@ namespace IMS.Model.Simulation
 {
     public class Constraints
     {
-        public Dictionary<Robot, Dictionary<int, HashSet<Pos>>> agent_Constraints { get; set; }
+        public Dictionary<Robot, Dictionary<int, HashSet<Pos>>> Agent_Constraints { get; set; }
         //private Dictionary<Robot, Dictionary<int, HashSet<Pos>>> agent_Constraints = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>();
         public Constraints(Dictionary<Robot, Dictionary<int, HashSet<Pos>>> new_constraints)
         {
-            agent_Constraints = new_constraints;
+            Agent_Constraints = new_constraints;
         }
 
 
@@ -23,7 +23,7 @@ namespace IMS.Model.Simulation
         {
             //johnny deep copy of constraints
 
-            Dictionary<Robot, Dictionary<int, HashSet<Pos>>> constraintsCopy = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>(agent_Constraints);
+            Dictionary<Robot, Dictionary<int, HashSet<Pos>>> constraintsCopy = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>(Agent_Constraints);
             for (int i = start; i < end; i++)
             {
                 if (!constraintsCopy.ContainsKey(robot))

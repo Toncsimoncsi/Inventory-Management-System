@@ -112,7 +112,7 @@ namespace IMS.Model.Simulation
             return robot.EnergyLeft > shortestDistance;
         }
 
-        private void checkConflicts(CTNode ctnode)
+        private void checkConflicts(CTNode best)
         {
             //CTNode ctnode = new CTNode();
             //solution = dict((agent, self.calculate_path(agent, constraints, None)) for agent in self.agents)
@@ -125,15 +125,26 @@ namespace IMS.Model.Simulation
                     {
                         // Calculate new constraints
 
-                        Constraints robot1Constraint = calculateConstraints(ctnode, robot2, robot1, conflictTime);
-                        Constraints robot2Constraint = calculateConstraints(ctnode, robot1, robot2, conflictTime);
+                        Constraints robot1Constraint = calculateConstraints(best, robot2, robot1, conflictTime);
+                        Constraints robot2Constraint = calculateConstraints(best, robot1, robot2, conflictTime);
                         // Calculate new paths
-                        //TODO:convert constraints to Dictionary<int, HashSet<Pos>>
-                        List<Pos> robot1Path = new AstarSpacetime().FindPath(robot1Constraint.agent_Constraints[robot2], conflictTime, robot1.Pos, robot1.Pos);
-                        List<Pos> robot2Path= new AstarSpacetime().FindPath(robot1Constraint.agent_Constraints[robot1], conflictTime, robot1.Pos, robot1.Pos);
+                        //TODO: convert constraints to Dictionary<int, HashSet<Pos>>
+
+                        List<Pos> robot1Path = new AstarSpacetime().FindPath(robot1Constraint.Agent_Constraints[robot2], conflictTime, robot1.Pos, robot1.Pos);
+                        List<Pos> robot2Path= new AstarSpacetime().FindPath(robot1Constraint.Agent_Constraints[robot1], conflictTime, robot1.Pos, robot1.Pos);
                         //Replace old paths with new ones in solution
 
+                        Dictionary<Robot,List<Pos>> solution_1 = best.Solution;
+                        Dictionary<Robot, List<Pos>> solution_2 = new Dictionary<Robot, List<Pos>>(solution_1);
+                        solution_1[robot1] = robot1Path;
+                        solution_2[robot2] = robot2Path;
                         //add nodes to min heap
+
+                        CTNode node_1 = new CTNode(robot1Constraint, solution_1);
+                        CTNode node_2 = new CTNode(robot2Constraint, solution_2);
+
+                        constraintTree.Insert(node_1);
+                        constraintTree.Insert(node_2);
                     }
                 }
             }
