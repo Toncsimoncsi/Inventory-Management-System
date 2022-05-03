@@ -45,7 +45,7 @@ namespace IMS.Model.Simulation
                 Rotations[robot] = new List<Direction>();
                 //constraints[robot.Pos.X, robot.Pos.Y] = true;
             }
-            astar = new AstarSpacetime();
+            astar = new AstarSpacetime();,
             //AstarSpaceTime = new AstarSpacetime();
             assign = new Assign();
         }

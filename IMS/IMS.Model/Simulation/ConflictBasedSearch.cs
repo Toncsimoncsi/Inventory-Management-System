@@ -129,19 +129,20 @@ namespace IMS.Model.Simulation
                         Constraints robot2Constraint = calculateConstraints(best, robot1, robot2, conflictTime);
                         // Calculate new paths
                         //TODO: convert constraints to Dictionary<int, HashSet<Pos>>
-
+                        Dictionary<int, Pos> static1=calculateGoalTimes(best, robot1);
+                        Dictionary<int, Pos> static2=calculateGoalTimes(best, robot2);
                         List<Pos> robot1Path = new AstarSpacetime().FindPath(robot1Constraint.Agent_Constraints[robot2], conflictTime, robot1.Pos, robot1.Pos);
-                        List<Pos> robot2Path= new AstarSpacetime().FindPath(robot1Constraint.Agent_Constraints[robot1], conflictTime, robot1.Pos, robot1.Pos);
+                        List<Pos> robot2Path = new AstarSpacetime().FindPath(robot1Constraint.Agent_Constraints[robot1], conflictTime, robot1.Pos, robot1.Pos);
                         //Replace old paths with new ones in solution
 
-                        Dictionary<Robot,List<Pos>> solution_1 = best.Solution;
-                        Dictionary<Robot, List<Pos>> solution_2 = new Dictionary<Robot, List<Pos>>(solution_1);
-                        solution_1[robot1] = robot1Path;
-                        solution_2[robot2] = robot2Path;
+                        Dictionary<Robot, List<Pos>> solution1 = best.Solution;
+                        Dictionary<Robot, List<Pos>> solution2 = new Dictionary<Robot, List<Pos>>(solution1);
+                        solution1[robot1] = robot1Path;
+                        solution2[robot2] = robot2Path;
                         //add nodes to min heap
 
-                        CTNode node_1 = new CTNode(robot1Constraint, solution_1);
-                        CTNode node_2 = new CTNode(robot2Constraint, solution_2);
+                        CTNode node_1 = new CTNode(robot1Constraint, solution1);
+                        CTNode node_2 = new CTNode(robot2Constraint, solution2);
 
                         constraintTree.Insert(node_1);
                         constraintTree.Insert(node_2);
@@ -155,10 +156,10 @@ namespace IMS.Model.Simulation
         }
         private Constraints calculateConstraints(CTNode ctnode, Robot robot1, Robot robot2, int time)
         {
-            List<Pos> contrained_path = ctnode.Solution[robot1];
-            List<Pos> unchanged_path = ctnode.Solution[robot2];
+            List<Pos> contrainedPath = ctnode.Solution[robot1];
+            List<Pos> unchangedPath = ctnode.Solution[robot2];
 
-            Pos pivot = unchanged_path[time];
+            Pos pivot = unchangedPath[time];
             return ctnode.Constraints.Extend(robot1, pivot, time, time);
         }
         private Constraints calculatePath()
@@ -166,9 +167,19 @@ namespace IMS.Model.Simulation
             return null;
         }
 
-        private int[] calculateGoalTimes()
+        private Dictionary<int, Pos> calculateGoalTimes(CTNode ctnode, Robot robot)
         {
-            return null;
+            Dictionary<Robot, List<Pos>> solution = ctnode.Solution;
+            Dictionary<int, Pos> goalTimes = new Dictionary<int, Pos>();
+            foreach (Robot robot1 in IMSData.EntityData.RobotData)
+            {
+                if (robot1 != robot)
+                {
+                    int time = solution[robot].Count-1;
+                    goalTimes[time] = solution[robot1][time];
+                }
+            }
+            return goalTimes; ;
         }
 
 
