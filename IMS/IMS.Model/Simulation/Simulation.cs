@@ -29,6 +29,10 @@ namespace IMS.Model.Simulation
         {
             IMSData = data;
             astar = new AstarSpacetime(data.SizeX,data.SizeY);
+            Rotations=new Dictionary<Robot, List<Direction>>();
+            foreach (Robot robot in IMSData.EntityData.RobotData){
+                Rotations[robot] = new List<Direction>();
+            }
 
         }
 

@@ -24,16 +24,11 @@ namespace IMS.Model
         private Entity[,] _gameTable; // simtábla
         private IMSData _IMSData;
         private IMSDataAccess _dataAccess; // adatelérés
-        private Boolean[,] blocked;
 
-
-        //private Astar astar;
-        //private AstarSpacetime AstarSpaceTime;
         private ConflictBasedSearch cbs;
 
-
-        private List<Direction>[] rotations;
         private Dictionary<Robot, List<Pos>> routes;
+        private Dictionary<Robot, List<Direction>> rotations;
         private Boolean SimulationFinished;
 
 
@@ -41,7 +36,7 @@ namespace IMS.Model
         private int _allEnergy;
         private int _speed;
         private int _time;
-        private int _counter2;
+        private int _counter;
 
 
         #endregion
@@ -125,16 +120,11 @@ namespace IMS.Model
             _dataAccess = dataAccess;
             _steps = 0;
             _allEnergy = 0;
-            //_counter1 = 0;
-            _counter2 = 0;
-            List<Direction>[] rotations = new List<Direction>[IMSData.EntityData.RobotData.Count].Select(item => new List<Direction>()).ToArray();
-            List<Dictionary<int, HashSet<Pos>>>[] obstacles = new List<Dictionary<int, HashSet<Pos>>>[IMSData.EntityData.RobotData.Count].Select(item => new List<Dictionary<int, HashSet<Pos>>>()).ToArray();
-
+            _counter = 0;
             _speed = 1;
             _time = 0;
             SimulationFinished = false;
             //astar = new();
-            blocked = new Boolean[_gameTable.GetLength(0), _gameTable.GetLength(1)];
             //NewSimulation();
         }
 
@@ -220,33 +210,6 @@ namespace IMS.Model
         #endregion
 
         #region Private methods
-        private List<Direction> ConvertTurn(Pos[] route1, Robot robot)
-        {
-            Direction direction = new Direction();
-            List<Direction> directionList = new List<Direction>();
-            directionList.Add(robot.Direction); //add robots initial direction
-            for (int i = 0; i < route1.Length; i++)
-            {
-                switch (route1[i + 1].X - route1[i].X + (route1[i + 1].Y - route1[i].Y) * 2) //x coordinate diff(-1 or 1) plus y  coordinate*2 diff(-2 or 2) and 
-                {
-
-                    case -1:// down  
-                        direction = Direction.DOWN;
-                        break;
-                    case 1:// up
-                        direction = Direction.UP;
-                        break;
-                    case -2:// left  
-                        direction = Direction.LEFT;
-                        break;
-                    case 2:// right 
-                        direction = Direction.RIGHT;
-                        break;
-                }
-                directionList.Add(direction);
-            }
-            return directionList;
-        }
 
         private Entity[,] _createEmptyTable(Int32 sizeX, Int32 sizeY)
         {
@@ -307,19 +270,29 @@ namespace IMS.Model
                         max = entry.Value.Count();
                     }
                 }
-                if (_counter2 <= max)
+                if (_counter <= max)
                 {
+                    //rotate
+                    foreach (var item in rotations)
+                    {
+                        if (item.Value.Count() > _counter)
+                        {
+                            item.Key.Rotate(item.Value[_counter]);
+                        }
+
+                    }
+                    //move
                     foreach (var item in routes)
                     {
-                        if (item.Value.Count() > _counter2)
+                        if (item.Value.Count() > _counter)
                         {
-                            item.Key.Move(item.Value[_counter2]);
+                            item.Key.Move(item.Value[_counter]);
                         }
 
                     }
                     _steps++;
                     OnTableChanged();
-                    _counter2++;
+                    _counter++;
 
                 }
             }
@@ -367,16 +340,12 @@ namespace IMS.Model
             _IMSData.EntityData.DockData.Add(dock2);
 
             routes = new Dictionary<Robot, List<Pos>>();
-            rotations = new List<Direction>[2];
-            rotations[0] = new List<Direction>();
-            rotations[1] = new List<Direction>();
-            //_counter1 = 0;
-            _counter2 = 0;
+            _counter = 0;
             OnTableChanged();
             OnSimulationStarted();
             cbs = new ConflictBasedSearch(IMSData);
             routes = cbs.CheckConflicts();
-
+            rotations = cbs.Rotations;
             SimulationFinished = true;
         }
 

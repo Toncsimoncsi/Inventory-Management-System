@@ -20,9 +20,7 @@ namespace IMS.Model.Simulation
                 return null;
 
             costs = new int[starts.Count, goals.Count];
-            // 1 9
-            // 9 1
-            //
+
             for (int i = 0; i < starts.Count; i++)
             {
                 for (int j = 0; j < goals.Count; j++)

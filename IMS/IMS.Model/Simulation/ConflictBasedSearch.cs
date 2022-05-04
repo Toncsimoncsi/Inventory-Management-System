@@ -37,6 +37,7 @@ namespace IMS.Model.Simulation
             pathfinder = new PathFinder(IMSData);
             assigner = new Assign();
             constraintTree = new MinHeap(60);
+            Rotations = new Dictionary<Robot, List<Direction>>();
         }
 
         //minheap storing nodes of constraintTree, easy to extract min 
@@ -47,7 +48,7 @@ namespace IMS.Model.Simulation
         private PathFinder pathfinder;
 
 
-
+        public Dictionary<Robot, List<Direction>> Rotations { get; private set; }
         public Dictionary<Robot, List<Pos>> CheckConflicts()
         {
             //assign pods to destinations
@@ -73,7 +74,7 @@ namespace IMS.Model.Simulation
 
             //int[x0]=y0 where x0 th robot going to y0 th pod;
             int[] assignmentRobPod = assigner.Assigner(robotsPos, podsPos);
-       
+
             Constraints startConstraints = new Constraints(IMSData.EntityData.RobotData);
             Dictionary<Robot, List<Pos>> Solution = new Dictionary<Robot, List<Pos>>();
             Dictionary<int, HashSet<Pos>> empty = new Dictionary<int, HashSet<Pos>>();
@@ -105,6 +106,11 @@ namespace IMS.Model.Simulation
                 int conflictTime = conflict.Item3;
                 if (conflictTime == -1) //no conflict
                 {
+
+                    foreach (KeyValuePair<Robot, List<Pos>> item in Solution)
+                    {
+                        Rotations[item.Key] =convertTurn(item.Value, item.Key);
+                    }
                     return best.Solution;
                 }
                 else
@@ -142,6 +148,33 @@ namespace IMS.Model.Simulation
             return null;
 
         }
+        private List<Direction> convertTurn(List<Pos>route1, Robot robot)
+        {
+            Direction direction = new Direction();
+            List<Direction> directionList = new List<Direction>();
+            directionList.Add(robot.Direction); //add robots initial direction
+            for (int i = 0; i < route1.Count - 1; i++)
+            {
+                switch (route1[i + 1].X - route1[i].X + (route1[i + 1].Y - route1[i].Y) * 2) //x coordinate diff(-1 or 1) plus y  coordinate*2 diff(-2 or 2) and 
+                {
+
+                    case -1:// down  
+                        direction = Direction.DOWN;
+                        break;
+                    case 1:// up
+                        direction = Direction.UP;
+                        break;
+                    case -2:// left  
+                        direction = Direction.LEFT;
+                        break;
+                    case 2:// right 
+                        direction = Direction.RIGHT;
+                        break;
+                }
+                directionList.Add(direction);
+            }
+            return directionList;
+        }
         private Constraints CalculateConstraints(CTNode ctnode, Robot robot1, Robot robot2, int time)
         {
             List<Pos> contrainedPath = ctnode.Solution[robot1];
@@ -178,7 +211,7 @@ namespace IMS.Model.Simulation
             {
                 for (int i = 0; i < j; i++)
                 {
-                    if (i!=j)
+                    if (i != j)
                     {
                         int conflictTime = HasConflict(node.Solution, IMSData.EntityData.RobotData[i], IMSData.EntityData.RobotData[j]);
                         if (conflictTime != -1)
