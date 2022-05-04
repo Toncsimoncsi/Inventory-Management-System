@@ -11,15 +11,15 @@ namespace IMS.Model.Simulation
     //Constraints Tree node, for the binary tree
     public class CTNode: IComparable<CTNode>
     {
-        public CTNode(Constraints constraints, Dictionary<Robot, List<Pos>> Solution)
+        public CTNode(Constraints constraints, Dictionary<Robot, List<Pos>> solution)
         {
-            this.Solution = Solution;
-            this.Cost = sic();
-            this.Constraints = constraints;
+            Solution = solution;
+            Cost = sic();
+            Constraints = constraints;
         }
-        public Constraints Constraints { get; set; }
-        public int Cost { get; set; }
-        public Dictionary<Robot, List<Pos>> Solution { get; set; }
+        public Constraints Constraints { get;private set; }
+        public int Cost { get;private set; }
+        public Dictionary<Robot, List<Pos>> Solution { get;private set; }
 
         public int CompareTo(CTNode incomingCTNode)
         {
@@ -100,7 +100,7 @@ namespace IMS.Model.Simulation
 
         private int sic()
         {
-            int temp = new();
+            int temp = 0;
             foreach(List<Pos> list in Solution.Values)
             {
                 temp += list.Count;

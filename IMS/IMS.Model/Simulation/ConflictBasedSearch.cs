@@ -6,180 +6,209 @@ using System.Text;
 using System.Threading.Tasks;
 using IMS.Persistence;
 using IMS.Persistence.Entities;
-using MoreComplexDataStructures;
+using System.Diagnostics;
 
 namespace IMS.Model.Simulation
 {
-    //    Constraint Tree
-
-    //The core of the algorithm is the maintenance of a constraint tree(a binary min-heap in my implementation). The nodes in the constraint tree have 3 component:
-
-    //    constraints - detailing what each agent should avoid in space-time
-    //    solution - path for each agent
-    //    cost - the sum of the cost of individual paths
-
-    //The low-level STA* planner can take the constraints for an agent and calculate a collison-free path for that agent.
-    //node = Find paths for individual agents with no constraints.
-    //Add node to the constraint tree.
-
-    //while constraint tree is not empty:
-    //  best = node with the lowest cost in the constraint tree
-
-    //  Validate the solution in best until a conflict occurs.
-    //  if there is no conflict:
-    //    return best
-
-    //  conflict = Find the first 2 agents with conflicting paths.
-
-    //  new_node1 = node where the 1st agent avoid the 2nd agent
-    //  Add new_node1 to the constraint tree.
-
-    //  new_node2 = node where the 2nd agent avoid the 1st agent
-    //  Add new_node2 to the constraint tree.
+    //    MIT License
+    //Copyright(c) 2018 YOUR NAME
+    //Permission is hereby granted, free of charge, to any person obtaining a copy
+    //of this software and associated documentation files (the "Software"), to deal
+    //in the Software without restriction, including without limitation the rights
+    //to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    //copies of the Software, and to permit persons to whom the Software is
+    //furnished to do so, subject to the following conditions:
+    //The above copyright notice and this permission notice shall be included in all
+    //copies or substantial portions of the Software.
+    //THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    //IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    //FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    //AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    //LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    //SOFTWARE.
     //https://github.com/GavinPHR/Multi-Agent-Path-Finding
     public class ConflictBasedSearch
     {
         public IMSData IMSData { get; set; }
-        public ConflictBasedSearch()
+        public ConflictBasedSearch(IMSData imsdata)
         {
-
+            IMSData = imsdata;
+            pathfinder = new PathFinder(IMSData);
+            assigner = new Assign();
+            constraintTree = new MinHeap(60);
         }
 
-        private Dictionary<Robot, List<Pos>> routes;
-        private Dictionary<Robot, List<Direction>> rotations;
-        private Dictionary<Robot, Dictionary<int, HashSet<Pos>>> blocked;
-        private Dictionary<Int32, Pos> constraint = new Dictionary<Int32, Pos>();
-        private MinHeap<CTNode> constraintTree;
+        //minheap storing nodes of constraintTree, easy to extract min 
+        private MinHeap constraintTree;
+        //assign robots to Goals;
+        private Assign assigner;
+        //Astar with multiple destinations
+        private PathFinder pathfinder;
+
+
+
+        public Dictionary<Robot, List<Pos>> CheckConflicts()
+        {
+            //assign pods to destinations
+            Dictionary<int, int> assignmentPodDest = new Dictionary<int, int>();
+            for (int i = 0; i < IMSData.EntityData.DestinationData.Count; i++)
+            {
+                for (int j = 0; j < IMSData.EntityData.PodData.Count; j++)
+                {
+                    if (IMSData.EntityData.PodData[j].Products.ContainsKey(IMSData.EntityData.DestinationData[i].ID) && !assignmentPodDest.ContainsKey(j)) //matching id and not assigned
+                    {
+                        assignmentPodDest[j] = i;
+                    }
+                }
+            }
+
+            //     
+            //assign robots to pods with hungarian-algorithm (lowest combined cost)
+            List<Pos> robotsPos = IMSData.EntityData.RobotData.Select(item => item.Pos).ToList();
+            List<Pos> podsPos = IMSData.EntityData.PodData.Select(item => item.Pos).ToList();
+            List<Pos> destPos = IMSData.EntityData.DestinationData.Select(item => item.Pos).ToList();
+
+
+
+            //int[x0]=y0 where x0 th robot going to y0 th pod;
+            int[] assignmentRobPod = assigner.Assigner(robotsPos, podsPos);
+       
+            Constraints startConstraints = new Constraints(IMSData.EntityData.RobotData);
+            Dictionary<Robot, List<Pos>> Solution = new Dictionary<Robot, List<Pos>>();
+            Dictionary<int, HashSet<Pos>> empty = new Dictionary<int, HashSet<Pos>>();
+            //better acces to assignment
+            Dictionary<Robot, Tuple<Pod, Destination>> assignment = new Dictionary<Robot, Tuple<Pod, Destination>>();
+
+            for (int i = 0; i < assignmentRobPod.Length; i++)
+            {
+                //find path for each robot
+                assignment[IMSData.EntityData.RobotData[i]] = Tuple.Create(IMSData.EntityData.PodData[assignmentRobPod[i]], IMSData.EntityData.DestinationData[assignmentPodDest[assignmentRobPod[i]]]);
+                List<Pos> path = pathfinder.CalculatePath(IMSData.EntityData.RobotData[i], assignment[IMSData.EntityData.RobotData[i]].Item1, assignment[IMSData.EntityData.RobotData[i]].Item2,
+                    startConstraints.Agent_Constraints[IMSData.EntityData.RobotData[i]], empty);
+                Solution[IMSData.EntityData.RobotData[i]] = path;
+            }
+            //make rootNode
+            CTNode rootNode = new CTNode(startConstraints, Solution);
+            constraintTree.Add(rootNode);
+            //search conflicts
+            //if finds conflicts add 2 nodes with 1 representing
+            //robot 1 avoding robot 2( robot2 is added to robot1 constraints)
+            //robot 2 avoiding robo1 (robot1 is added to robot2 constraint
+            while (!constraintTree.IsEmpty())
+            {
+                CTNode best = constraintTree.Pop();
+                //check for conflicts
+                Tuple<Robot, Robot, int> conflict = Validate_paths(best);
+                Robot robot1 = conflict.Item1;
+                Robot robot2 = conflict.Item2;
+                int conflictTime = conflict.Item3;
+                if (conflictTime == -1) //no conflict
+                {
+                    return best.Solution;
+                }
+                else
+                {
+                    // Calculate new constraints
+                    Debug.WriteLine(conflictTime.ToString(), "conflictTime");
+                    Constraints robot1Constraint = CalculateConstraints(best, robot1, robot2, conflictTime);
+                    Constraints robot2Constraint = CalculateConstraints(best, robot2, robot1, conflictTime);
+                    // Calculate new paths
+                    // calculate static obstacles which constitute for robots when they stop they stop
+                    Dictionary<int, HashSet<Pos>> goalTimes1 = calculateGoalTimes(best, robot1);
+                    Dictionary<int, HashSet<Pos>> goalTimes2 = calculateGoalTimes(best, robot2);
+
+                    List<Pos> robot1Path = pathfinder.CalculatePath(robot1, assignment[robot1].Item1, assignment[robot1].Item2, robot1Constraint.Agent_Constraints[robot1], goalTimes1);
+                    List<Pos> robot2Path = pathfinder.CalculatePath(robot2, assignment[robot2].Item1, assignment[robot2].Item2, robot2Constraint.Agent_Constraints[robot2], goalTimes2);
+
+                    //Replace old paths with new ones in solution
+
+                    Dictionary<Robot, List<Pos>> solution1 = best.Solution;
+                    Dictionary<Robot, List<Pos>> solution2 = new Dictionary<Robot, List<Pos>>(solution1);
+                    solution1[robot1] = robot1Path;
+                    solution2[robot2] = robot2Path;
+                    //add nodes to min heap
+
+                    CTNode node_1 = new CTNode(robot1Constraint, solution1);
+                    CTNode node_2 = new CTNode(robot2Constraint, solution2);
+
+                    constraintTree.Add(node_1);
+                    constraintTree.Add(node_2);
+                }
+            }
+
+            // If there is not conflict, validate_paths returns (None, None, -1)
+
+            return null;
+
+        }
+        private Constraints CalculateConstraints(CTNode ctnode, Robot robot1, Robot robot2, int time)
+        {
+            List<Pos> contrainedPath = ctnode.Solution[robot1];
+            List<Pos> unchangedPath = ctnode.Solution[robot2];
+
+            Pos pivot = unchangedPath[time];
+            //Constraints where robot1 cant be at pivot at the time
+            return ctnode.Constraints.Extend(robot1, pivot, time);
+        }
         /// <summary>
         /// return time of conflict or -1 if no conflicts
         /// </summary>
         /// <param name="route1">robot 1 route</param>
         /// <param name="route2">robot 2 route </param>
         /// <returns></returns>
-        private int hasConflict(Dictionary<Robot, List<Pos>> solution, Robot robot1, Robot robot2)
+        private int HasConflict(Dictionary<Robot, List<Pos>> solution, Robot robot1, Robot robot2)
         {
             int min_index = Math.Min(solution[robot1].Count, solution[robot2].Count);
             for (int i = 0; i < min_index; i++)
             {
                 if (solution[robot1][i] == solution[robot2][i])
+                {
                     return i;
+                }
             }
+            //no conflict
             return -1;
         }
-
-        private List<Direction> convertTurn(Pos[] route1, Robot robot)
+        //check for conflicts and return which robot had conflict when
+        private Tuple<Robot, Robot, int> Validate_paths(CTNode node)
         {
-            Direction direction = new Direction();
-            List<Direction> directionList = new List<Direction>();
-            directionList.Add(robot.Direction); //add robots initial direction
-            for (int i = 0; i < route1.Length; i++)
+            Tuple<Robot, Robot, int> conflict = new Tuple<Robot, Robot, int>(null, null, -1);
+            for (int j = 0; j < IMSData.EntityData.RobotData.Count(); j++)
             {
-                switch (route1[i + 1].X - route1[i].X + (route1[i + 1].Y - route1[i].Y) * 2) //x coordinate diff(-1 or 1) plus y  coordinate*2 diff(-2 or 2) and 
+                for (int i = 0; i < j; i++)
                 {
-
-                    case -1:// down  
-                        direction = Direction.DOWN;
-                        break;
-                    case 1:// up
-                        direction = Direction.UP;
-                        break;
-                    case -2:// left  
-                        direction = Direction.LEFT;
-                        break;
-                    case 2:// right 
-                        direction = Direction.RIGHT;
-                        break;
-                }
-                directionList.Add(direction);
-            }
-            return directionList;
-        }
-
-        //private Boolean isTurn(Pos[] route1)
-
-        private Boolean canCharge(Robot robot)
-        {
-            Pos closestDockPos = new Pos();
-            int shortestDistance = int.MaxValue;
-            foreach (Dock dock in IMSData.EntityData.DockData) // iterate over all docks which is closer
-            {
-                if (shortestDistance > robot.Pos.Distance(dock.Pos))
-                {
-                    shortestDistance = robot.Pos.Distance(dock.Pos);
-                    closestDockPos = dock.Pos;
-                }
-            }
-            return robot.EnergyLeft > shortestDistance;
-        }
-
-        private void checkConflicts(CTNode best)
-        {
-            //CTNode ctnode = new CTNode();
-            //solution = dict((agent, self.calculate_path(agent, constraints, None)) for agent in self.agents)
-            foreach (Robot robot1 in IMSData.EntityData.RobotData)
-            {
-                foreach (Robot robot2 in IMSData.EntityData.RobotData)
-                {
-                    int conflictTime = hasConflict(routes, robot1, robot2);
-                    if (conflictTime != -1)
+                    if (i!=j)
                     {
-                        // Calculate new constraints
-
-                        Constraints robot1Constraint = calculateConstraints(best, robot2, robot1, conflictTime);
-                        Constraints robot2Constraint = calculateConstraints(best, robot1, robot2, conflictTime);
-                        // Calculate new paths
-                        //TODO: convert constraints to Dictionary<int, HashSet<Pos>>
-                        Dictionary<int, Pos> static1=calculateGoalTimes(best, robot1);
-                        Dictionary<int, Pos> static2=calculateGoalTimes(best, robot2);
-                        List<Pos> robot1Path = new AstarSpacetime().FindPath(robot1Constraint.Agent_Constraints[robot2], conflictTime, robot1.Pos, robot1.Pos);
-                        List<Pos> robot2Path = new AstarSpacetime().FindPath(robot1Constraint.Agent_Constraints[robot1], conflictTime, robot1.Pos, robot1.Pos);
-                        //Replace old paths with new ones in solution
-
-                        Dictionary<Robot, List<Pos>> solution1 = best.Solution;
-                        Dictionary<Robot, List<Pos>> solution2 = new Dictionary<Robot, List<Pos>>(solution1);
-                        solution1[robot1] = robot1Path;
-                        solution2[robot2] = robot2Path;
-                        //add nodes to min heap
-
-                        CTNode node_1 = new CTNode(robot1Constraint, solution1);
-                        CTNode node_2 = new CTNode(robot2Constraint, solution2);
-
-                        constraintTree.Insert(node_1);
-                        constraintTree.Insert(node_2);
+                        int conflictTime = HasConflict(node.Solution, IMSData.EntityData.RobotData[i], IMSData.EntityData.RobotData[j]);
+                        if (conflictTime != -1)
+                        {
+                            return Tuple.Create(IMSData.EntityData.RobotData[i], IMSData.EntityData.RobotData[j], conflictTime);
+                        }
                     }
                 }
             }
-            // If there is not conflict, validate_paths returns (None, None, -1)
-
-
-
+            return conflict;
         }
-        private Constraints calculateConstraints(CTNode ctnode, Robot robot1, Robot robot2, int time)
-        {
-            List<Pos> contrainedPath = ctnode.Solution[robot1];
-            List<Pos> unchangedPath = ctnode.Solution[robot2];
-
-            Pos pivot = unchangedPath[time];
-            return ctnode.Constraints.Extend(robot1, pivot, time, time);
-        }
-        private Constraints calculatePath()
-        {
-            return null;
-        }
-
-        private Dictionary<int, Pos> calculateGoalTimes(CTNode ctnode, Robot robot)
+        //static obstacles (robot which has stopped)
+        private Dictionary<int, HashSet<Pos>> calculateGoalTimes(CTNode ctnode, Robot robot)
         {
             Dictionary<Robot, List<Pos>> solution = ctnode.Solution;
-            Dictionary<int, Pos> goalTimes = new Dictionary<int, Pos>();
+            Dictionary<int, HashSet<Pos>> goalTimes = new Dictionary<int, HashSet<Pos>>();
+            int time;
             foreach (Robot robot1 in IMSData.EntityData.RobotData)
             {
                 if (robot1 != robot)
                 {
-                    int time = solution[robot].Count-1;
-                    goalTimes[time] = solution[robot1][time];
+                    time = solution[robot1].Count - 1;
+                    if (!goalTimes.ContainsKey(time))
+                    {
+                        goalTimes[time] = new HashSet<Pos>();
+                    }
+                    goalTimes[time].Add(solution[robot1][time]);
                 }
             }
-            return goalTimes; ;
+            return goalTimes;
         }
 
 

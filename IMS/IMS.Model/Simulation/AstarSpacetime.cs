@@ -20,6 +20,11 @@ namespace IMS.Model.Simulation
     //https://www.davidsilver.uk/wp-content/uploads/2020/03/coop-path-AIWisdom.pdf
     public class AstarSpacetime
     {
+        public AstarSpacetime(int x,int y)
+        {
+            SizeX = x;
+            SizeY = y;
+        }
         public int SizeX { get; set; }
         public int SizeY { get; set; }
 
@@ -30,14 +35,20 @@ namespace IMS.Model.Simulation
         Dictionary<Pos, int> gScore = new Dictionary<Pos, int>();
         //cost of start to goal, passing through key node
         Dictionary<Pos, int> fScore = new Dictionary<Pos, int>();
-
+        //path
         Dictionary<Pos, Pos> nodeLinks = new Dictionary<Pos, Pos>();
 
+        //robots that have stopped
+        Dictionary<int, HashSet<Pos>> staticObstacles = new Dictionary<int, HashSet<Pos>>();
+        //robots that are moving 
+        Dictionary<int, HashSet<Pos>> dynamicObstacles = new Dictionary<int, HashSet<Pos>>();
 
-        public List<Pos> FindPath(Dictionary<int, HashSet<Pos>> dynamic_obstacles, int startTime, Pos start, Pos goal)
+        public List<Pos> FindPath( Dictionary<int, HashSet<Pos>> dynamicObstacle, Dictionary<int, HashSet<Pos>> robotObstacles, int startTime, Pos start, Pos goal)
         {
 
-            //Clear();
+            Clear();
+            dynamicObstacles = dynamicObstacle;
+            staticObstacles = robotObstacles;
             openSet[start] = true;
             gScore[start] = 0;
             fScore[start] = Heuristic(start, goal);
@@ -55,7 +66,7 @@ namespace IMS.Model.Simulation
                 openSet.Remove(current);
                 closedSet[current] = true;
 
-                foreach (var neighbor in Neighbors(getGraph(dynamic_obstacles[localTime+gScore[current]]), current))
+                foreach (var neighbor in Neighbors(getGraph(getGScore(current)), current))
                 {
                     if (closedSet.ContainsKey(neighbor))
                         continue;
@@ -78,17 +89,8 @@ namespace IMS.Model.Simulation
 
             return new List<Pos>();
         }
-        public bool[,] getGraph(HashSet<Pos> obstacles)
-        {
-            bool[,] tempgraph = new bool[SizeX, SizeY];
-            foreach (Pos positions in obstacles)
-            {
-                tempgraph[positions.X, positions.Y] = true;
 
-            }
-            return tempgraph;
-        }
-        
+
         private void Clear()
         {
             closedSet.Clear();
@@ -116,6 +118,32 @@ namespace IMS.Model.Simulation
             int score = int.MaxValue;
             fScore.TryGetValue(pt, out score);
             return score;
+        }
+        //remake graph that has blocked points
+        public bool[,] getGraph(int time)
+        {
+            bool[,] tempGraph = new bool[SizeX, SizeY];
+            
+            if (dynamicObstacles.ContainsKey(time))
+            {
+                foreach (Pos positions in dynamicObstacles[time])
+                {
+                    tempGraph[positions.X, positions.Y] = true;
+
+                }
+            }
+
+            foreach (KeyValuePair<int, HashSet<Pos>> entry in staticObstacles)
+            {
+                if (time > entry.Key)
+                {
+                    foreach (Pos positions in entry.Value)
+                    {
+                        tempGraph[positions.X, positions.Y] = true;
+                    }
+                }
+            }
+            return tempGraph;
         }
 
         //diagonal movement not allowed
@@ -153,7 +181,7 @@ namespace IMS.Model.Simulation
             if (y < 0 || y >= matrix.GetLength(1))
                 return false;
 
-            return matrix[x, y];
+            return !matrix[x, y];
 
         }
 

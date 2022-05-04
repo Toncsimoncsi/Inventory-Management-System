@@ -12,13 +12,12 @@ namespace IMS.Persistence.Entities
         private Int32 _capacity;
         private Int32 _energyLeft;
         private Int32 _destinationID;
-        private Dictionary<Int32, Int32> _products;
 
         public Int32 EnergyConsumption { get { return _energyConsumption; } }
         public Int32 Capacity { get { return _capacity; } }
         public Int32 EnergyLeft { get { return _energyLeft; } }
         public Int32 DestinationID { get { return _destinationID; } }
-        public Dictionary<Int32, Int32> Products { get { return _products; } }
+        public Dictionary<Int32, Int32> Products { get; set; }
 
         //public Int32 EnergyConsumption { get; }
         //public Int32 Capacity { get; }
@@ -34,7 +33,7 @@ namespace IMS.Persistence.Entities
             _energyLeft = energyLeft;
             _energyConsumption = energyConsumption;
             _dir = direction;
-            _products = products;
+            Products = products;
         }
 
         public RobotUnderPod(int x, int y, Direction direction, int capacity, int energyLeft, int destinationID, Dictionary<Int32, Int32> products) : this(x, y, direction, capacity, energyLeft, destinationID, 0, products)
@@ -47,27 +46,6 @@ namespace IMS.Persistence.Entities
         public RobotUnderPod(Robot robot, Pod pod) : this(robot.Pos.X,robot.Pos.Y, robot.Direction, robot.Capacity, robot.EnergyLeft, robot.DestinationID, robot.EnergyConsumption, pod.Products)
         {
         }
-        public void RemoveProduct(int productID)
-        {
-            if (_products.ContainsKey(productID))
-            {
-                if (_products[productID] == 1)
-                {
-                    _products.Remove(productID);
-                }
-                else if (_products[productID] > 1)
-                {
-                    _products[productID] -= 1;
-                }
-                else
-                {
-                    //might need to throw an exception if this is even possible (products[productID] == 0 shouldn't be allowed)
-                }
-            }
-            else
-            {
-                //might need to throw an exception if someone is trying to remove a nonexistent productID
-            }
-        }
+
     }
 }

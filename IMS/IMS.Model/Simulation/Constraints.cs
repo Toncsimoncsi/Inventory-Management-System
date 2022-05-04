@@ -11,32 +11,44 @@ namespace IMS.Model.Simulation
 {
     public class Constraints
     {
+        //which agents the robots have to avoid
         public Dictionary<Robot, Dictionary<int, HashSet<Pos>>> Agent_Constraints { get; set; }
         //private Dictionary<Robot, Dictionary<int, HashSet<Pos>>> agent_Constraints = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>();
+        public Constraints()
+        {
+            Agent_Constraints = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>();
+        }
+        public Constraints(List<Robot> Robots)
+        {
+            Agent_Constraints = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>();
+            foreach (Robot robot in Robots)
+            {
+                Agent_Constraints[robot] = new Dictionary<int, HashSet<Pos>>();
+            }
+        }
         public Constraints(Dictionary<Robot, Dictionary<int, HashSet<Pos>>> new_constraints)
         {
             Agent_Constraints = new_constraints;
         }
 
 
-        public Constraints Extend(Robot robot, Pos obstacle, int start, int end)
+        public Constraints Extend(Robot robot, Pos obstacle, int start)
         {
             //johnny deep copy of constraints
 
             Dictionary<Robot, Dictionary<int, HashSet<Pos>>> constraintsCopy = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>(Agent_Constraints);
-            for (int i = start; i < end; i++)
-            {
-                if (!constraintsCopy.ContainsKey(robot))
-                {
-                    constraintsCopy[robot] = new Dictionary<int, HashSet<Pos>>();
 
-                }
-                if (!constraintsCopy[robot].ContainsKey(i))
-                {
-                    constraintsCopy[robot][i] = new HashSet<Pos>();
-                }
-                constraintsCopy[robot][i].Add(obstacle);
+            if (!constraintsCopy.ContainsKey(robot))
+            {
+                constraintsCopy[robot] = new Dictionary<int, HashSet<Pos>>();
+
             }
+            if (!constraintsCopy[robot].ContainsKey(start))
+            {
+                constraintsCopy[robot][start] = new HashSet<Pos>();
+            }
+            constraintsCopy[robot][start].Add(obstacle);
+
             Constraints new_constraints = new Constraints(constraintsCopy);
 
             return new_constraints;

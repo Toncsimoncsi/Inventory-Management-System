@@ -25,16 +25,15 @@ namespace IMS.Model
         private IMSData _IMSData;
         private IMSDataAccess _dataAccess; // adatelérés
         private Boolean[,] blocked;
-        private List<Dictionary<int, HashSet<Pos>>>[] obstacles;
-        //private Dictionary<int, HashSet<Pos>>[] blocked;
 
-        //private Pos[][] routes;
+
         //private Astar astar;
         //private AstarSpacetime AstarSpaceTime;
+        private ConflictBasedSearch cbs;
 
 
         private List<Direction>[] rotations;
-        private List<Pos>[] routes;
+        private Dictionary<Robot, List<Pos>> routes;
         private Boolean SimulationFinished;
 
 
@@ -42,7 +41,6 @@ namespace IMS.Model
         private int _allEnergy;
         private int _speed;
         private int _time;
-        private int _counter1;
         private int _counter2;
 
 
@@ -127,7 +125,7 @@ namespace IMS.Model
             _dataAccess = dataAccess;
             _steps = 0;
             _allEnergy = 0;
-            _counter1 = 0;
+            //_counter1 = 0;
             _counter2 = 0;
             List<Direction>[] rotations = new List<Direction>[IMSData.EntityData.RobotData.Count].Select(item => new List<Direction>()).ToArray();
             List<Dictionary<int, HashSet<Pos>>>[] obstacles = new List<Dictionary<int, HashSet<Pos>>>[IMSData.EntityData.RobotData.Count].Select(item => new List<Dictionary<int, HashSet<Pos>>>()).ToArray();
@@ -137,7 +135,6 @@ namespace IMS.Model
             SimulationFinished = false;
             //astar = new();
             blocked = new Boolean[_gameTable.GetLength(0), _gameTable.GetLength(1)];
-            updateBlock();
             //NewSimulation();
         }
 
@@ -223,41 +220,34 @@ namespace IMS.Model
         #endregion
 
         #region Private methods
-        //check if robot has enough energy to finish task
-        private Dock closestDock(Robot robot)
+        private List<Direction> ConvertTurn(Pos[] route1, Robot robot)
         {
-            Dock closestDock = _IMSData.EntityData.DockData[0];
-            int shortestDistance = int.MaxValue;
-            foreach (Dock dock in _IMSData.EntityData.DockData) // iterate over all docks which is closer
+            Direction direction = new Direction();
+            List<Direction> directionList = new List<Direction>();
+            directionList.Add(robot.Direction); //add robots initial direction
+            for (int i = 0; i < route1.Length; i++)
             {
-                if (shortestDistance < robot.Pos.Distance(dock.Pos))
+                switch (route1[i + 1].X - route1[i].X + (route1[i + 1].Y - route1[i].Y) * 2) //x coordinate diff(-1 or 1) plus y  coordinate*2 diff(-2 or 2) and 
                 {
-                    shortestDistance = robot.Pos.Distance(dock.Pos);
-                    closestDock = dock;
-                }
-            }
-            return closestDock;
-        }
-        // update block array
-        private void updateBlock()
-        {
-            for (int i = 0; i < blocked.GetLength(0); i++)
-            {
-                for (int j = 0; j < blocked.GetLength(1); j++)
-                {
-                    blocked[i, j] = true;
-                }
 
+                    case -1:// down  
+                        direction = Direction.DOWN;
+                        break;
+                    case 1:// up
+                        direction = Direction.UP;
+                        break;
+                    case -2:// left  
+                        direction = Direction.LEFT;
+                        break;
+                    case 2:// right 
+                        direction = Direction.RIGHT;
+                        break;
+                }
+                directionList.Add(direction);
             }
-            //blocked = new Boolean[IMSData.SizeX][IMSData.SizeY];
-            foreach (Robot robot in _IMSData.EntityData.RobotData)
-            {
-                //int x = robot.Pos.X;
-                //int y = robot.Pos.Y;
-                //blocked[robot.Pos.X][robot.Pos.Y;] = true;
-                blocked[robot.Pos.X, robot.Pos.Y] = false;
-            }
+            return directionList;
         }
+
         private Entity[,] _createEmptyTable(Int32 sizeX, Int32 sizeY)
         {
             Entity[,] table = new Entity[sizeX, sizeY];
@@ -308,103 +298,85 @@ namespace IMS.Model
 
             if (SimulationFinished)
             {
-                int max = routes.Max(x => x.Count);
-                if (_counter2 < max)
+                int max = -1;
+                foreach (KeyValuePair<Robot, List<Pos>> entry in routes)
                 {
-                    for (int i = 0; i < routes.Length; i++)
+                    //find longest path
+                    if (entry.Value.Count() > max)
                     {
-                        if (routes[i].Count < _counter2)
-                        {
-                            _IMSData.EntityData.RobotData[i].Move(routes[i][_counter2]);
-                            _IMSData.EntityData.RobotData[i].Rotate(rotations[i][_counter2]);
-                        }
+                        max = entry.Value.Count();
                     }
+                }
+                if (_counter2 <= max)
+                {
+                    foreach (var item in routes)
+                    {
+                        if (item.Value.Count() > _counter2)
+                        {
+                            item.Key.Move(item.Value[_counter2]);
+                        }
 
+                    }
                     _steps++;
                     OnTableChanged();
                     _counter2++;
 
                 }
-                else
-                {
-                    _counter2 = 0;
-                }
-
-
             }
             _time++;
             OnTimePassed(_time);
 
         }
 
-
-        //run the calculate paths on the table
-        private List<Direction> convertTurn(Pos[] route1, Robot robot)
-        {
-            Direction direction = new Direction();
-            List<Direction> directionList = new List<Direction>();
-            directionList.Add(robot.Direction); //add robots initial direction
-            for (int i = 0; i < route1.Length - 1; i++)
-            {
-                switch (route1[i + 1].X - route1[i].X + (route1[i + 1].Y - route1[i].Y) * 2) //x coordinate diff(-1 or 1) plus y  coordinate*2 diff(-2 or 2) and 
-                {
-
-                    case -1:// down  
-                        direction = Direction.DOWN;
-                        break;
-                    case 1:// up
-                        direction = Direction.UP;
-                        break;
-                    case -2:// left  
-                        direction = Direction.LEFT;
-                        break;
-                    case 2:// right 
-                        direction = Direction.RIGHT;
-                        break;
-                }
-                directionList.Add(direction);
-            }
-            return directionList;
-        }
-
         public void Simulation()
         {
             //random table
             //example
+
             Robot Robot1 = new Robot(0, 0, Direction.UP, 1000, 1000, 1);
-            Robot Robot2 = new Robot(0, 11, Direction.UP, 1000, 25, 1);
+            Robot Robot2 = new Robot(0, 10, Direction.UP, 1000, 1000, 1);
+            //Robot Robot3 = new Robot(3, 3, Direction.UP, 1000, 1000, 1);
+            //Robot Robot4 = new Robot(9, 9, Direction.UP, 1000, 1000, 1);
             _IMSData.EntityData.RobotData.Add(Robot1);
             _IMSData.EntityData.RobotData.Add(Robot2);
-            Dictionary<Int32, Int32> asd = new();
-            Dictionary<Int32, Int32> asd2 = new();
-            Pod pod1 = new Pod(6, 2, asd);
-            Pod pod2 = new Pod(6, 6, asd2);
+            //_IMSData.EntityData.RobotData.Add(Robot3);
+            //_IMSData.EntityData.RobotData.Add(Robot4);
+            Dictionary<Int32, Int32> asd = new Dictionary<Int32, Int32>() { { 2, 1 } };
+            Dictionary<Int32, Int32> asd2 = new Dictionary<Int32, Int32>() { { 1, 1 } };
+            //Dictionary<Int32, Int32> asd3 = new Dictionary<Int32, Int32>() { { 3, 1 } };
+            //Dictionary<Int32, Int32> asd4 = new Dictionary<Int32, Int32>() { { 4, 1 } };
+            Pod pod1 = new Pod(0, 9, asd);
+            Pod pod2 = new Pod(0, 1, asd2);
+            //Pod pod3 = new Pod(9, 1, asd3);
+            //Pod pod4 = new Pod(1, 4, asd4);
             _IMSData.EntityData.PodData.Add(pod1);
             _IMSData.EntityData.PodData.Add(pod2);
+            //_IMSData.EntityData.PodData.Add(pod3);
+            //_IMSData.EntityData.PodData.Add(pod4);
             Destination dest1 = new Destination(11, 0, 1);
-            Destination dest2 = new Destination(11, 11, 1);
+            Destination dest2 = new Destination(3, 11, 2);
+            //Destination dest3 = new Destination(6, 4, 4);
+            //Destination dest4 = new Destination(5, 3, 1);
             _IMSData.EntityData.DestinationData.Add(dest1);
             _IMSData.EntityData.DestinationData.Add(dest2);
+            //_IMSData.EntityData.DestinationData.Add(dest3);
+            //_IMSData.EntityData.DestinationData.Add(dest4);
             Dock dock1 = new Dock(4, 3);
             Dock dock2 = new Dock(6, 10);
             _IMSData.EntityData.DockData.Add(dock1);
             _IMSData.EntityData.DockData.Add(dock2);
 
-
-            routes = new List<Pos>[2];
+            routes = new Dictionary<Robot, List<Pos>>();
             rotations = new List<Direction>[2];
-            routes[0] = new List<Pos>();
-            routes[1] = new List<Pos>();
             rotations[0] = new List<Direction>();
             rotations[1] = new List<Direction>();
-            _counter1 = 0;
+            //_counter1 = 0;
             _counter2 = 0;
             OnTableChanged();
             OnSimulationStarted();
-            Dictionary<Robot, Dictionary<int, HashSet<Pos>>> blocked = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>();
-            Constraints cs = new Constraints(blocked);
-            PathFinder pf = new PathFinder(IMSData,blocked);
-            pf.FindPaths();
+            cbs = new ConflictBasedSearch(IMSData);
+            routes = cbs.CheckConflicts();
+
             SimulationFinished = true;
         }
 

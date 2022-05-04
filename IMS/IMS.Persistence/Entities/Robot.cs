@@ -15,6 +15,7 @@ namespace IMS.Persistence.Entities
         private Pos _destination;
         private Boolean _underPod;
 
+        public Int32 Potato { get; private set; }
         public Int32 EnergyConsumption { get { return _energyConsumption; } }
         public Int32 Capacity { get { return _capacity; } }
         public int EnergyLeft { get; set; }
@@ -43,6 +44,7 @@ namespace IMS.Persistence.Entities
             if (this._dir != other)
             {
                 EnergyLeft--;
+                _energyConsumption++;
             }
             _dir = other;
         }
@@ -61,6 +63,11 @@ namespace IMS.Persistence.Entities
             }
             return this.EnergyLeft > shortestDistance;
         }
+
+        public void Charge()
+        {
+            EnergyLeft = Capacity;
+        }
         //public Int32 EnergyConsumption { get; }
         //public Int32 Capacity { get;}
         //public Int32 EnergyLeft { get; }
@@ -78,6 +85,8 @@ namespace IMS.Persistence.Entities
             _dir = direction;
             EnergyLeft = energyLeft;
             _destinationID = destinationID;
+            Random rnd = new Random();
+            Potato = rnd.Next(100);
         }
 
         public override bool Equals(object obj)
@@ -92,14 +101,14 @@ namespace IMS.Persistence.Entities
 
         public bool Equals(Robot other)
         {
-            return other != null &&
-                   Pos.X == other.Pos.X &&
-                   Pos.Y == other.Pos.Y;
+            return other != null && Potato == other.Potato;
+                   //Pos.X == other.Pos.X &&
+                   //Pos.Y == other.Pos.Y;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Pos.X, Pos.Y);
+            return HashCode.Combine(Pos.X, Pos.Y,Potato);
         }
 
         public static bool operator ==(Robot A, Robot B)
