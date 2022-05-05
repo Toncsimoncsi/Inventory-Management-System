@@ -28,6 +28,9 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -35,11 +38,23 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 
-                <RadioButton Grid.Row="1" Grid.Column="0" Style="{StaticResource RobotButton}" Content="ROBOT" Margin="10"/>
-                <RadioButton Grid.Row="1" Grid.Column="1" Style="{StaticResource DockButton}" Content="DOCK" Margin="10"/>
+                <RadioButton Grid.Row="1" Grid.Column="0" Style="{StaticResource RobotButton}" Command="{Binding SelectRobotCommand}" Content="ROBOT" Margin="10"/>
+                <RadioButton Grid.Row="1" Grid.Column="1" Style="{StaticResource DockButton}" Command="{Binding SelectDockCommand}" Content="DOCK" Margin="10"/>
 
-                <RadioButton Grid.Row="2" Grid.Column="0" Style="{StaticResource TargetButton}" Content="TARGET" Margin="10"/>
-                <RadioButton Grid.Row="2" Grid.Column="1" Style="{StaticResource PodButton}" Content="POD" Margin="10"/>
+                <RadioButton Grid.Row="2" Grid.Column="0" Style="{StaticResource TargetButton}" Command="{Binding SelectDestinationCommand}" Content="TARGET" Margin="10"/>
+                <RadioButton Grid.Row="2" Grid.Column="1" Style="{StaticResource PodButton}" Command="{Binding SelectPodCommand}" Content="POD" Margin="10"/>
+
+                <RadioButton Grid.Row="3" Grid.Column="0" Style="{StaticResource PodButton}" Command="{Binding RelocationCommand}" Content="MOVE" Margin="10"/>
+                <RadioButton Grid.Row="3" Grid.Column="1" Style="{StaticResource PodButton}" Command="{Binding AddProductCommand}" Content="ADD" Margin="10"/>
+
+                <StackPanel Grid.Row="4" Grid.Column="1" Margin="10 5 10 5">
+                    <Label Content="Product"/>
+                    <TextBox Name="ProductTextBox" Text="{Binding SelectedProduct}"/>
+                </StackPanel>
+                <StackPanel Grid.Row="4" Grid.Column="0" Margin="10 5 10 5">
+                    <Label Content="Capacity"/>
+                    <TextBox Name="CapacityTextBox" Text="{Binding SelectedCapacity}"/>
+                </StackPanel>
 
             </Grid>
 
@@ -59,10 +74,12 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button IsEnabled="True"  >
+                        <Button IsEnabled="True" Command="{Binding PutFieldCommand}" CommandParameter="{Binding Number}">
                             <Button.Style>
                                 <Style TargetType="Button">
-                                    <Setter Property="Background" Value="{Binding Color}" />
+                                    <Setter Property="Background" Value="{Binding Color}"/>
+                                    <Setter Property="BorderThickness" Value="0.1"/>
+                                    <Setter Property="BorderBrush" Value="{Binding BorderColor}"/>
                                 </Style>
                             </Button.Style>
                         </Button>

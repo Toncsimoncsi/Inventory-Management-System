@@ -89,45 +89,73 @@ namespace IMS.Persistence.Entities
             Potato = rnd.Next(100);
         }
 
-        public override bool Equals(object obj)
+        //public override bool Equals(object obj)
+        //{
+        //    var item = obj as Robot;
+        //    if (item == null)
+        //    {
+        //        return false;
+        //    }
+        //    return Equals(obj as Robot);
+        //}
+
+        //public bool Equals(Robot other)
+        //{
+        //    return other != null && Potato == other.Potato;
+        //           //Pos.X == other.Pos.X &&
+        //           //Pos.Y == other.Pos.Y;
+        //}
+
+        //public override int GetHashCode()
+        //{
+        //    return HashCode.Combine(Pos.X, Pos.Y,Potato);
+        //}
+
+        //public static bool operator ==(Robot A, Robot B)
+        //{
+        //    if (A is null)
+        //    {
+        //        if (B is null)
+        //        {
+        //            // null == null = true.
+        //            return true;
+        //        }
+
+        //        // Only the left side is null.
+        //        return false;
+        //    }
+        //    // Equals handles the case of null on right side.
+        //    return A.Equals(B);
+        //}
+
+        //public static bool operator !=(Robot A, Robot B) => !(A == B);
+
+        public Robot(int x, int y) : this(x,y,Direction.UP,1,1,-1,0)
         {
-            var item = obj as Robot;
-            if (item == null)
-            {
-                return false;
-            }
-            return Equals(obj as Robot);
+
         }
 
-        public bool Equals(Robot other)
+        public Robot(int x, int y, int capacity) : this(x,y,Direction.UP,capacity,capacity,-1)
         {
-            return other != null && Potato == other.Potato;
-                   //Pos.X == other.Pos.X &&
-                   //Pos.Y == other.Pos.Y;
+
         }
 
-        public override int GetHashCode()
+        public Robot(int x, int y, Direction direction, int capacity) : this(x, y, direction, capacity, capacity, -1)
         {
-            return HashCode.Combine(Pos.X, Pos.Y,Potato);
+
         }
 
-        public static bool operator ==(Robot A, Robot B)
+        /*
+        public Robot(int x, int y, Direction direction, int capacity, int energyLeft, int energyConsumption) : this(x, y, direction, capacity, energyLeft, -1, energyConsumption)
         {
-            if (A is null)
-            {
-                if (B is null)
-                {
-                    // null == null = true.
-                    return true;
-                }
 
-                // Only the left side is null.
-                return false;
-            }
-            // Equals handles the case of null on right side.
-            return A.Equals(B);
+        }
+        */
+
+        public Robot(Robot robot, Direction direction) : this(robot.Pos.X, robot.Pos.Y, direction, robot.Capacity, robot.EnergyLeft, robot.DestinationID, robot.EnergyConsumption)
+        {
+
         }
 
-        public static bool operator !=(Robot A, Robot B) => !(A == B);
     }
 }

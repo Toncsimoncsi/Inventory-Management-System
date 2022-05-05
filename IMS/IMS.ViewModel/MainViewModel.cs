@@ -92,7 +92,7 @@ namespace IMS.ViewModel
         public DelegateCommand SlowerCommand { get; private set; }
         public DelegateCommand FasterCommand { get; private set; }
         public DelegateCommand StopCommand { get; private set; }
-        public DelegateCommand ViewField { get; private set; }
+        //public DelegateCommand ViewField { get; private set; }
         public DelegateCommand ModifyField { get; private set; }
         public ObservableCollection<TableField> Fields { get; private set; }
         public Int32 SizeX { get { return _model.SizeX; } }
@@ -167,18 +167,20 @@ namespace IMS.ViewModel
         private void GenerateTable()
         {
             Fields.Clear();
-            for (Int32 i = 0; i < SizeX; ++i)
+            for (Int32 i = 0; i < SizeY; ++i)
             {
-                for (Int32 j = 0; j < SizeY; ++j)
+                for (Int32 j = 0; j < SizeX; ++j)
                 {
                     Fields.Add(new TableField
                     {
-                        X = i,
-                        Y = j,
+                        X = j,
+                        Y = i,
                         Color = EntityToColor(EntityType.Empty),
                         Direction = Direction.NONE.ToString(),
+                        Type = EntityType.Empty,
+                        Entity = _model[j, i],
                         Number = i * SizeX + j,
-                        ViewField = new DelegateCommand(param => ViewFieldInfo(Convert.ToInt32(param)))
+                        ViewFieldCommand = new DelegateCommand(param => ViewFieldInfo(Convert.ToInt32(param)))
                     });
                 }
             }
@@ -195,12 +197,16 @@ namespace IMS.ViewModel
         {
             foreach (TableField field in Fields)
             {
-                field.Color = EntityToColor(_model[field.X, field.Y].Type);
+                /*field.Color = EntityToColor(_model[field.X, field.Y].Type);
                 if (field.Color != "White")
                 {
                     Debug.WriteLine("non-white field found, should be displayed");
-                }
+                }*/
+                field.Color = EntityToColor(_model[field.X,field.Y].Type);
+
                 field.Direction = _model[field.X, field.Y].Direction.ToString();
+                field.Type = _model[field.X, field.Y].Type;
+                field.Entity = _model[field.X, field.Y];
             }
             //OnPropertyChanged(nameof(Fields));
         }
@@ -212,27 +218,42 @@ namespace IMS.ViewModel
             switch (field.Color)
             {
                 case "Yellow":
+                    Robot robot = (Robot)field.Entity;
                     _entityInfo = "Robot info\n";
-                    _entityInfo += "Battery: " + "\n";
+                    _entityInfo += "Capacity: " + robot.Capacity.ToString() + "\n";
+                    _entityInfo += "Battery: " + robot.EnergyLeft.ToString() + "\n";
                     _entityInfo += "Direction: " + field.Direction + "\n";
-                    _entityInfo += "Consumed energy: " + "0" + "\n";
+                    _entityInfo += "Consumed energy: " + robot.EnergyConsumption.ToString() + "\n";
+                    _entityInfo += "ID of destination: " + robot.DestinationID.ToString() + "\n";
                     break;
                 case "Green":
                     _entityInfo = "Destination\n";
+                    _entityInfo += "ID: " + ((Destination)field.Entity).ID.ToString() + "\n";
                     break;
                 case "Blue":
                     _entityInfo = "Dock\n";
                     break;
                 case "Gray":
                     _entityInfo = "Pod info\n";
-                    _entityInfo += "Pod content: " + "\n";
+                    _entityInfo += "Pod content (productID : pieces):" + "\n";
+                    Pod pod = (Pod)field.Entity;
+                    foreach(Int32 product in pod.Products.Keys)
+                    {
+                        _entityInfo += product.ToString() + " : " + pod.Products[product].ToString() +"\n";
+                    }
                     break;
                 case "Purple":
+                    RobotUnderPod robotUnderPod = (RobotUnderPod)field.Entity;
                     _entityInfo = "Robot under pod info\n";
-                    _entityInfo += "Robot battery: " + "\n";
-                    _entityInfo += "Robot direction: " + field.Direction + "\n";
-                    _entityInfo += "Consumed energy: " + "0" + "\n";
-                    _entityInfo += "Pod content: " + "\n";
+                    _entityInfo += "Capacity: " + robotUnderPod.Capacity.ToString() + "\n";
+                    _entityInfo += "Battery: " + robotUnderPod.EnergyLeft.ToString() + "\n";
+                    _entityInfo += "Direction: " + field.Direction + "\n";
+                    _entityInfo += "Consumed energy: " + robotUnderPod.EnergyConsumption.ToString() + "\n";
+                    _entityInfo += "ID of destination: " + robotUnderPod.DestinationID.ToString() + "\n";
+                    foreach (Int32 product in robotUnderPod.Products.Keys)
+                    {
+                        _entityInfo += product.ToString() + " : " + robotUnderPod.Products[product].ToString() + "\n";
+                    }
                     break;
                 case "White":
                     _entityInfo = "Empty!\n";
@@ -262,6 +283,7 @@ namespace IMS.ViewModel
 
         public void CreateSimulationFromSettingsWindow()
         {
+            _model.CreateTableFromSettings();
             GenerateTable();
             SetupTable();
         }

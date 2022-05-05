@@ -20,7 +20,7 @@
                     <TextBox DockPanel.Dock="Right" Name="ColTextBox" Width="50" Height="20" Text="Width: "/>
                 </DockPanel>
 
-                <Button HorizontalAlignment="Center" Name="SetGridSize" Content="SET" Command="{Binding SetSize}" Width="50" Margin="5 10 10 10"/>
+                <Button HorizontalAlignment="Center" Name="SetGridSize" Content="SET" Command="{Binding SetSizeCommand}" Width="50" Margin="5 10 10 10"/>
 
             </StackPanel>
             <Grid Grid.Row="1">
@@ -30,13 +30,13 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <DockPanel Grid.Row="0">
-                    <Button DockPanel.Dock="Left" Width="50" Height="50" Content="ROBOT" Margin="10"/>
-                    <Button DockPanel.Dock="Right" Width="50" Height="50" Content="DOCK" Margin="10"/>
+                    <Button DockPanel.Dock="Left" Width="50" Height="50" Content="ROBOT" Margin="10" Command="{Binding SelectRobotCommand}"/>
+                    <Button DockPanel.Dock="Right" Width="50" Height="50" Content="DOCK" Margin="10" Command="{Binding SelectDockCommand}"/>
                 </DockPanel>
 
                 <DockPanel Grid.Row="1">
-                    <Button DockPanel.Dock="Left" Width="50" Height="50" Content="TARGET" Margin="10"/>
-                    <Button DockPanel.Dock="Right" Width="50" Height="50" Content="POD" Margin="10"/>
+                    <Button DockPanel.Dock="Left" Width="50" Height="50" Content="TARGET" Margin="10" Command="{Binding SelectTargetCommand}"/>
+                    <Button DockPanel.Dock="Right" Width="50" Height="50" Content="POD" Margin="10" Command="{Binding SelectPodCommand}"/>
                 </DockPanel>
 
                 <StackPanel Grid.Row="2" Orientation="Vertical">
@@ -55,9 +55,28 @@
         <ItemsControl ItemsSource="{Binding Fields}" DockPanel.Dock="Right">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-
+                    <UniformGrid Rows="{Binding SizeX}" Columns="{Binding SizeY}" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button IsEnabled="True" Command="{Binding PutFieldCommand}" CommandParameter="{Binding Number}">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="{Binding Color, UpdateSourceTrigger=PropertyChanged}" />
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Grid.Row" Value="{Binding X}" />
+                    <Setter Property="Grid.Column" Value="{Binding Y}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
         </ItemsControl>
     </DockPanel>
 </Window>

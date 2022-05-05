@@ -1,0 +1,61 @@
+8 8
+0
+14
+Pod
+2 2
+0
+Pod
+2 3
+0
+Pod
+2 4
+0
+Pod
+3 2
+0
+Pod
+3 3
+0
+Pod
+3 4
+2
+1 1
+2 1
+Robot
+0 2
+1
+1
+0
+NONE
+-1
+Robot
+0 5
+1
+1
+0
+NONE
+-1
+Robot
+7 2
+1
+1
+0
+NONE
+-1
+Robot
+7 5
+1
+1
+0
+NONE
+-1
+Dock
+2 0
+Dock
+5 0
+Destination
+2 7
+-1
+Destination
+5 7
+-1

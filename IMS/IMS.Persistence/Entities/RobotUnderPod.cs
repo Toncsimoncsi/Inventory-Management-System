@@ -43,7 +43,16 @@ namespace IMS.Persistence.Entities
         public RobotUnderPod(int x, int y, Robot robot, Pod pod) : this(x, y, robot.Direction, robot.Capacity, robot.EnergyLeft, robot.DestinationID, robot.EnergyConsumption, pod.Products)
         {
         }
-        public RobotUnderPod(Robot robot, Pod pod) : this(robot.Pos.X,robot.Pos.Y, robot.Direction, robot.Capacity, robot.EnergyLeft, robot.DestinationID, robot.EnergyConsumption, pod.Products)
+
+        //public RobotUnderPod(Robot robot, Pod pod) : this(robot.Pos.X,robot.Pos.Y, robot.Direction, robot.Capacity, robot.EnergyLeft, robot.DestinationID, robot.EnergyConsumption, pod.Products)
+
+
+        public RobotUnderPod(int x, int y) : this(x, y, Direction.NONE,1,1,-1,new Dictionary<int,int>())
+        {
+
+        }
+
+        public void RemoveProduct(int productID)
         {
         }
 

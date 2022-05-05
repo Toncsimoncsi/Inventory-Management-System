@@ -16,5 +16,9 @@ namespace IMS.Persistence.Entities
             Products = products;
             Pos = new Pos(x, y);
         }
+
+        public Pod(int x, int y) : this(x,y,new Dictionary<int, int>())
+        {
+        }
     }
 }

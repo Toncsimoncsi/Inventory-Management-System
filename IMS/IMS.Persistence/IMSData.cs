@@ -44,8 +44,45 @@ namespace IMS.Persistence
         {
         }
 
-        public IMSData(Int32 sizeX, Int32 sizeY) : this(new List<Pod>(), new List<Destination>(), new List<Dock>(), new List<Robot>(), new List<RobotUnderPod>(),sizeX,sizeY,0,0)
+        public IMSData(Int32 sizeX, Int32 sizeY) : this(new List<Pod>(), new List<Destination>(), new List<Dock>(), new List<Robot>(), new List<RobotUnderPod>(),sizeX,sizeY,0,0) { }
+        
+        public IMSData(Entity[,] gameTable)
         {
+            List<Pod> podData = new List<Pod>();
+            List<Destination> destinationData = new List<Destination>();
+            List<Dock> dockData = new List<Dock>();
+            List<Robot> robotData = new List<Robot>();
+            List<RobotUnderPod> robotUnderPodData = new List<RobotUnderPod>();
+            for (Int32 i = 0; i<gameTable.GetLength(0); ++i)
+            {
+                for (Int32 j = 0; j < gameTable.GetLength(1); ++j)
+                {
+                    switch (gameTable[i, j].Type)
+                    {
+                        case EntityType.Destination:
+                            destinationData.Add((Destination)gameTable[i, j]);
+                            break;
+                        case EntityType.Dock:
+                            dockData.Add((Dock)gameTable[i, j]);
+                            break;
+                        case EntityType.Pod:
+                            podData.Add((Pod)gameTable[i, j]);
+                            break;
+                        case EntityType.Robot:
+                            robotData.Add((Robot)gameTable[i, j]);
+                            break;
+                        case EntityType.RobotUnderPod:
+                            robotUnderPodData.Add((RobotUnderPod)gameTable[i, j]);
+                            break;
+                    }
+                }
+            }
+
+            _sizeX = gameTable.GetLength(0);
+            _sizeY = gameTable.GetLength(1);
+            _entityData = new EntityData(podData,destinationData,dockData,robotData,robotUnderPodData);
+            _totalEnergyConsumption = 0;
+            _time = 0;
         }
     }
 }

@@ -10,7 +10,36 @@ namespace IMS.ViewModel.Fields
     public class TableField : ViewModelBase
     {
         private String _color;
+        private String _borderColor;
         private String _dir;
+        private EntityType _type;
+        private Entity _entity;
+
+        public EntityType Type
+        {
+            get { return _type; }
+            set
+            {
+                if (_type != value)
+                {
+                    _type = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public Entity Entity
+        {
+            get { return _entity; }
+            set
+            {
+                if (_entity != value)
+                {
+                    _entity = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
         public String Color
         {
@@ -24,6 +53,20 @@ namespace IMS.ViewModel.Fields
                 }
             }
         }
+
+        public String BorderColor
+        {
+            get { return _borderColor; }
+            set
+            {
+                if (_borderColor != value)
+                {
+                    _borderColor = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public String Direction
         {
             get { return _dir; }
@@ -47,7 +90,8 @@ namespace IMS.ViewModel.Fields
         /// </summary>
         public Int32 Y { get; set; }
 
-        public DelegateCommand ViewField { get; set; }
+        public DelegateCommand ViewFieldCommand { get; set; }
+        public DelegateCommand PutFieldCommand { get; set; }
 
         public Int32 Number { get; set; }
 
