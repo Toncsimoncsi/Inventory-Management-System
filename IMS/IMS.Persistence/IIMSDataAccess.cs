@@ -20,6 +20,8 @@ namespace IMS.Persistence
         /// <param name="path">Elérési útvonal.</param>
         /// <param name="values">A mezőértékek.</param>
         Task SaveSimulationAsync(String path, IMSData values);
+
+        Task SaveDiaryAsync(String path, IMSData values);
     }
 
 }

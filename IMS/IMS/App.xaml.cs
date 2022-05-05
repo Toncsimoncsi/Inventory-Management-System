@@ -191,9 +191,29 @@ namespace IMS
             //_settingsViewModel.ChangeFieldColor();
         }
 
-        private void ViewModel_SaveDiary(object sender, EventArgs e)
+        private async void ViewModel_SaveDiary(object sender, EventArgs e)
         {
-            //
+            try
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Title = "Save diary";
+                saveFileDialog.Filter = "Textfile (*.txt) | *.txt";
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    try
+                    {
+                        await _model.SaveDiaryAsync(saveFileDialog.FileName);
+                    }
+                    catch (IMSDataException)
+                    {
+                        MessageBox.Show("Error occurred during save", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Cannot save diary", "IMS", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void ViewModel_StartStopSimulation(object sender, EventArgs e)

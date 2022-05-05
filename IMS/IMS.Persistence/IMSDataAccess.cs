@@ -194,6 +194,34 @@ namespace IMS.Persistence
                 throw new IMSDataException("");
             }
         }
+
+        public async Task SaveDiaryAsync(String path, IMSData values)
+        {
+            //steps
+            //per robot energy consumption
+            //total energy consumption
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(path))
+                {
+                    await writer.WriteLineAsync("Total steps required: " + values.StepCount.ToString());
+                    int i = 0;
+                    int totalEnergy = 0;
+                    await writer.WriteLineAsync("Energy consumed by each robot:");
+                    foreach (Robot robot in values.EntityData.RobotData){
+                        ++i;
+                        totalEnergy += robot.EnergyConsumption;
+                        await writer.WriteLineAsync("Robot " + i.ToString() + ": " + robot.EnergyConsumption.ToString());
+                    }
+                    await writer.WriteLineAsync("Total energy consumption: " + totalEnergy.ToString());
+                }
+            }
+            catch
+            {
+                throw new IMSDataException("");
+            }
+
+        }
     }
 
 }
