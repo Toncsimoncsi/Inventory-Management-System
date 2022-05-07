@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IMS"
         mc:Ignorable="d"
-        Title="Inventory Management Simulation" Height="450" Width="800" FontFamily="Corbel">
+        Title="Inventory Management Simulation" Height="450" Width="800" FontFamily="Corbel"
+        Icon="./img/icon.png">
     <Window.Resources>
         <ImageBrush x:Key="BgImg" ImageSource="{Binding BgImage}" Stretch="Fill"/>
             <ImageBrush x:Key="RobotImg" ImageSource="/img/robot.png" Stretch="Fill"/>

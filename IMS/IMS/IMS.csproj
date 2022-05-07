@@ -13,6 +13,7 @@
     <None Remove="img\empty.png" />
     <None Remove="img\exit-button.jpg" />
     <None Remove="img\full-pod.png" />
+    <None Remove="img\icon.png" />
     <None Remove="img\load-button.jpg" />
     <None Remove="img\robot-down.png" />
     <None Remove="img\robot-left.png" />
@@ -46,6 +47,7 @@
     <Resource Include="img\empty.png" />
     <Resource Include="img\exit-button.jpg" />
     <Resource Include="img\full-pod.png" />
+    <Resource Include="img\icon.png" />
     <Resource Include="img\load-button.jpg" />
     <Resource Include="img\robot-down.png" />
     <Resource Include="img\robot-left.png" />

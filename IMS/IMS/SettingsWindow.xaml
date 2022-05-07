@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:IMS"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="800" FontFamily="Corbel">
+        Title="Settings" Height="450" Width="800" FontFamily="Corbel"
+        Icon="./img/icon.png">
     <DockPanel Background="#ABB0B7">
         <Grid DockPanel.Dock="Left">
             <Grid.RowDefinitions>
