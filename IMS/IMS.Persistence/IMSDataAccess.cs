@@ -222,6 +222,18 @@ namespace IMS.Persistence
             }
 
         }
+
+        public int getTotalEnergy(IMSData values)
+        {
+            int i = 0;
+            int totalEnergy = 0;
+            foreach (Robot robot in values.EntityData.RobotData)
+            {
+                ++i;
+                totalEnergy += robot.EnergyConsumption;
+            }
+            return totalEnergy;
+        }
     }
 
 }

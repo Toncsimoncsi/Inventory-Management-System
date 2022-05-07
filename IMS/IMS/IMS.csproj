@@ -7,8 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="img\dest.png" />
+    <None Remove="img\dock.png" />
+    <None Remove="img\empty-pod.png" />
+    <None Remove="img\empty.png" />
     <None Remove="img\exit-button.jpg" />
+    <None Remove="img\full-pod.png" />
     <None Remove="img\load-button.jpg" />
+    <None Remove="img\robot-down.png" />
+    <None Remove="img\robot-left.png" />
+    <None Remove="img\robot-right.png" />
+    <None Remove="img\robot-under-pod-down.png" />
+    <None Remove="img\robot-under-pod-left.png" />
+    <None Remove="img\robot-under-pod-right.png" />
+    <None Remove="img\robot-under-pod.png" />
+    <None Remove="img\robot.png" />
     <None Remove="img\save-button.jpg" />
     <None Remove="img\settings-button.jpg" />
     <None Remove="img\speed-down.jpg" />
@@ -27,8 +40,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="img\dest.png" />
+    <Resource Include="img\dock.png" />
+    <Resource Include="img\empty-pod.png" />
+    <Resource Include="img\empty.png" />
     <Resource Include="img\exit-button.jpg" />
+    <Resource Include="img\full-pod.png" />
     <Resource Include="img\load-button.jpg" />
+    <Resource Include="img\robot-down.png" />
+    <Resource Include="img\robot-left.png" />
+    <Resource Include="img\robot-right.png" />
+    <Resource Include="img\robot-under-pod-down.png" />
+    <Resource Include="img\robot-under-pod-left.png" />
+    <Resource Include="img\robot-under-pod-right.png" />
+    <Resource Include="img\robot-under-pod.png" />
+    <Resource Include="img\robot.png" />
     <Resource Include="img\save-button.jpg" />
     <Resource Include="img\settings-button.jpg" />
     <Resource Include="img\speed-down.jpg" />

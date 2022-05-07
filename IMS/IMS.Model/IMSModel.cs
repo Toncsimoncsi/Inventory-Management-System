@@ -508,6 +508,12 @@ namespace IMS.Model
             return table;
         }
 
+        private void setTotalEnergy()
+        {
+            _allEnergy = _dataAccess.getTotalEnergy(_IMSData);
+            OnAllEnergyChanged();
+        }
+
         private Entity[,] _extractTableFromIMSData()
         {
             //Entity[,] table = new Entity[_IMSData.SizeX, _IMSData.SizeY];
@@ -573,6 +579,8 @@ namespace IMS.Model
 
                     }
                     _steps++;
+                    OnStepsChanged();
+                    setTotalEnergy();
                     OnTableChanged();
                     _counter++;
 
@@ -580,7 +588,6 @@ namespace IMS.Model
             }
             _time++;
             OnTimePassed(_time);
-
         }
 
         public void Simulation()
@@ -669,7 +676,7 @@ namespace IMS.Model
         /// <param name="speed">A sebesség.</param>
         private void OnStepsChanged()
         {
-            if (SimulationWon != null)
+            if (StepsChanged != null)
                 StepsChanged(this, EventArgs.Empty);
         }
         /// <summary>
@@ -678,7 +685,7 @@ namespace IMS.Model
         /// <param name="speed">A sebesség.</param>
         private void OnAllEnergyChanged()
         {
-            if (SimulationWon != null)
+            if (EnergyChanged != null)
                 EnergyChanged(this, EventArgs.Empty);
         }
 
@@ -688,7 +695,7 @@ namespace IMS.Model
         /// <param name="speed">A sebesség.</param>
         private void OnSpeedChanged(Int32 speed)
         {
-            if (SimulationWon != null)
+            if (SpeedChanged != null)
                 SpeedChanged(this, new SpeedChangedEventArgs(speed));
         }
         /// <summary>
@@ -697,7 +704,7 @@ namespace IMS.Model
         /// <param name="time">Az idő.</param>
         private void OnTimePassed(Int32 time)
         {
-            if (SimulationWon != null)
+            if (TimePassed != null)
                 TimePassed(this, new TimePassedEventArgs(time));
         }
         /// <summary>

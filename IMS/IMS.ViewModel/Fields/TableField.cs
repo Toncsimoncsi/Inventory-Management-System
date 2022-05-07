@@ -14,6 +14,7 @@ namespace IMS.ViewModel.Fields
         private String _dir;
         private EntityType _type;
         private Entity _entity;
+        private String _bgImage;
 
         public EntityType Type
         {
@@ -49,6 +50,19 @@ namespace IMS.ViewModel.Fields
                 if (_color != value)
                 {
                     _color = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public String BgImage
+        {
+            get { return _bgImage; }
+            set
+            {
+                if (_bgImage != value)
+                {
+                    _bgImage = value;
                     OnPropertyChanged();
                 }
             }

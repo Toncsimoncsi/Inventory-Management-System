@@ -7,7 +7,14 @@
         mc:Ignorable="d"
         Title="Inventory Management Simulation" Height="450" Width="800" FontFamily="Corbel">
     <Window.Resources>
-       
+        <ImageBrush x:Key="BgImg" ImageSource="{Binding BgImage}" Stretch="Fill"/>
+            <ImageBrush x:Key="RobotImg" ImageSource="/img/robot.png" Stretch="Fill"/>
+            <ImageBrush x:Key="FullPodImg" ImageSource="/img/full-pod.png" Stretch="Fill"/>
+            <ImageBrush x:Key="EmptyPodImg" ImageSource="/img/empty-pod.png" Stretch="Fill"/>
+            <ImageBrush x:Key="RobotUnderPodImg" ImageSource="/img/robot-under-pod.png" Stretch="Fill"/>
+            <ImageBrush x:Key="EmptyImg" ImageSource="/img/empty.png" Stretch="Fill"/>
+            <ImageBrush x:Key="DockImg" ImageSource="/img/dock.png" Stretch="Fill"/>
+        <ImageBrush x:Key="DestinationImg" ImageSource="/img/dest.png" Stretch="Fill"/>
     </Window.Resources>
 
     <DockPanel Background="#ABB0B7">
@@ -59,11 +66,11 @@
                     <Label Grid.Row="1" Grid.Column="0" Padding="2" Background="#7e8185" Foreground="White">
                         Steps:
                     </Label>
-                    <TextBlock  Grid.Row="1" Grid.Column="1" Background="#7e8185" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Text="{Binding STEPS, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
+                    <TextBlock  Grid.Row="1" Grid.Column="1" Background="#7e8185" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Text="{Binding STEPS}" TextWrapping="Wrap"/>
                     <Label Grid.Row="2" Grid.Column="0" Padding="2" Background="#7e8185" Foreground="White">
                         All energy:
                     </Label>
-                    <TextBlock Grid.Row="2" Grid.Column="1" Background="#7e8185" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Text="{Binding ALLENERGY, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Background="#7e8185" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Text="{Binding ALLENERGY}" TextWrapping="Wrap"/>
                 </Grid>
             </Border>
 
@@ -93,7 +100,9 @@
                         <Button IsEnabled="True" Command="{Binding ViewFieldCommand}" CommandParameter="{Binding Number}">
                             <Button.Style>
                                 <Style TargetType="Button">
-                                    <Setter Property="Background" Value="{Binding Color, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Setter Property="Background" Value="{StaticResource BgImg}" />
+                                    <Setter Property="BorderThickness" Value="0.01"/>
+                                    <Setter Property="BorderBrush" Value="{Binding BorderColor}"/>
                                 </Style>
                             </Button.Style>
                         </Button>

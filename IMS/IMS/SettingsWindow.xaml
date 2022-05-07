@@ -78,7 +78,7 @@
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Background" Value="{Binding Color}"/>
-                                    <Setter Property="BorderThickness" Value="0.1"/>
+                                    <Setter Property="BorderThickness" Value="0.01"/>
                                     <Setter Property="BorderBrush" Value="{Binding BorderColor}"/>
                                 </Style>
                             </Button.Style>

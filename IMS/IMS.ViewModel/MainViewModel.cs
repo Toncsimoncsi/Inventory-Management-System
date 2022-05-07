@@ -14,6 +14,7 @@ namespace IMS.ViewModel
 
         private IMSModel _model;
         private Dictionary<EntityType, String> _entityToColor;
+        private Dictionary<EntityType, String> _entityToImg;
 
         private ViewModelBase _currentView;
         private string _entityInfo;
@@ -128,11 +129,21 @@ namespace IMS.ViewModel
             _entityToColor.Add(EntityType.Pod, "Gray");
             _entityToColor.Add(EntityType.RobotUnderPod, "Purple");
 
+            _entityToImg = new Dictionary<EntityType, String>();
+            _entityToImg.Add(EntityType.Robot, "/img/robot.png");
+            _entityToImg.Add(EntityType.Pod, "/img/full-pod.png");
+            _entityToImg.Add(EntityType.RobotUnderPod, "/img/robot-under-pod.png");
+            _entityToImg.Add(EntityType.Destination, "/img/dest.png");
+            _entityToImg.Add(EntityType.Dock, "/img/dock.png");
+            _entityToImg.Add(EntityType.Empty, "/img/empty.png");
+
             Fields = new ObservableCollection<TableField>();
 
             _model = model;
             _model.SimulationCreated += new EventHandler<EventArgs>(Model_SimulationCreated);
             _model.TableChanged += new EventHandler<EventArgs>(Model_TableChanged);
+            _model.StepsChanged += new EventHandler(Model_StepsChanged);
+            _model.EnergyChanged += new EventHandler(Model_AllEnergyChanged);
 
 
             LoadSimulationCommand = new DelegateCommand(param => OnLoadSimulation());
@@ -161,6 +172,55 @@ namespace IMS.ViewModel
             return _entityToColor[type];
         }
 
+        private String EntityToImg(EntityType type)
+        {
+            string res = _entityToImg[type];
+            return res;
+        }
+
+        private string RobotImage(String dir)
+        {
+            //LEFT, UP, RIGHT, DOWN, NONE 
+            switch (dir)
+            {
+                case "DOWN":
+                    return "/img/robot-left.png";
+                case "UP":
+                    return "/img/robot-right.png";
+                case "RIGHT":
+                    return "/img/robot-down.png";
+                default:
+                    return "/img/robot.png";
+            }
+        }
+
+        private string RobotUnderPodImage(String dir)
+        {
+            //LEFT, UP, RIGHT, DOWN, NONE 
+            switch (dir)
+            {
+                case "DOWN":
+                    return "/img/robot-under-pod-left.png";
+                case "UP":
+                    return "/img/robot-under-pod-right.png";
+                case "RIGHT":
+                    return "/img/robot-under-pod-down.png";
+                default:
+                    return "/img/robot-under-pod.png";
+            }
+        }
+
+        private string FullOrEmptyPodImg(bool isEmpty)
+        {
+            if (isEmpty)
+            {
+                return "/img/empty-pod.png";
+            }
+            else
+            {
+                return "/img/full-pod.png";
+            }
+        }
         /// <summary>
         /// creates an empty viewmodel table (Fields)
         /// </summary>
@@ -176,6 +236,7 @@ namespace IMS.ViewModel
                         X = j,
                         Y = i,
                         Color = EntityToColor(EntityType.Empty),
+                        BgImage = EntityToImg(EntityType.Empty),
                         Direction = Direction.NONE.ToString(),
                         Type = EntityType.Empty,
                         Entity = _model[j, i],
@@ -206,6 +267,19 @@ namespace IMS.ViewModel
 
                 field.Direction = _model[field.X, field.Y].Direction.ToString();
                 field.Type = _model[field.X, field.Y].Type;
+
+                if(field.Type == EntityType.Robot)
+                {
+                    field.BgImage = RobotImage(field.Direction);
+                }
+                else if(field.Type == EntityType.RobotUnderPod)
+                {
+                    field.BgImage = RobotUnderPodImage(field.Direction);
+                }
+                else {
+                    field.BgImage = EntityToImg(_model[field.X, field.Y].Type);
+                }
+
                 field.Entity = _model[field.X, field.Y];
             }
             //OnPropertyChanged(nameof(Fields));
@@ -279,6 +353,15 @@ namespace IMS.ViewModel
             //Debug.WriteLine("Model_SimulationCreated called in viewmodel");
             GenerateTable();
             SetupTable();
+        }
+
+        private void Model_StepsChanged(Object sender, EventArgs e)
+        {
+            OnPropertyChanged("STEPS");
+        }
+        private void Model_AllEnergyChanged(Object sender, EventArgs e)
+        {
+            OnPropertyChanged("ALLENERGY");
         }
 
         public void CreateSimulationFromSettingsWindow()
