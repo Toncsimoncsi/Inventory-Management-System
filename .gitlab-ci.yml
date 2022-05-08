@@ -3,7 +3,7 @@ image: mcr.microsoft.com/dotnet/sdk:5.0
 
 stages:
   - build
-  #- test
+  - test
 
 before_script:
   - dotnet --version
@@ -27,7 +27,8 @@ build_view:
     - dotnet build IMS.sln
 
 # Test
-#test_model:
-  #stage: test
-  #script:
-    #- dotnet test IMS.Test
+test_model:
+  stage: test
+  tags: [windows]
+  script:
+    - dotnet test IMS.Test
