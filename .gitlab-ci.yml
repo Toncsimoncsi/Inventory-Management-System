@@ -31,4 +31,5 @@ test_model:
   stage: test
   tags: [windows]
   script:
+    - cd IMS
     - dotnet test IMS.Test
