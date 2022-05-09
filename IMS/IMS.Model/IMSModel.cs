@@ -357,6 +357,19 @@ namespace IMS.Model
             OnTableCreated_SVM();
         }
 
+        /*public void ClearSettingsWindow()
+        {
+            _tempTable = new Entity[TempSizeX, TempSizeY];
+            for (int i = 0; i < TempSizeX; ++i)
+            {
+                for (int j = 0; j < TempSizeY; ++j)
+                {
+                    OnFieldChanged_SVM(i, j, _tempTable[i, j]);
+                }
+            }
+        }
+        */
+
         public Entity GetTemp(Int32 x, Int32 y)
         {
             return _tempTable[x, y];
@@ -525,7 +538,7 @@ namespace IMS.Model
 
             foreach (Robot robot in _IMSData.EntityData.RobotData)
             {
-                Debug.WriteLine("putting down robot, x: "+robot.Pos.X.ToString()+", y: "+robot.Pos.Y.ToString());
+                //Debug.WriteLine("putting down robot, x: "+robot.Pos.X.ToString()+", y: "+robot.Pos.Y.ToString());
                 table[robot.Pos.X, robot.Pos.Y] = robot;
             }
             foreach (Pod pod in _IMSData.EntityData.PodData)

@@ -241,6 +241,7 @@ namespace IMS.ViewModel
                     });
                 }
             }
+            //OnPropertyChanged(nameof(Fields));
             OnPropertyChanged(nameof(SizeX));
             OnPropertyChanged(nameof(SizeY));
         }

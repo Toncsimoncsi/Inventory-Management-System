@@ -170,6 +170,7 @@ namespace IMS
             }
         }
 
+        /*
         private void SVM_ResetSimulation(object sender, EventArgs e)
         {
             _settingsViewModel.SizeX = 0;
@@ -177,6 +178,20 @@ namespace IMS
             _model.GenerateEmtyTableForSettingsWindow(_settingsViewModel.SizeX, _settingsViewModel.SizeY);
             _settingsViewModel.GenerateTable();
             _settingsViewModel.SetupTable();
+        }
+        */
+
+        private void SVM_ResetSimulation(object sender, EventArgs e)
+        {
+            //_settingsViewModel.SizeX = 0;
+            //_settingsViewModel.SizeY = 0;
+            _model.GenerateEmtyTableForSettingsWindow(_settingsViewModel.SizeX, _settingsViewModel.SizeY);
+            _settingsViewModel.GenerateTable();
+            //_settingsViewModel.SetupTable();
+            //Debug.WriteLine("resetting SVM");
+            //Debug.WriteLine("color of field (0, 0): "+_settingsViewModel.Fields[0].Color);
+            //Debug.WriteLine("");
+            //_model.ClearSettingsWindow();
         }
 
         private void SVM_SetSimulationSize(object sender, EventArgs e)
