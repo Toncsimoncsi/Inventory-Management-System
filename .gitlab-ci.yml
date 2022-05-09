@@ -29,6 +29,7 @@ build_view:
 # Test
 test_model:
   stage: test
+  image: mcr.microsoft.com/dotnet/framework/sdk:4.8
   tags: [windows]
   script:
     - cd IMS
