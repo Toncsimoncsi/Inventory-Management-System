@@ -1,0 +1,95 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "IMS/1.0.0": {
+        "dependencies": {
+          "HungarianAlgorithm": "2.2.9",
+          "IMS.Model": "1.0.0",
+          "IMS.Persistence": "1.0.0",
+          "IMS.View": "1.0.0",
+          "IMS.ViewModel": "1.0.0"
+        },
+        "runtime": {
+          "IMS.dll": {}
+        }
+      },
+      "HungarianAlgorithm/2.2.9": {
+        "runtime": {
+          "lib/netstandard2.1/HungarianAlgorithm.dll": {
+            "assemblyVersion": "2.2.9.0",
+            "fileVersion": "2.2.9.0"
+          }
+        }
+      },
+      "IMS.Model/1.0.0": {
+        "dependencies": {
+          "IMS.Persistence": "1.0.0"
+        },
+        "runtime": {
+          "IMS.Model.dll": {}
+        }
+      },
+      "IMS.Persistence/1.0.0": {
+        "runtime": {
+          "IMS.Persistence.dll": {}
+        }
+      },
+      "IMS.View/1.0.0": {
+        "dependencies": {
+          "IMS.Model": "1.0.0",
+          "IMS.ViewModel": "1.0.0"
+        },
+        "runtime": {
+          "IMS.View.dll": {}
+        }
+      },
+      "IMS.ViewModel/1.0.0": {
+        "dependencies": {
+          "IMS.Model": "1.0.0"
+        },
+        "runtime": {
+          "IMS.ViewModel.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "IMS/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "HungarianAlgorithm/2.2.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SLP+PGp/8osduOpcdZrgIn1Ig4Tc0QclTxmyCCA7XrAN8gXve/6xeYR04AZsQrvyPdB9MxLc4CYVvFvvX1SSEw==",
+      "path": "hungarianalgorithm/2.2.9",
+      "hashPath": "hungarianalgorithm.2.2.9.nupkg.sha512"
+    },
+    "IMS.Model/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "IMS.Persistence/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "IMS.View/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "IMS.ViewModel/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
