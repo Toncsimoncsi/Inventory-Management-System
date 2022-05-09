@@ -176,8 +176,8 @@ namespace IMS.Model
 
         public void RelocationAttempt(int x1, int y1, int x2, int y2, int x, int y)
         {
-            Debug.WriteLine("RelocationAttempt called");
-            Debug.WriteLine("x1: "+x1+", y1: "+y1+", x2: "+x2+", y2: "+y2+", x: "+x+", y: "+y);
+            //Debug.WriteLine("RelocationAttempt called");
+            //Debug.WriteLine("x1: "+x1+", y1: "+y1+", x2: "+x2+", y2: "+y2+", x: "+x+", y: "+y);
             int dx = x2 - x1;
             int dy = y2 - y1;
 
@@ -366,6 +366,7 @@ namespace IMS.Model
         public void CreateTableFromSettings()
         {
             _IMSData = new IMSData(_tempTable);
+            //Debug.WriteLine("new IMSData created from _tempTable");
             _gameTable = _tempTable;
         }
 
@@ -520,8 +521,11 @@ namespace IMS.Model
 
             Entity[,] table = _createEmptyTable(_IMSData.SizeX, _IMSData.SizeY);
 
+            Debug.WriteLine("created new table, x: "+ _IMSData.SizeX.ToString()+", y: "+ _IMSData.SizeY.ToString());
+
             foreach (Robot robot in _IMSData.EntityData.RobotData)
             {
+                Debug.WriteLine("putting down robot, x: "+robot.Pos.X.ToString()+", y: "+robot.Pos.Y.ToString());
                 table[robot.Pos.X, robot.Pos.Y] = robot;
             }
             foreach (Pod pod in _IMSData.EntityData.PodData)
@@ -590,7 +594,7 @@ namespace IMS.Model
             OnTimePassed(_time);
         }
 
-        public void Simulation()
+        public void Simulation_old()
         {
             //random table
             //example
@@ -627,6 +631,54 @@ namespace IMS.Model
             Dock dock2 = new Dock(6, 10);
             _IMSData.EntityData.DockData.Add(dock1);
             _IMSData.EntityData.DockData.Add(dock2);
+
+            routes = new Dictionary<Robot, List<Pos>>();
+            _counter = 0;
+            OnTableChanged();
+            OnSimulationStarted();
+            cbs = new ConflictBasedSearch(IMSData);
+            routes = cbs.CheckConflicts();
+            rotations = cbs.Rotations;
+            SimulationFinished = true;
+        }
+
+        public void Simulation()
+        {
+            //random table
+            //example
+
+            //Robot Robot1 = new Robot(0, 0, Direction.UP, 1000, 1000, 1);
+            //Robot Robot2 = new Robot(0, 10, Direction.UP, 1000, 1000, 1);
+            //Robot Robot3 = new Robot(3, 3, Direction.UP, 1000, 1000, 1);
+            //Robot Robot4 = new Robot(9, 9, Direction.UP, 1000, 1000, 1);
+            //_IMSData.EntityData.RobotData.Add(Robot1);
+            //_IMSData.EntityData.RobotData.Add(Robot2);
+            //_IMSData.EntityData.RobotData.Add(Robot3);
+            //_IMSData.EntityData.RobotData.Add(Robot4);
+            //Dictionary<Int32, Int32> asd = new Dictionary<Int32, Int32>() { { 2, 1 } };
+            //Dictionary<Int32, Int32> asd2 = new Dictionary<Int32, Int32>() { { 1, 1 } };
+            //Dictionary<Int32, Int32> asd3 = new Dictionary<Int32, Int32>() { { 3, 1 } };
+            //Dictionary<Int32, Int32> asd4 = new Dictionary<Int32, Int32>() { { 4, 1 } };
+            //Pod pod1 = new Pod(0, 9, asd);
+            //Pod pod2 = new Pod(0, 1, asd2);
+            //Pod pod3 = new Pod(9, 1, asd3);
+            //Pod pod4 = new Pod(1, 4, asd4);
+            //_IMSData.EntityData.PodData.Add(pod1);
+            //_IMSData.EntityData.PodData.Add(pod2);
+            //_IMSData.EntityData.PodData.Add(pod3);
+            //_IMSData.EntityData.PodData.Add(pod4);
+            //Destination dest1 = new Destination(11, 0, 1);
+            //Destination dest2 = new Destination(3, 11, 2);
+            //Destination dest3 = new Destination(6, 4, 4);
+            //Destination dest4 = new Destination(5, 3, 1);
+            //_IMSData.EntityData.DestinationData.Add(dest1);
+            //_IMSData.EntityData.DestinationData.Add(dest2);
+            //_IMSData.EntityData.DestinationData.Add(dest3);
+            //_IMSData.EntityData.DestinationData.Add(dest4);
+            //Dock dock1 = new Dock(4, 3);
+            //Dock dock2 = new Dock(6, 10);
+            //_IMSData.EntityData.DockData.Add(dock1);
+            //_IMSData.EntityData.DockData.Add(dock2);
 
             routes = new Dictionary<Robot, List<Pos>>();
             _counter = 0;

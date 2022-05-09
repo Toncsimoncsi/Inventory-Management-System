@@ -18,6 +18,7 @@ namespace IMS.ViewModel
 
         private IMSModel _model;
         private Dictionary<EntityType, String> _entityToColor;
+        private Dictionary<EntityType, String> _entityToImg;
         private int _sizeX;
         private int _sizeY;
         private int _relocationStep;
@@ -135,6 +136,14 @@ namespace IMS.ViewModel
             _entityToColor.Add(EntityType.Pod, "Gray");
             _entityToColor.Add(EntityType.RobotUnderPod, "Purple");
 
+            _entityToImg = new Dictionary<EntityType, String>();
+            _entityToImg.Add(EntityType.Robot, "/img/robot.png");
+            _entityToImg.Add(EntityType.Pod, "/img/full-pod.png");
+            _entityToImg.Add(EntityType.RobotUnderPod, "/img/robot-under-pod.png");
+            _entityToImg.Add(EntityType.Destination, "/img/dest.png");
+            _entityToImg.Add(EntityType.Dock, "/img/dock.png");
+            _entityToImg.Add(EntityType.Empty, "/img/empty.png");
+
             Fields = new ObservableCollection<TableField>();
 
             _model = model;
@@ -169,6 +178,44 @@ namespace IMS.ViewModel
             return _entityToColor[type];
         }
 
+        private String EntityToImg(EntityType type)
+        {
+            string res = _entityToImg[type];
+            return res;
+        }
+
+        private string RobotImage(String dir)
+        {
+            //LEFT, UP, RIGHT, DOWN, NONE 
+            switch (dir)
+            {
+                case "DOWN":
+                    return "/img/robot-left.png";
+                case "UP":
+                    return "/img/robot-right.png";
+                case "RIGHT":
+                    return "/img/robot-down.png";
+                default:
+                    return "/img/robot.png";
+            }
+        }
+
+        private string RobotUnderPodImage(String dir)
+        {
+            //LEFT, UP, RIGHT, DOWN, NONE 
+            switch (dir)
+            {
+                case "DOWN":
+                    return "/img/robot-under-pod-left.png";
+                case "UP":
+                    return "/img/robot-under-pod-right.png";
+                case "RIGHT":
+                    return "/img/robot-under-pod-down.png";
+                default:
+                    return "/img/robot-under-pod.png";
+            }
+        }
+
         /// <summary>
         /// creates an empty viewmodel table (Fields)
         /// </summary>
@@ -188,6 +235,7 @@ namespace IMS.ViewModel
                         BorderColor = "Gray",
                         Direction = Direction.NONE.ToString(),
                         Number = i * SizeX + j,
+                        BgImage = EntityToImg(EntityType.Empty),
                         //PutField = new DelegateCommand(param => SelectEntityField((EntityType)Enum.Parse(typeof(EntityType), param.ToString())))
                         PutFieldCommand = new DelegateCommand(param => PutEntity(Convert.ToInt32(param)))
                     });
@@ -208,6 +256,19 @@ namespace IMS.ViewModel
                 field.Color = EntityToColor(_model[field.X, field.Y].Type);
                 field.BorderColor = "Gray";
                 field.Direction = _model[field.X, field.Y].Direction.ToString();
+                field.Type = _model[field.X, field.Y].Type;
+                if (field.Type == EntityType.Robot)
+                {
+                    field.BgImage = RobotImage(field.Direction);
+                }
+                else if (field.Type == EntityType.RobotUnderPod)
+                {
+                    field.BgImage = RobotUnderPodImage(field.Direction);
+                }
+                else
+                {
+                    field.BgImage = EntityToImg(_model[field.X, field.Y].Type);
+                }
             }
         }
 
@@ -234,10 +295,10 @@ namespace IMS.ViewModel
         private void PutEntity(Int32 ind)
         {
             TableField field = Fields[ind];
-            Debug.WriteLine("PutEntity called");
+            //Debug.WriteLine("PutEntity called");
             if (_relocationStep == 0 && _selectionStep == 0)//changing field
             {
-                Debug.WriteLine("putting down entity");
+                //Debug.WriteLine("putting down entity");
                 if (_selectedType == EntityType.Robot && SelectedCapacity > 0)//only put it down if the capacity value is valid
                 {
                     if (field.Type == EntityType.Robot)
@@ -256,7 +317,7 @@ namespace IMS.ViewModel
             }
             else if (_relocationStep == 1)
             {
-                Debug.WriteLine("step 1 in relocation");
+                //Debug.WriteLine("step 1 in relocation");
                 _x1 = field.X;
                 _y1 = field.Y;
                 ++_relocationStep;
@@ -264,7 +325,7 @@ namespace IMS.ViewModel
             }
             else if (_relocationStep == 2)
             {
-                Debug.WriteLine("step 2 in relocation");
+                //Debug.WriteLine("step 2 in relocation");
                 _x2 = field.X;
                 _y2 = field.Y;
                 ++_relocationStep;
@@ -272,7 +333,7 @@ namespace IMS.ViewModel
             }
             else if (_relocationStep == 3)
             {
-                Debug.WriteLine("step 3 in relocation");
+                //Debug.WriteLine("step 3 in relocation");
                 //int dx = _x2 - _x1;
                 //int dy = _y2 - _y1;
 
@@ -402,7 +463,7 @@ namespace IMS.ViewModel
 
         private void OnGenerateEmptyTable() 
         {
-            Debug.WriteLine("OnGenerateEmptyTable called");
+            //Debug.WriteLine("OnGenerateEmptyTable called");
             if (SetSimulationSize != null)
                 SetSimulationSize(this, EventArgs.Empty);
         }

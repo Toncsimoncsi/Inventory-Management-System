@@ -159,6 +159,7 @@ namespace IMS
         {
             if (_settingsViewModel.SizeX != 0 && _settingsViewModel.SizeY != 0)
             {
+                //Debug.WriteLine("transferring creator data to simulation");
                 _viewModel.CurrentView = _viewModel;
                 _viewModel.CreateSimulationFromSettingsWindow();
                 _settings.Close();

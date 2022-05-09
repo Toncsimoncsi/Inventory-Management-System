@@ -7,6 +7,17 @@
         mc:Ignorable="d"
         Title="Settings" Height="450" Width="800" FontFamily="Corbel"
         Icon="./img/icon.png">
+    <Window.Resources>
+        <ImageBrush x:Key="BgImg" ImageSource="{Binding BgImage}" Stretch="Fill"/>
+        <ImageBrush x:Key="RobotImg" ImageSource="/img/robot.png" Stretch="Fill"/>
+        <ImageBrush x:Key="FullPodImg" ImageSource="/img/full-pod.png" Stretch="Fill"/>
+        <ImageBrush x:Key="EmptyPodImg" ImageSource="/img/empty-pod.png" Stretch="Fill"/>
+        <ImageBrush x:Key="RobotUnderPodImg" ImageSource="/img/robot-under-pod.png" Stretch="Fill"/>
+        <ImageBrush x:Key="EmptyImg" ImageSource="/img/empty.png" Stretch="Fill"/>
+        <ImageBrush x:Key="DockImg" ImageSource="/img/dock.png" Stretch="Fill"/>
+        <ImageBrush x:Key="DestinationImg" ImageSource="/img/dest.png" Stretch="Fill"/>
+    </Window.Resources>
+    
     <DockPanel Background="#ABB0B7">
         <Grid DockPanel.Dock="Left">
             <Grid.RowDefinitions>
