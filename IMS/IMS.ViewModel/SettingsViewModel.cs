@@ -48,7 +48,7 @@ namespace IMS.ViewModel
         public DelegateCommand SelectDestinationCommand { get; private set; }
         public DelegateCommand SelectRobotCommand { get; private set; }
         public DelegateCommand RelocationCommand { get; private set; }
-        public DelegateCommand AddProductCommand { get; private set; }
+        public DelegateCommand AddProductOrIDCommand { get; private set; }
 
         public EntityType SelectedType
         {
@@ -164,7 +164,7 @@ namespace IMS.ViewModel
 
             RelocationCommand = new DelegateCommand(x => _startRelocation());
 
-            AddProductCommand = new DelegateCommand(x => _startSelection());
+            AddProductOrIDCommand = new DelegateCommand(x => _startSelection());
 
             _fieldColor = "White";
 
@@ -306,8 +306,12 @@ namespace IMS.ViewModel
                     }
                     else
                     {
-                        _model.ChangeField(field.X, field.Y, _selectedType, SelectedCapacity);
+                        _model.ChangeField(field.X, field.Y, _selectedType, SelectedCapacity, SelectedProduct);
                     }
+                }
+                else if (_selectedType == EntityType.Destination)
+                {
+                    _model.ChangeField(field.X, field.Y, _selectedType, SelectedCapacity, SelectedProduct);
                 }
                 else
                 {
@@ -355,8 +359,6 @@ namespace IMS.ViewModel
             {
                 _x2 = field.X;
                 _y2 = field.Y;
-
-
 
                 _model.AddProduct(_x1, _y1, _x2, _y2, SelectedProduct);
 
