@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using IMS.Model;
 using IMS.Persistence;
 using System;
+using System.Diagnostics;
 using IMS.Persistence.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -152,6 +153,236 @@ namespace IMS.Test
             _model.setSpeed(-1);
             Assert.AreEqual(startSpeed - 1, _model.Speed);
         }
+
+
+
+
+
+        [TestMethod]
+        public void CreatorSizeTest()
+        {
+            int x = 10;
+            int y = 12;
+            _model.GenerateEmtyTableForSettingsWindow(x, y);
+            Assert.AreEqual(_model.TempSizeX, x);
+            Assert.AreEqual(_model.TempSizeY, y);
+        }
+
+        [TestMethod]
+        public void EntityPlacementTest()
+        {
+            int x = 10;
+            int y = 10;
+            int capacity = 10;
+            _model.GenerateEmtyTableForSettingsWindow(x, y);
+
+            _model.ChangeField(0, 0, EntityType.Dock);
+            Assert.AreEqual(_model.GetTemp(0, 0).Type, EntityType.Dock);
+
+            _model.ChangeField(0, 0, EntityType.Robot, capacity);
+            Assert.AreEqual(_model.GetTemp(0, 0).Type, EntityType.Robot);
+            Assert.AreEqual(((Robot)_model.GetTemp(0, 0)).Capacity, capacity);
+            Assert.AreEqual(_model.GetTemp(0, 0).Direction, Direction.UP);
+            _model.RotateRobot(0, 0);
+            Assert.AreEqual(_model.GetTemp(0, 0).Direction, Direction.RIGHT);
+            _model.RotateRobot(0, 0);
+            Assert.AreEqual(_model.GetTemp(0, 0).Direction, Direction.DOWN);
+            _model.RotateRobot(0, 0);
+            Assert.AreEqual(_model.GetTemp(0, 0).Direction, Direction.LEFT);
+            _model.RotateRobot(0, 0);
+            Assert.AreEqual(_model.GetTemp(0, 0).Direction, Direction.UP);
+
+            _model.ChangeField(0, 0, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(0, 0).Type, EntityType.Pod);
+
+            _model.ChangeField(0, 0, EntityType.Destination);
+            Assert.AreEqual(_model.GetTemp(0, 0).Type, EntityType.Destination);
+
+            _model.GenerateEmtyTableForSettingsWindow(_model.TempSizeX, _model.TempSizeY);
+            Assert.AreEqual(_model.GetTemp(0, 0).Type, EntityType.Empty);
+        }
+
+        [TestMethod]
+        public void ProductAssignmentTest()
+        {
+            int x = 10;
+            int y = 10;
+            _model.GenerateEmtyTableForSettingsWindow(x, y);
+            _model.ChangeField(2, 2, EntityType.Pod);
+            _model.ChangeField(3, 2, EntityType.Pod);
+            _model.ChangeField(2, 3, EntityType.Destination);
+            _model.AddProduct(2, 2, 3, 3, 5);
+            Assert.AreEqual(((Pod)_model.GetTemp(2, 2)).Products.ContainsKey(5), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(3, 2)).Products.ContainsKey(5), true);
+            Assert.AreEqual(((Destination)_model.GetTemp(2, 3)).ID, 5);
+            _model.AddProduct(2, 2, 3, 3, 6);
+            Assert.AreEqual(((Pod)_model.GetTemp(2, 2)).Products.ContainsKey(5), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(3, 2)).Products.ContainsKey(5), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(2, 2)).Products.ContainsKey(6), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(3, 2)).Products.ContainsKey(6), true);
+            Assert.AreEqual(((Destination)_model.GetTemp(2, 3)).ID, 6);
+        }
+
+        [TestMethod]
+        public void BasicRelocationTest()
+        {
+            int x = 10;
+            int y = 10;
+            _model.GenerateEmtyTableForSettingsWindow(x, y);
+
+            _model.ChangeField(1, 1, EntityType.Pod);
+            _model.ChangeField(1, 2, EntityType.Pod);
+            _model.ChangeField(2, 1, EntityType.Pod);
+            _model.ChangeField(2, 2, EntityType.Pod);
+            _model.AddProduct(1, 1, 2, 2, 22);
+
+            _model.RelocationAttempt(1, 1, 2, 2, 3, 3);
+
+            Assert.AreEqual(_model.GetTemp(1, 1).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(1, 2).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(2, 1).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(2, 2).Type, EntityType.Empty);
+
+            Assert.AreEqual(_model.GetTemp(3, 3).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(3, 4).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(4, 3).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(4, 4).Type, EntityType.Pod);
+
+            Assert.AreEqual(((Pod)_model.GetTemp(3, 3)).Products.ContainsKey(22), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(3, 4)).Products.ContainsKey(22), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(4, 3)).Products.ContainsKey(22), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(4, 4)).Products.ContainsKey(22), true);
+        }
+
+        [TestMethod]
+        public void RelocationSelectionTest()
+        {
+            int x = 10;
+            int y = 10;
+            _model.GenerateEmtyTableForSettingsWindow(x, y);
+
+            _model.ChangeField(0, 0, EntityType.Pod);
+            _model.ChangeField(0, 1, EntityType.Pod);
+            _model.ChangeField(1, 0, EntityType.Pod);
+            _model.ChangeField(1, 1, EntityType.Pod);
+
+            _model.RelocationAttempt(1, 1, 0, 0, 3, 3);
+            Assert.AreEqual(_model.GetTemp(0, 0).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(1, 0).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(0, 1).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(1, 1).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(2, 2).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(2, 3).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(3, 2).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(3, 3).Type, EntityType.Pod);
+
+            _model.RelocationAttempt(2, 3, 3, 2, 0, 1);
+            Assert.AreEqual(_model.GetTemp(0, 0).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(1, 0).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(0, 1).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(1, 1).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(2, 2).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(2, 3).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(3, 2).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(3, 3).Type, EntityType.Empty);
+
+            _model.RelocationAttempt(1, 0, 0, 1, 3, 2);
+            Assert.AreEqual(_model.GetTemp(0, 0).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(1, 0).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(0, 1).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(1, 1).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(2, 2).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(2, 3).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(3, 2).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(3, 3).Type, EntityType.Pod);
+        }
+
+        [TestMethod]
+        public void NonPodRelocationTest()
+        {
+            int x = 10;
+            int y = 10;
+            _model.GenerateEmtyTableForSettingsWindow(x, y);
+
+            _model.ChangeField(0, 0, EntityType.Pod);
+            _model.ChangeField(0, 1, EntityType.Dock);
+            _model.ChangeField(1, 0, EntityType.Destination);
+            _model.ChangeField(1, 1, EntityType.Pod);
+
+            _model.RelocationAttempt(0, 0, 1, 1, 2, 2);
+            Assert.AreEqual(_model.GetTemp(2, 2).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(3, 3).Type, EntityType.Pod);
+            Assert.AreEqual(_model.GetTemp(2, 3).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(3, 2).Type, EntityType.Empty);
+
+            Assert.AreEqual(_model.GetTemp(0, 0).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(1, 1).Type, EntityType.Empty);
+            Assert.AreEqual(_model.GetTemp(0, 1).Type, EntityType.Dock);
+            Assert.AreEqual(_model.GetTemp(1, 0).Type, EntityType.Destination);
+        }
+
+        [TestMethod]
+        public void FailedRelocationTest()
+        {
+            int x = 10;
+            int y = 10;
+            _model.GenerateEmtyTableForSettingsWindow(x, y);
+
+            _model.ChangeField(0, 0, EntityType.Pod);
+            _model.ChangeField(0, 1, EntityType.Pod);
+            _model.ChangeField(1, 0, EntityType.Pod);
+            _model.ChangeField(1, 1, EntityType.Pod);
+            _model.ChangeField(2, 3, EntityType.Pod);
+            _model.ChangeField(3, 2, EntityType.Pod);
+            _model.ChangeField(2, 2, EntityType.Pod);
+            _model.ChangeField(3, 3, EntityType.Pod);
+            _model.AddProduct(0, 0, 1, 1, 10);
+            _model.AddProduct(2, 2, 3, 3, 5);
+            _model.RelocationAttempt(0, 0, 1, 1, 2, 2);
+
+            Assert.AreEqual(((Pod)_model.GetTemp(0, 0)).Products.ContainsKey(10), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(1, 0)).Products.ContainsKey(10), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(0, 1)).Products.ContainsKey(10), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(1, 1)).Products.ContainsKey(10), true);
+
+            Assert.AreEqual(((Pod)_model.GetTemp(2, 2)).Products.ContainsKey(5), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(3, 2)).Products.ContainsKey(5), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(2, 3)).Products.ContainsKey(5), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(3, 3)).Products.ContainsKey(5), true);
+        }
+
+        [TestMethod]
+        public void PartialRelocationTest()
+        {
+            int x = 10;
+            int y = 10;
+            _model.GenerateEmtyTableForSettingsWindow(x, y);
+
+            _model.ChangeField(0, 0, EntityType.Pod);
+            _model.ChangeField(0, 1, EntityType.Pod);
+            _model.ChangeField(1, 0, EntityType.Pod);
+            _model.ChangeField(1, 1, EntityType.Pod);
+            //_model.ChangeField(2, 3, EntityType.Pod);
+            //_model.ChangeField(3, 2, EntityType.Pod);
+            _model.ChangeField(2, 2, EntityType.Pod);
+            _model.ChangeField(3, 3, EntityType.Pod);
+            _model.AddProduct(0, 0, 1, 1, 10);
+            _model.AddProduct(2, 2, 3, 3, 5);
+            _model.RelocationAttempt(0, 0, 1, 1, 2, 2);
+
+            Assert.AreEqual(((Pod)_model.GetTemp(0, 0)).Products.ContainsKey(10), true);
+            //Assert.AreEqual(((Pod)_model.GetTemp(1, 0)).Products.ContainsKey(10), true);
+            //Assert.AreEqual(((Pod)_model.GetTemp(0, 1)).Products.ContainsKey(10), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(1, 1)).Products.ContainsKey(10), true);
+
+            Assert.AreEqual(((Pod)_model.GetTemp(2, 2)).Products.ContainsKey(5), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(3, 2)).Products.ContainsKey(10), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(2, 3)).Products.ContainsKey(10), true);
+            Assert.AreEqual(((Pod)_model.GetTemp(3, 3)).Products.ContainsKey(5), true);
+        }
+
+
+
 
         #region Event handlers
         private void Model_FieldChanged(object sender, RobotMovedEventArgs e)

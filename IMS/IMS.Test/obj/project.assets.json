@@ -6250,25 +6250,28 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\fruzs\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Leon\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\fruzs\\Desktop\\szofttech\\model-sim\\csapatnev-oetlet\\IMS\\IMS.Test\\IMS.Test.csproj",
+      "projectUniqueName": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Test\\IMS.Test.csproj",
       "projectName": "IMS.Test",
-      "projectPath": "C:\\Users\\fruzs\\Desktop\\szofttech\\model-sim\\csapatnev-oetlet\\IMS\\IMS.Test\\IMS.Test.csproj",
-      "packagesPath": "C:\\Users\\fruzs\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\fruzs\\Desktop\\szofttech\\model-sim\\csapatnev-oetlet\\IMS\\IMS.Test\\obj\\",
+      "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Test\\IMS.Test.csproj",
+      "packagesPath": "C:\\Users\\Leon\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Test\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\fruzs\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Leon\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0-windows7.0"
@@ -6281,17 +6284,17 @@
         "net5.0-windows7.0": {
           "targetAlias": "net5.0-windows",
           "projectReferences": {
-            "C:\\Users\\fruzs\\Desktop\\szofttech\\model-sim\\csapatnev-oetlet\\IMS\\IMS.Model\\IMS.Model.csproj": {
-              "projectPath": "C:\\Users\\fruzs\\Desktop\\szofttech\\model-sim\\csapatnev-oetlet\\IMS\\IMS.Model\\IMS.Model.csproj"
+            "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj": {
+              "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj"
             },
-            "C:\\Users\\fruzs\\Desktop\\szofttech\\model-sim\\csapatnev-oetlet\\IMS\\IMS.Persistence\\IMS.Persistence.csproj": {
-              "projectPath": "C:\\Users\\fruzs\\Desktop\\szofttech\\model-sim\\csapatnev-oetlet\\IMS\\IMS.Persistence\\IMS.Persistence.csproj"
+            "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj": {
+              "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj"
             },
-            "C:\\Users\\fruzs\\Desktop\\szofttech\\model-sim\\csapatnev-oetlet\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj": {
-              "projectPath": "C:\\Users\\fruzs\\Desktop\\szofttech\\model-sim\\csapatnev-oetlet\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj"
+            "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj": {
+              "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj"
             },
-            "C:\\Users\\fruzs\\Desktop\\szofttech\\model-sim\\csapatnev-oetlet\\IMS\\IMS\\IMS.csproj": {
-              "projectPath": "C:\\Users\\fruzs\\Desktop\\szofttech\\model-sim\\csapatnev-oetlet\\IMS\\IMS\\IMS.csproj"
+            "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS\\IMS.csproj": {
+              "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS\\IMS.csproj"
             }
           }
         }
@@ -6338,7 +6341,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
       }
     }
   }
