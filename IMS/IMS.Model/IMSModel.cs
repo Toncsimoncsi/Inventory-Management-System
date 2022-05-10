@@ -51,6 +51,12 @@ namespace IMS.Model
 
         #region Public properties
 
+        /// <summary>
+        /// make the model indexable
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public Entity this[Int32 x, Int32 y]
         {
             get
@@ -63,14 +69,25 @@ namespace IMS.Model
                 return _gameTable[x, y];
             }
         }
-
+        /// <summary>
+        /// width of the sim table
+        /// </summary>
         public Int32 SizeX { get { return _gameTable.GetLength(0); } set { } }
+        /// <summary>
+        /// height of the sim table
+        /// </summary>
         public Int32 SizeY { get { return _gameTable.GetLength(1); } set { } }
 
 
         public IMSData IMSData { get { return _IMSData; } }
 
+        /// <summary>
+        /// width of the creator's table
+        /// </summary>
         public Int32 TempSizeX { get { return _tempTable.GetLength(0); } set { } }
+        /// <summary>
+        /// height of the creator's table
+        /// </summary>
         public Int32 TempSizeY { get { return _tempTable.GetLength(1); } set { } }
 
         public int Steps { get { return _steps; } }
@@ -157,33 +174,33 @@ namespace IMS.Model
 
         #region Public methods
 
+        /// <summary>
+        /// start a new simulation
+        /// </summary>
         public void NewSimulation()
         {
-            /*
-            for (Int32 i = 0; i < _gameTable.GetLength(0); i++)
-            {
-                for (Int32 j = 0; j < _gameTable.GetLength(1); j++)
-                {
-                    _gameTable[i, j] = new Empty(i, j);
-                }
-            }
-            */
             SimulationFinished = false;
             _gameTable = _createEmptyTable(_gameTable.GetLength(0), _gameTable.GetLength(1));
             OnSimulationCreated();
         }
 
-
+        /// <summary>
+        /// attempt to relocate the selected block to a different position (block)
+        /// the selected rectangle's points will be translated specified by (x1, y1) -> (x, y)
+        /// </summary>
+        /// <param name="x1">x of the first corner of the block</param>
+        /// <param name="y1">y of the first corner of the block</param>
+        /// <param name="x2">x of the second corner of the block</param>
+        /// <param name="y2">y of the second corner of the block</param>
+        /// <param name="x">x of the translation point</param>
+        /// <param name="y">y of the translation point</param>
         public void RelocationAttempt(int x1, int y1, int x2, int y2, int x, int y)
         {
-            //Debug.WriteLine("RelocationAttempt called");
-            //Debug.WriteLine("x1: "+x1+", y1: "+y1+", x2: "+x2+", y2: "+y2+", x: "+x+", y: "+y);
             int dx = x2 - x1;
             int dy = y2 - y1;
 
             if (x + dx < 0 || x + dx >= TempSizeX || y + dy < 0 || y + dy >= TempSizeY)
             {
-                //this means the other corner of the rectangle would be outside the map
                 return;
             }
 
@@ -199,31 +216,20 @@ namespace IMS.Model
                 y += dy;
                 dy = -1 * dy;
             }
-            //Debug.WriteLine("x1: " + x1 + ", y1: " + y1 + ", x: " + x + ", y: " + y + ", dx: " + dx + ", dy: " + dy);
-            //now: dx is the width, dy the height; x1, y1 the upper right corner of the 1st rectangle, x, y are the 2nd rect's pos
-
-            //if there's an overlap between them, it will fail
-            //TODO: maybe <= is needed. Check
             if (x1 <= x + dx || x <= x1 + dx || y1 <= y + dy || y <= y1 + dy)
             {
-                //no overlap
                 for (int i = 0; i < dx + 1; ++i)
                 {
                     for (int j = 0; j < dy + 1; ++j)
                     {
-                        //Debug.WriteLine(_tempTable[x1 + i, y1 + j].Type.ToString());
-                        //Debug.WriteLine(i.ToString()+", "+j.ToString());
                         if(_tempTable[x1+i,y1+j].Type == EntityType.Pod && _tempTable[x+i,y+j].Type == EntityType.Empty)
                         {
-                            //Debug.WriteLine("switching");
-                            //swap only needs to happen in this case
                             _tempTable[x + i, y + j] = _tempTable[x1 + i, y1 + j];
                             _tempTable[x + i, y + j].Pos.X = x + i;
                             _tempTable[x + i, y + j].Pos.Y = y + j;
                             _tempTable[x1 + i, y1 + j] = new Empty(x1 + i, y1 + j);
                             OnFieldChanged_SVM(x1 + i, y1 + j, _tempTable[x1 + i, y1 + j]);
                             OnFieldChanged_SVM(x + i, y + j, _tempTable[x + i, y + j]);
-                            //Debug.WriteLine("done switching");
                         }
                     }
                 }
@@ -231,36 +237,21 @@ namespace IMS.Model
 
 
             }
-            //else
-            //{
-                //overlap detected: abort
-            //    return;
-            //}
-
-            //signal for the creation of a new table
         }
 
+        /// <summary>
+        /// add a product to all of the pods and destinations inside the rectangle specified by the parameters
+        /// if an entity is a destination, overwrite its ID
+        /// if it's a pod, add to its product list
+        /// </summary>
+        /// <param name="x1"></param>
+        /// <param name="y1"></param>
+        /// <param name="x2"></param>
+        /// <param name="y2"></param>
+        /// <param name="productID"></param>
         public void AddProduct(int x1, int y1, int x2, int y2, int productID)
         {
             OnSelectionChanged_SVM(x1, y1, false);
-            /*
-            for (int y = y1; y <= y2; ++y)
-            {
-                for (int x = x1; x <= x2; ++x)
-                {
-                    if (_tempTable[x,y].Type == EntityType.Destination)
-                    {
-                        ((Destination)_tempTable[x, y]).ID = productID;
-                        OnFieldChanged_SVM(x, y, _tempTable[x,y]);
-                    }
-                    if (_tempTable[x, y].Type == EntityType.Pod)
-                    {
-                        ((Pod)_tempTable[x, y]).Products.Add(productID,1);
-                        OnFieldChanged_SVM(x, y, _tempTable[x,y]);
-                    }
-                }
-            }
-            */
             int yInc = y1 <= y2 ? 1 : -1;
             int xInc = x1 <= x2 ? 1 : -1;
             for (int y = y1; yInc == 1 ? y <= y2 : y >= y2; y += yInc)
@@ -272,14 +263,6 @@ namespace IMS.Model
                         ((Destination)_tempTable[x, y]).ID = productID;
                         OnFieldChanged_SVM(x, y, _tempTable[x, y]);
                     }
-                    /*
-                    if(_tempTable[x, y].Type == EntityType.Destination)
-                    {
-
-                        ((Robot)_tempTable[x, y]).DestinationID = productID;
-                        OnFieldChanged_SVM(x, y, _tempTable[x, y]);
-                    }
-                    */
                     if (_tempTable[x, y].Type == EntityType.Pod)
                     {
                         ((Pod)_tempTable[x, y]).Products.Add(productID, 1);
@@ -294,13 +277,17 @@ namespace IMS.Model
             OnSelectionChanged_SVM(x, y, true);
         }
 
+        /// <summary>
+        /// first step in selecting the AddProduct rectangle
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public void Selection(int x, int y)
         {
             if (_selectionX1 == -1 && _selectionY1 == -1)
             {
                 _selectionX1 = x;
                 _selectionY1 = y;
-                //change one field
                 OnSelectionChanged_SVM(x, y, true);
             }
             else
@@ -337,7 +324,6 @@ namespace IMS.Model
 
         public void EndSelection()
         {
-            //this doesn't test it if it's not used correctly
             for (int y = _selectionY1; y <= _selectionY2; ++y)
             {
                 for (int x = _selectionX1; x <= _selectionX2; ++x)
@@ -351,7 +337,11 @@ namespace IMS.Model
             _selectionY2 = -1;
         }
 
-
+        /// <summary>
+        /// new, empty table for the creator
+        /// </summary>
+        /// <param name="x">width</param>
+        /// <param name="y">height</param>
         public void GenerateEmtyTableForSettingsWindow(int x, int y)
         {
             _tempTable = new Entity[x, y];
@@ -365,30 +355,23 @@ namespace IMS.Model
             OnTableCreated_SVM();
         }
 
-        /*public void ClearSettingsWindow()
-        {
-            _tempTable = new Entity[TempSizeX, TempSizeY];
-            for (int i = 0; i < TempSizeX; ++i)
-            {
-                for (int j = 0; j < TempSizeY; ++j)
-                {
-                    OnFieldChanged_SVM(i, j, _tempTable[i, j]);
-                }
-            }
-        }
-        */
-
+        /// <summary>
+        /// get the entity from the creator's table
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public Entity GetTemp(Int32 x, Int32 y)
         {
             return _tempTable[x, y];
         }
-
-        //makes _tempTable the official table (_gameTable) and creates a new IMSData
+        /// <summary>
+        /// makes _tempTable the official table (_gameTable) and creates a new IMSData
+        /// </summary>
         public void CreateTableFromSettings()
         {
             SimulationFinished = false;
             _IMSData = new IMSData(_tempTable);
-            //Debug.WriteLine("new IMSData created from _tempTable");
             _gameTable = _tempTable;
         }
 
@@ -398,11 +381,14 @@ namespace IMS.Model
             OnSpeedChanged(_speed);
         }
 
-
-        //note: empty (blank) entity is placed there of the specified type
+        /// <summary>
+        /// place an entity down in the creator, put it inside the temporary table
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="type">type of the entity to be placed down</param>
         public void ChangeField(int x, int y, EntityType type)
         {
-            //Debug.WriteLine("ChangeField: "+x.ToString()+", "+y.ToString());
             switch (type)
             {
                 case EntityType.Dock:
@@ -422,11 +408,17 @@ namespace IMS.Model
                     break;
             }
 
-            //Debug.WriteLine("ChangeField called");
-
             OnFieldChanged_SVM(x, y, _tempTable[x, y]);
         }
 
+        /// <summary>
+        /// the original function with extra inputs for the robot capacity and destination ID
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="type"></param>
+        /// <param name="capacity"></param>
+        /// <param name="id"></param>
         public void ChangeField(int x, int y, EntityType type, int capacity, int id)
         {
             if (type == EntityType.Robot && capacity > 0)
@@ -439,10 +431,14 @@ namespace IMS.Model
                 _tempTable[x, y] = new Destination(x, y, id);
                 OnFieldChanged_SVM(x, y, _tempTable[x, y]);
             }
-            //if it's not a robot then do nothing
         }
 
-        public void RotateRobot(int x, int y) // clockwise rotation
+        /// <summary>
+        /// rotate the robot clockwise
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        public void RotateRobot(int x, int y)
         {
             if (_tempTable[x, y].Type == EntityType.Robot && _tempTable[x, y].Direction != Direction.NONE)
             {
@@ -462,20 +458,23 @@ namespace IMS.Model
                         newDirection = Direction.UP;
                         break;
                 }
-                //_tempTable[x, y] = new Robot(x, y, newDirection, ((Robot)_tempTable[x, y]).Capacity, );
                 _tempTable[x, y] = new Robot((Robot)_tempTable[x, y], newDirection);
 
                 OnFieldChanged_SVM(x, y, _tempTable[x, y]);
             }
         }
 
+        /// <summary>
+        /// load a previously saved simulation
+        /// </summary>
+        /// <param name="path">path to the saved simulation (ims)</param>
+        /// <returns></returns>
         public async Task LoadSimulationAsync(String path)
         {
             if (_dataAccess == null)
                 return;
 
 
-            //IMSData values = await _dataAccess.LoadSimulationAsync(path);
             _IMSData = await _dataAccess.LoadSimulationAsync(path);
             _gameTable = _extractTableFromIMSData();
 
@@ -485,6 +484,11 @@ namespace IMS.Model
 
         }
 
+        /// <summary>
+        /// save the current state of the simulation
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public async Task SaveSimulationAsync(String path)
         {
             if (_dataAccess == null)
@@ -493,6 +497,11 @@ namespace IMS.Model
             await _dataAccess.SaveSimulationAsync(path, _IMSData);
         }
 
+        /// <summary>
+        /// save the diary (statistics, total usage etc)
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public async Task SaveDiaryAsync(String path)
         {
             if (_dataAccess == null)
@@ -507,6 +516,12 @@ namespace IMS.Model
 
         #region Private methods
 
+        /// <summary>
+        /// create a table filled with Empty entities
+        /// </summary>
+        /// <param name="sizeX">width of the new table</param>
+        /// <param name="sizeY">height of the new table</param>
+        /// <returns></returns>
         private Entity[,] _createEmptyTable(Int32 sizeX, Int32 sizeY)
         {
             Entity[,] table = new Entity[sizeX, sizeY];
@@ -522,16 +537,21 @@ namespace IMS.Model
             return table;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void setTotalEnergy()
         {
             _allEnergy = _dataAccess.getTotalEnergy(_IMSData);
             OnAllEnergyChanged();
         }
 
+        /// <summary>
+        /// makes a table based on an already existing IMSData
+        /// </summary>
+        /// <returns></returns>
         private Entity[,] _extractTableFromIMSData()
         {
-            //Entity[,] table = new Entity[_IMSData.SizeX, _IMSData.SizeY];
-
             Entity[,] table = _createEmptyTable(_IMSData.SizeX, _IMSData.SizeY);
 
             Debug.WriteLine("created new table, x: "+ _IMSData.SizeX.ToString()+", y: "+ _IMSData.SizeY.ToString());
@@ -561,6 +581,9 @@ namespace IMS.Model
             return table;
         }
 
+        /// <summary>
+        /// calculate the state of the simulation
+        /// </summary>
         public void AdvanceTime()
         {
 
@@ -606,7 +629,9 @@ namespace IMS.Model
             _time++;
             OnTimePassed(_time);
         }
-
+        /// <summary>
+        /// the main function which starts the simulation
+        /// </summary>
         public void Simulation()
         {
             //random table

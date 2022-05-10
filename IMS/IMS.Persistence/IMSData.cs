@@ -23,11 +23,6 @@ namespace IMS.Persistence
 
         public int StepCount { get; set; }
 
-        //public Int32 Time { get; set; }
-        //public Int32 TotalEnergyConsumption { get; set; }
-        //public Int32 SizeX { get; set; }
-        //public Int32 SizeY { get; set; }
-
 
 
         public IMSData(EntityData entityData, int sizeX, int sizeY, int time, int totalEnergyConsumption)

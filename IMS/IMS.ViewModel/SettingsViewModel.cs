@@ -59,13 +59,6 @@ namespace IMS.ViewModel
             get { return _sizeX; }
             set
             {
-                /*
-                if (_model.SizeX != value)
-                {
-                    _sizeX = value;
-                    OnPropertyChanged(nameof(SizeX));
-                }
-                */
                 _sizeX = value;
                 OnPropertyChanged(nameof(SizeX));
             }
@@ -74,13 +67,6 @@ namespace IMS.ViewModel
             get { return _sizeY; }
             set
             {
-                /*
-                if (_model.SizeY != value)
-                {
-                    _sizeY = value;
-                    OnPropertyChanged(nameof(SizeY));
-                }
-                */
                 _sizeY = value;
                 OnPropertyChanged(nameof(SizeY));
             }
@@ -180,18 +166,33 @@ namespace IMS.ViewModel
         #endregion
 
         #region Methods
-
+        /// <summary>
+        /// matches entities to their color
+        /// </summary>
+        /// <param name="type">type to convert to color</param>
+        /// <returns></returns>
         private String EntityToColor(EntityType type)
         {
             return _entityToColor[type];
         }
 
+        /// <summary>
+        /// matches each entity to an image path
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         private String EntityToImg(EntityType type)
         {
             string res = _entityToImg[type];
             return res;
         }
 
+        /// <summary>
+        /// matches a robot to corresponding image
+        /// based on its rotation
+        /// </summary>
+        /// <param name="dir">the direction it faces</param>
+        /// <returns></returns>
         private string RobotImage(String dir)
         {
             //LEFT, UP, RIGHT, DOWN, NONE 
@@ -208,6 +209,11 @@ namespace IMS.ViewModel
             }
         }
 
+        /// <summary>
+        /// matches RobotUnderPod to image based on its rotation
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
         private string RobotUnderPodImage(String dir)
         {
             //LEFT, UP, RIGHT, DOWN, NONE 
@@ -281,32 +287,17 @@ namespace IMS.ViewModel
             }
         }
 
-        public void ChangeFieldColor()
-        {
-            TableField field = Fields[0];
-            switch (FieldColor)
-            {
-                case "Gold":
-                   // _model.setField(field.X, field.Y, "Robot");
-                   break;
-            }
-            GenerateTable();
-            SetupTable();
-        }
-
-        /*
-        private void SelectEntityField(EntityType type)
-        {
-            _selectedType = type;
-        }
-        */
-
+        /// <summary>
+        /// called when one clicks on the creator's table
+        /// other variables determine what's to be done
+        /// </summary>
+        /// <param name="ind">index of Field in Fields</param>
         private void PutEntity(Int32 ind)
         {
             TableField field = Fields[ind];
-            if (_relocationStep == 0 && _selectionStep == 0)//changing field
+            if (_relocationStep == 0 && _selectionStep == 0)
             {
-                if (_selectedType == EntityType.Robot && SelectedCapacity > 0)//only put it down if the capacity value is valid
+                if (_selectedType == EntityType.Robot && SelectedCapacity > 0)
                 {
                     if (field.Type == EntityType.Robot)
                     {
@@ -335,7 +326,6 @@ namespace IMS.ViewModel
             }
             else if (_relocationStep == 2)
             {
-                //Debug.WriteLine("step 2 in relocation");
                 _x2 = field.X;
                 _y2 = field.Y;
                 ++_relocationStep;
@@ -374,12 +364,23 @@ namespace IMS.ViewModel
             }
         }
 
+        /// <summary>
+        /// when a simulation is created, generate a new table and fill it up with Empty
+        /// entities
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Model_SimulationCreated(Object sender, EventArgs e)
         {
             GenerateTable();
             SetupTable();
         }
-
+        /// <summary>
+        /// when the model's representation of the creator table changes,
+        /// make a visual update
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Model_FieldChanged_SVM(Object sender, RobotMovedEventArgs e)
         {
 
@@ -387,47 +388,55 @@ namespace IMS.ViewModel
             Fields[e.Y * _model.TempSizeX + e.X].Type = _model.GetTemp(e.X, e.Y).Type;
             Fields[e.Y * _model.TempSizeX + e.X].Color = EntityToColor(_model.GetTemp(e.X, e.Y).Type);
         }
-
+        /// <summary>
+        /// highlight the border of selected regions in the creator
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Model_SelectionChanged_SVM(Object sender, SelectionChangedEventArgs e)
         {
             Fields[e.Y * _model.TempSizeX + e.X].BorderColor = e.IsSelected ? "Red" : "Gray";
         }
-
+        /// <summary>
+        /// first Entity has been clicked with the Move option selected
+        /// mark it with a variable and stop the Add
+        /// </summary>
         private void _startRelocation()
         {
-            //Debug.WriteLine("starting relocation");
             _relocationStep = 1;
             _stopSelection();
         }
 
+        /// <summary>
+        /// stop the mass relocation of pods
+        /// </summary>
         private void _stopRelocation()
         {
             _relocationStep = 0;
         }
-
+        /// <summary>
+        /// when the first corner of the product addition rectangle has been clicked,
+        /// stop relocation (if it's ongoing)
+        /// </summary>
         private void _startSelection()
         {
             _selectionStep = 1;
             _stopRelocation();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void _stopSelection()
         {
             _selectionStep = 0;
         }
-
-        /*
-        private void _changeSelection(String typeStr)
-        {
-            Debug.WriteLine("changed selection");
-            _selectedType = (EntityType)Enum.Parse(typeof(EntityType),typeStr);
-        }
-        */
-
+        /// <summary>
+        /// change the type of entity to be placed
+        /// </summary>
+        /// <param name="type"></param>
         private void _changeSelection(EntityType type)
         {
-            //Debug.WriteLine("changed selection");
-            //_selectedType = (EntityType)Enum.Parse(typeof(EntityType), typeStr);
             _selectedType = type;
         }
 
@@ -451,7 +460,6 @@ namespace IMS.ViewModel
 
         private void OnGenerateEmptyTable() 
         {
-            //Debug.WriteLine("OnGenerateEmptyTable called");
             if (SetSimulationSize != null)
                 SetSimulationSize(this, EventArgs.Empty);
         }
