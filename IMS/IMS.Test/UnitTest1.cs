@@ -8,6 +8,7 @@ using IMS.Persistence.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using IMS.Model.Simulation;
+using System.Linq;
 
 namespace IMS.Test
 {
@@ -153,6 +154,58 @@ namespace IMS.Test
             _model.setSpeed(-1);
             Assert.AreEqual(startSpeed - 1, _model.Speed);
         }
+        #region Simulation
+        public Dictionary<Robot, List<Pos>> CreatTestTable()
+        {
+            _table = new IMSData(12, 12);
+            Robot Robot1 = new Robot(0, 0, Direction.UP, 1000, 1000, 1);
+            Robot Robot2 = new Robot(0, 10, Direction.UP, 1000, 1000, 1);
+            _table.EntityData.RobotData.Add(Robot1);
+            _table.EntityData.RobotData.Add(Robot2);
+            Dictionary<Int32, Int32> asd = new Dictionary<Int32, Int32>() { { 2, 1 } };
+            Dictionary<Int32, Int32> asd2 = new Dictionary<Int32, Int32>() { { 1, 1 } };
+            Pod pod1 = new Pod(0, 9, asd);
+            Pod pod2 = new Pod(0, 1, asd2);
+            _table.EntityData.PodData.Add(pod1);
+            _table.EntityData.PodData.Add(pod2);
+            Destination dest1 = new Destination(11, 0, 1);
+            Destination dest2 = new Destination(3, 11, 2);
+            _table.EntityData.DestinationData.Add(dest1);
+            _table.EntityData.DestinationData.Add(dest2);
+            Dock dock1 = new Dock(4, 3);
+            Dock dock2 = new Dock(6, 10);
+            _table.EntityData.DockData.Add(dock1);
+            _table.EntityData.DockData.Add(dock2);
+            ConflictBasedSearch cbs = new ConflictBasedSearch(_table);
+            return cbs.CheckConflicts();
+        }
+        [TestMethod]
+        public void Robot1Pos1Test()
+        {
+            Dictionary<Robot, List<Pos>> routes = CreatTestTable();
+            Assert.AreEqual(routes[_table.EntityData.RobotData[0]].Last().X, 0);
+            Assert.AreEqual(routes[_table.EntityData.RobotData[0]].Last().Y, 9);
+        }
+        [TestMethod]
+        public void Robot2Pos2Test()
+        {
+            Dictionary<Robot, List<Pos>> routes = CreatTestTable();
+            Assert.AreEqual(routes[_table.EntityData.RobotData[1]].Last().X, 0);
+            Assert.AreEqual(routes[_table.EntityData.RobotData[1]].Last().Y, 1);
+        }
+        [TestMethod]
+        public void Robot1RouteTest()
+        {
+            Dictionary<Robot, List<Pos>> routes = CreatTestTable();
+            Assert.AreEqual(routes[_table.EntityData.RobotData[0]].Count(), 22);
+        }
+        [TestMethod]
+        public void Robot2RouteTest()
+        {
+            Dictionary<Robot, List<Pos>> routes = CreatTestTable();
+            Assert.AreEqual(routes[_table.EntityData.RobotData[1]].Count(), 34);
+        }
+        #endregion
 
 
 

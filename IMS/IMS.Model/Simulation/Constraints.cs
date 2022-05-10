@@ -11,9 +11,8 @@ namespace IMS.Model.Simulation
 {
     public class Constraints
     {
-        //which agents the robots have to avoid
+        //which agents the robots have to avoid at a given time
         public Dictionary<Robot, Dictionary<int, HashSet<Pos>>> Agent_Constraints { get; set; }
-        //private Dictionary<Robot, Dictionary<int, HashSet<Pos>>> agent_Constraints = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>();
         public Constraints()
         {
             Agent_Constraints = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>();
