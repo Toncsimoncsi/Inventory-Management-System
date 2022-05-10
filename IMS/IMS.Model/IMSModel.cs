@@ -272,12 +272,14 @@ namespace IMS.Model
                         ((Destination)_tempTable[x, y]).ID = productID;
                         OnFieldChanged_SVM(x, y, _tempTable[x, y]);
                     }
+                    /*
                     if(_tempTable[x, y].Type == EntityType.Destination)
                     {
 
                         ((Robot)_tempTable[x, y]).DestinationID = productID;
                         OnFieldChanged_SVM(x, y, _tempTable[x, y]);
                     }
+                    */
                     if (_tempTable[x, y].Type == EntityType.Pod)
                     {
                         ((Pod)_tempTable[x, y]).Products.Add(productID, 1);
