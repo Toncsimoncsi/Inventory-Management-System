@@ -21,3 +21,5 @@
 /IMS/IMS.Persistence/obj
 /IMS/diary0.txt
 /IMS/IMS.Test/TestMethodAttribute.cs
+bin
+obj

@@ -258,11 +258,6 @@ namespace IMS.ViewModel
         {
             foreach (TableField field in Fields)
             {
-                /*field.Color = EntityToColor(_model[field.X, field.Y].Type);
-                if (field.Color != "White")
-                {
-                    Debug.WriteLine("non-white field found, should be displayed");
-                }*/
                 field.Color = EntityToColor(_model[field.X,field.Y].Type);
 
                 field.Direction = _model[field.X, field.Y].Direction.ToString();
@@ -270,11 +265,14 @@ namespace IMS.ViewModel
 
                 if(field.Type == EntityType.Robot)
                 {
-                    field.BgImage = RobotImage(field.Direction);
-                }
-                else if(field.Type == EntityType.RobotUnderPod)
-                {
-                    field.BgImage = RobotUnderPodImage(field.Direction);
+                    if (_model.isRobotUnderPod(field.X, field.Y))
+                    {
+                        field.BgImage = RobotUnderPodImage(field.Direction);
+                    }
+                    else
+                    {
+                        field.BgImage = RobotImage(field.Direction);
+                    }
                 }
                 else {
                     field.BgImage = EntityToImg(_model[field.X, field.Y].Type);
@@ -337,20 +335,16 @@ namespace IMS.ViewModel
 
             if (ClickedOnTable != null)
                 ClickedOnTable(this, EventArgs.Empty);
-
-            //az entitydatabl kiszedni az infokat?
         }
 
         private void Model_SimulationCreated(Object sender, EventArgs e)
         {
-            //Debug.WriteLine("Model_SimulationCreated called in viewmodel");
             GenerateTable();
             SetupTable();
         }
 
         private void Model_TableChanged(Object sender, EventArgs e)
         {
-            //Debug.WriteLine("Model_SimulationCreated called in viewmodel");
             GenerateTable();
             SetupTable();
         }
