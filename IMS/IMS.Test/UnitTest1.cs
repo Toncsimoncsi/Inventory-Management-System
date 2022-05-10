@@ -161,13 +161,13 @@ namespace IMS.Test
         public void Robot1RouteTest()
         {
             Dictionary<Robot, List<Pos>> routes = CreatTestTable();
-            Assert.AreEqual(routes[_table.EntityData.RobotData[0]].Count(), 22);
+            Assert.AreEqual(routes[_table.EntityData.RobotData[0]].Count(), 23);
         }
         [TestMethod]
         public void Robot2RouteTest()
         {
             Dictionary<Robot, List<Pos>> routes = CreatTestTable();
-            Assert.AreEqual(routes[_table.EntityData.RobotData[1]].Count(), 34);
+            Assert.AreEqual(routes[_table.EntityData.RobotData[1]].Count(), 35);
         }
         #endregion
 
