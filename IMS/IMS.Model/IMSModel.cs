@@ -465,20 +465,6 @@ namespace IMS.Model
             _IMSData = await _dataAccess.LoadSimulationAsync(path);
             _gameTable = _extractTableFromIMSData();
 
-
-            /*
-            if (values.Length != _gameTable.Length)
-                throw new IMSDataException("Error occurred during game loading.");
-
-            for (Int32 i = 0; i < _gameTable.GetLength(0); i++)
-                for (Int32 j = 0; j < _gameTable.GetLength(1); j++)
-                {
-                    _gameTable[i, j] = values[i * _gameTable.GetLength(0) + j];
-
-                    OnFieldChanged(i, j, _gameTable[i, j]);
-                }
-            */
-
             OnSimulationCreated();
 
             //NewSimulation();
@@ -605,54 +591,6 @@ namespace IMS.Model
             }
             _time++;
             OnTimePassed(_time);
-        }
-
-        public void Simulation_old()
-        {
-            //random table
-            //example
-
-            Robot Robot1 = new Robot(0, 0, Direction.UP, 1000, 1000, 1);
-            Robot Robot2 = new Robot(0, 10, Direction.UP, 1000, 1000, 1);
-            //Robot Robot3 = new Robot(3, 3, Direction.UP, 1000, 1000, 1);
-            //Robot Robot4 = new Robot(9, 9, Direction.UP, 1000, 1000, 1);
-            _IMSData.EntityData.RobotData.Add(Robot1);
-            _IMSData.EntityData.RobotData.Add(Robot2);
-            //_IMSData.EntityData.RobotData.Add(Robot3);
-            //_IMSData.EntityData.RobotData.Add(Robot4);
-            Dictionary<Int32, Int32> asd = new Dictionary<Int32, Int32>() { { 2, 1 } };
-            Dictionary<Int32, Int32> asd2 = new Dictionary<Int32, Int32>() { { 1, 1 } };
-            //Dictionary<Int32, Int32> asd3 = new Dictionary<Int32, Int32>() { { 3, 1 } };
-            //Dictionary<Int32, Int32> asd4 = new Dictionary<Int32, Int32>() { { 4, 1 } };
-            Pod pod1 = new Pod(0, 9, asd);
-            Pod pod2 = new Pod(0, 1, asd2);
-            //Pod pod3 = new Pod(9, 1, asd3);
-            //Pod pod4 = new Pod(1, 4, asd4);
-            _IMSData.EntityData.PodData.Add(pod1);
-            _IMSData.EntityData.PodData.Add(pod2);
-            //_IMSData.EntityData.PodData.Add(pod3);
-            //_IMSData.EntityData.PodData.Add(pod4);
-            Destination dest1 = new Destination(11, 0, 1);
-            Destination dest2 = new Destination(3, 11, 2);
-            //Destination dest3 = new Destination(6, 4, 4);
-            //Destination dest4 = new Destination(5, 3, 1);
-            _IMSData.EntityData.DestinationData.Add(dest1);
-            _IMSData.EntityData.DestinationData.Add(dest2);
-            //_IMSData.EntityData.DestinationData.Add(dest3);
-            //_IMSData.EntityData.DestinationData.Add(dest4);
-            Dock dock1 = new Dock(4, 3);
-            Dock dock2 = new Dock(6, 10);
-            _IMSData.EntityData.DockData.Add(dock1);
-            _IMSData.EntityData.DockData.Add(dock2);
-
-            routes = new Dictionary<Robot, List<Pos>>();
-            _counter = 0;
-            OnTableChanged();
-            OnSimulationStarted();
-            cbs = new ConflictBasedSearch(IMSData);
-            routes = cbs.CheckConflicts();
-            rotations = cbs.Rotations;
-            SimulationFinished = true;
         }
 
         public void Simulation()

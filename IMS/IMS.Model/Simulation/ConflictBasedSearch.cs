@@ -36,7 +36,7 @@ namespace IMS.Model.Simulation
             IMSData = imsdata;
             pathfinder = new PathFinder(IMSData);
             assigner = new Assign();
-            constraintTree = new MinHeap(60);
+            constraintTree = new MinHeap(100);
             Rotations = new Dictionary<Robot, List<Direction>>();
         }
 
@@ -63,14 +63,18 @@ namespace IMS.Model.Simulation
                     }
                 }
             }
-
+            //cant match pods to destinations
+            if (assignmentPodDest.Count != IMSData.EntityData.DestinationData.Count)
+                return null;
             //     
             //assign robots to pods with hungarian-algorithm (lowest combined cost)
             List<Pos> robotsPos = IMSData.EntityData.RobotData.Select(item => item.Pos).ToList();
             List<Pos> podsPos = IMSData.EntityData.PodData.Select(item => item.Pos).ToList();
             List<Pos> destPos = IMSData.EntityData.DestinationData.Select(item => item.Pos).ToList();
 
-
+            //not same amount of robots to pods
+            if (robotsPos.Count != podsPos.Count)
+                return null;
 
             //int[x0]=y0 where x0 th robot going to y0 th pod;
             int[] assignmentRobPod = assigner.Assigner(robotsPos, podsPos);
@@ -78,7 +82,7 @@ namespace IMS.Model.Simulation
             Constraints startConstraints = new Constraints(IMSData.EntityData.RobotData);
             Dictionary<Robot, List<Pos>> Solution = new Dictionary<Robot, List<Pos>>();
             Dictionary<int, HashSet<Pos>> empty = new Dictionary<int, HashSet<Pos>>();
-            //better acces to assignment
+            //better access to assignment
             Dictionary<Robot, Tuple<Pod, Destination>> assignment = new Dictionary<Robot, Tuple<Pod, Destination>>();
 
             for (int i = 0; i < assignmentRobPod.Length; i++)
@@ -148,6 +152,13 @@ namespace IMS.Model.Simulation
             return null;
 
         }
+
+        /// <summary>
+        /// Converts route list to rotations
+        /// </summary>
+        /// <param name="route1">given route</param>
+        /// <param name="robot">robot </param>
+        /// <returns></returns>
         private List<Direction> convertTurn(List<Pos>route1, Robot robot)
         {
             Direction direction = new Direction();
@@ -175,6 +186,14 @@ namespace IMS.Model.Simulation
             }
             return directionList;
         }
+        /// <summary>
+        /// Calculate Constraints and returns them
+        /// </summary>
+        /// <param name="ctnode"></param>
+        /// <param name="robot1"></param>
+        /// <param name="robot2"></param>
+        /// <param name="time"></param>
+        /// <returns></returns>
         private Constraints CalculateConstraints(CTNode ctnode, Robot robot1, Robot robot2, int time)
         {
             List<Pos> contrainedPath = ctnode.Solution[robot1];
