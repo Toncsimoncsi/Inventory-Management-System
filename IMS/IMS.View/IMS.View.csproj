@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IMS.Model\IMS.Model.csproj" />
+    <ProjectReference Include="..\IMS.ViewModel\IMS.ViewModel.csproj" />
+  </ItemGroup>
+
+</Project>

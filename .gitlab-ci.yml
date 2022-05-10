@@ -1,0 +1,36 @@
+# Default image (https://hub.docker.com/_/microsoft-dotnet-core-sdk/)
+image: mcr.microsoft.com/dotnet/sdk:5.0
+
+stages:
+  - build
+  - test
+
+before_script:
+  - dotnet --version
+
+# Build
+build_model:
+  stage: build
+  script:
+    - cd IMS
+    - dotnet build IMS.Model
+    - dotnet build IMS.Persistence
+
+build_view:
+  stage: build
+  # Windows-based docker images for .NET Framework:
+  # https://hub.docker.com/_/microsoft-dotnet-framework-sdk/
+  image: mcr.microsoft.com/dotnet/framework/sdk:4.8
+  tags: [windows]
+  script:
+    - cd IMS
+    - dotnet build IMS.sln
+
+# Test
+test_model:
+  stage: test
+  image: mcr.microsoft.com/dotnet/framework/sdk:4.8
+  tags: [windows]
+  script:
+    - cd IMS
+    - dotnet test IMS.Test

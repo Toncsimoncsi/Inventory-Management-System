@@ -1,0 +1,123 @@
+﻿<Window x:Class="IMS.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:IMS"
+        mc:Ignorable="d"
+        Title="Inventory Management Simulation" Height="450" Width="800" FontFamily="Corbel"
+        Icon="./img/icon.png">
+    <Window.Resources>
+        <ImageBrush x:Key="BgImg" ImageSource="{Binding BgImage}" Stretch="Fill"/>
+            <ImageBrush x:Key="RobotImg" ImageSource="/img/robot.png" Stretch="Fill"/>
+            <ImageBrush x:Key="FullPodImg" ImageSource="/img/full-pod.png" Stretch="Fill"/>
+            <ImageBrush x:Key="EmptyPodImg" ImageSource="/img/empty-pod.png" Stretch="Fill"/>
+            <ImageBrush x:Key="RobotUnderPodImg" ImageSource="/img/robot-under-pod.png" Stretch="Fill"/>
+            <ImageBrush x:Key="EmptyImg" ImageSource="/img/empty.png" Stretch="Fill"/>
+            <ImageBrush x:Key="DockImg" ImageSource="/img/dock.png" Stretch="Fill"/>
+        <ImageBrush x:Key="DestinationImg" ImageSource="/img/dest.png" Stretch="Fill"/>
+    </Window.Resources>
+
+    <DockPanel Background="#ABB0B7">
+        <Grid DockPanel.Dock="Left" Background="#CAD0D8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid.Resources>
+                <ImageBrush x:Key="AddLoadImg" ImageSource="/img/load-button.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="AddSaveImg" ImageSource="/img/save-button.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="AddSpeedUpImg" ImageSource="/img/speed-up.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="AddSpeedDownImg" ImageSource="/img/speed-down.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="AddSetImg" ImageSource="/img/settings-button.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="AddExitImg" ImageSource="/img/exit-button.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="Start" ImageSource="/img/start-button.jpg" Stretch="UniformToFill"/>
+                <ImageBrush x:Key="Stop" ImageSource="/img/stop-button.jpg" Stretch="UniformToFill"/>
+            </Grid.Resources>
+
+            <Button Grid.Row="0" Style="{StaticResource MenuButtons}" Background="{StaticResource AddLoadImg}" Command="{Binding LoadSimulationCommand}"/>
+            <Button Grid.Row="1" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSaveImg}" Command="{Binding SaveSimulationCommand}"/>
+
+            <Button Grid.Row="2" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSpeedUpImg}" Command="{Binding FasterCommand}"/>
+            <Button Grid.Row="3" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSpeedDownImg}" Command="{Binding SlowerCommand}"/>
+            <Button Grid.Row="4" Style="{StaticResource MenuButtons}" Background="{StaticResource AddSetImg}" Command="{Binding OpenSettingsCommand}"/>
+            <Button Grid.Row="5" x:Name="StartStopBtn" Style="{StaticResource StartStopBtnSztyle}" Content="▶️" Command="{Binding StartStopCommand}"/>
+            <!--⏸-->
+        </Grid>
+        
+        <StackPanel Width="Auto" Margin="10 0 10 0">
+            <Border BorderThickness="1" BorderBrush="Transparent" Margin="10 10 10 0">
+
+                <Grid Background="#343537">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Width="Auto" Padding="2" Foreground="White">Diary</TextBlock>
+                    <Label Grid.Row="1" Grid.Column="0" Padding="2" Background="#7e8185" Foreground="White">
+                        Steps:
+                    </Label>
+                    <TextBlock  Grid.Row="1" Grid.Column="1" Background="#7e8185" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Text="{Binding STEPS}" TextWrapping="Wrap"/>
+                    <Label Grid.Row="2" Grid.Column="0" Padding="2" Background="#7e8185" Foreground="White">
+                        All energy:
+                    </Label>
+                    <TextBlock Grid.Row="2" Grid.Column="1" Background="#7e8185" Foreground="White" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Height="Auto" Text="{Binding ALLENERGY}" TextWrapping="Wrap"/>
+                </Grid>
+            </Border>
+
+            <Button Style="{StaticResource BtnStyle}" Command="{Binding SaveDiaryCommand}">Save diary</Button>
+
+            <StackPanel Orientation="Horizontal" Margin="10 10 10 10" >
+                <Label Content="Speed: " />
+                <TextBlock Text="{Binding SpeedText}" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Margin="10 10 10 10" >
+                <Label Content="Time: " />
+                <TextBlock Text="{Binding TimerText}" />
+            </StackPanel>
+
+        </StackPanel>
+        <Viewbox DockPanel.Dock="Right">
+            <ItemsControl ItemsSource="{Binding Fields}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="{Binding SizeX}" Columns="{Binding SizeY}" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button IsEnabled="True" Command="{Binding ViewFieldCommand}" CommandParameter="{Binding Number}">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="{StaticResource BgImg}" />
+                                    <Setter Property="BorderThickness" Value="0.01"/>
+                                    <Setter Property="BorderBrush" Value="{Binding BorderColor}"/>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Grid.Row" Value="{Binding X}" />
+                        <Setter Property="Grid.Column" Value="{Binding Y}" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+
+            </ItemsControl>
+        </Viewbox>
+    </DockPanel>
+</Window>
