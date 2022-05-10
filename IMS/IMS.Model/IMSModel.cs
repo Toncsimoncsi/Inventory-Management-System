@@ -630,6 +630,10 @@ namespace IMS.Model
             //Dock dock2 = new Dock(6, 10);
             //_IMSData.EntityData.DockData.Add(dock1);
             //_IMSData.EntityData.DockData.Add(dock2);
+            if (SimulationFinished)
+            {
+                return;
+            }
 
             routes = new Dictionary<Robot, List<Pos>>();
             _counter = 0;
@@ -638,7 +642,11 @@ namespace IMS.Model
             cbs = new ConflictBasedSearch(IMSData);
             routes = cbs.CheckConflicts();
             rotations = cbs.Rotations;
-            SimulationFinished = true;
+            if (routes!= null)
+            {
+                SimulationFinished = true;
+            }
+
         }
 
         #endregion
