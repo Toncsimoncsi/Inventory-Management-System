@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Test\\IMS.Test.csproj": {}
+    "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Test\\IMS.Test.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj": {
+    "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj",
+        "projectUniqueName": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj",
         "projectName": "IMS.Model",
-        "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj",
-        "packagesPath": "C:\\Users\\Test\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\obj\\",
+        "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj",
+        "packagesPath": "C:\\Users\\Leon\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Test\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Leon\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -34,8 +32,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Persistence\\IMS.Persistence.csproj": {
-                "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Persistence\\IMS.Persistence.csproj"
+              "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj": {
+                "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj"
               }
             }
           }
@@ -64,28 +62,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Persistence\\IMS.Persistence.csproj": {
+    "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Persistence\\IMS.Persistence.csproj",
+        "projectUniqueName": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj",
         "projectName": "IMS.Persistence",
-        "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Persistence\\IMS.Persistence.csproj",
-        "packagesPath": "C:\\Users\\Test\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Persistence\\obj\\",
+        "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj",
+        "packagesPath": "C:\\Users\\Leon\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Test\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Leon\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0"
@@ -124,28 +120,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Test\\IMS.Test.csproj": {
+    "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Test\\IMS.Test.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Test\\IMS.Test.csproj",
+        "projectUniqueName": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Test\\IMS.Test.csproj",
         "projectName": "IMS.Test",
-        "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Test\\IMS.Test.csproj",
-        "packagesPath": "C:\\Users\\Test\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Test\\obj\\",
+        "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Test\\IMS.Test.csproj",
+        "packagesPath": "C:\\Users\\Leon\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Test\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Test\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Leon\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0-windows7.0"
@@ -158,17 +152,17 @@
           "net5.0-windows7.0": {
             "targetAlias": "net5.0-windows",
             "projectReferences": {
-              "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj": {
-                "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj"
+              "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj": {
+                "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj"
               },
-              "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Persistence\\IMS.Persistence.csproj": {
-                "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Persistence\\IMS.Persistence.csproj"
+              "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj": {
+                "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj"
               },
-              "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj": {
-                "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj"
+              "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj": {
+                "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj"
               },
-              "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS\\IMS.csproj": {
-                "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS\\IMS.csproj"
+              "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS\\IMS.csproj": {
+                "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS\\IMS.csproj"
               }
             }
           }
@@ -215,28 +209,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj": {
+    "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj",
+        "projectUniqueName": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj",
         "projectName": "IMS.ViewModel",
-        "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj",
-        "packagesPath": "C:\\Users\\Test\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.ViewModel\\obj\\",
+        "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj",
+        "packagesPath": "C:\\Users\\Leon\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Test\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Leon\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0-windows7.0"
@@ -249,8 +241,8 @@
           "net5.0-windows7.0": {
             "targetAlias": "net5.0-windows",
             "projectReferences": {
-              "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj": {
-                "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj"
+              "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj": {
+                "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj"
               }
             }
           }
@@ -282,28 +274,26 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.View\\IMS.View.csproj": {
+    "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.View\\IMS.View.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.View\\IMS.View.csproj",
+        "projectUniqueName": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.View\\IMS.View.csproj",
         "projectName": "IMS.View",
-        "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.View\\IMS.View.csproj",
-        "packagesPath": "C:\\Users\\Test\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.View\\obj\\",
+        "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.View\\IMS.View.csproj",
+        "packagesPath": "C:\\Users\\Leon\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.View\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Test\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Leon\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0-windows7.0"
@@ -316,11 +306,11 @@
           "net5.0-windows7.0": {
             "targetAlias": "net5.0-windows",
             "projectReferences": {
-              "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj": {
-                "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj"
+              "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj": {
+                "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj"
               },
-              "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj": {
-                "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj"
+              "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj": {
+                "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj"
               }
             }
           }
@@ -352,28 +342,26 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS\\IMS.csproj": {
+    "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS\\IMS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS\\IMS.csproj",
+        "projectUniqueName": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS\\IMS.csproj",
         "projectName": "IMS",
-        "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS\\IMS.csproj",
-        "packagesPath": "C:\\Users\\Test\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS\\obj\\",
+        "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS\\IMS.csproj",
+        "packagesPath": "C:\\Users\\Leon\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Test\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Leon\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net5.0-windows7.0"
@@ -386,17 +374,17 @@
           "net5.0-windows7.0": {
             "targetAlias": "net5.0-windows",
             "projectReferences": {
-              "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj": {
-                "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj"
+              "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj": {
+                "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj"
               },
-              "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Persistence\\IMS.Persistence.csproj": {
-                "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Persistence\\IMS.Persistence.csproj"
+              "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj": {
+                "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj"
               },
-              "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj": {
-                "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj"
+              "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj": {
+                "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj"
               },
-              "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.View\\IMS.View.csproj": {
-                "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.View\\IMS.View.csproj"
+              "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.View\\IMS.View.csproj": {
+                "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.View\\IMS.View.csproj"
               }
             }
           }
@@ -434,7 +422,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.405\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.407\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -10,6 +10,7 @@ namespace IMS.Persistence.Entities
     {
         
         public Dictionary<Int32,Int32> Products{ get;private set; }
+
         public Pod(int x, int y, Dictionary<Int32, Int32> products) : base(x, y)
         {
             _type = EntityType.Pod;

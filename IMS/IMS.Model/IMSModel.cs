@@ -581,6 +581,18 @@ namespace IMS.Model
             return table;
         }
 
+        public bool isRobotUnderPod(int x, int y)
+        {
+            foreach (Robot robot in _IMSData.EntityData.RobotData)
+            {
+                if(robot.Pos.X == x && robot.Pos.Y == y)
+                {
+                    return robot.UnderPod;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// calculate the state of the simulation
         /// </summary>
