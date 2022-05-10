@@ -168,7 +168,7 @@ namespace IMS.Model
                 }
             }
             */
-
+            SimulationFinished = false;
             _gameTable = _createEmptyTable(_gameTable.GetLength(0), _gameTable.GetLength(1));
             OnSimulationCreated();
         }
@@ -272,6 +272,14 @@ namespace IMS.Model
                         ((Destination)_tempTable[x, y]).ID = productID;
                         OnFieldChanged_SVM(x, y, _tempTable[x, y]);
                     }
+                    /*
+                    if(_tempTable[x, y].Type == EntityType.Destination)
+                    {
+
+                        ((Robot)_tempTable[x, y]).DestinationID = productID;
+                        OnFieldChanged_SVM(x, y, _tempTable[x, y]);
+                    }
+                    */
                     if (_tempTable[x, y].Type == EntityType.Pod)
                     {
                         ((Pod)_tempTable[x, y]).Products.Add(productID, 1);
@@ -378,6 +386,7 @@ namespace IMS.Model
         //makes _tempTable the official table (_gameTable) and creates a new IMSData
         public void CreateTableFromSettings()
         {
+            SimulationFinished = false;
             _IMSData = new IMSData(_tempTable);
             //Debug.WriteLine("new IMSData created from _tempTable");
             _gameTable = _tempTable;
@@ -418,11 +427,16 @@ namespace IMS.Model
             OnFieldChanged_SVM(x, y, _tempTable[x, y]);
         }
 
-        public void ChangeField(int x, int y, EntityType type, int capacity)
+        public void ChangeField(int x, int y, EntityType type, int capacity, int id)
         {
             if (type == EntityType.Robot && capacity > 0)
             {
-                _tempTable[x, y] = new Robot(x, y, capacity);
+                _tempTable[x, y] = new Robot(x, y, capacity, id);
+                OnFieldChanged_SVM(x, y, _tempTable[x, y]);
+            }
+            if(type == EntityType.Destination)
+            {
+                _tempTable[x, y] = new Destination(x, y, id);
                 OnFieldChanged_SVM(x, y, _tempTable[x, y]);
             }
             //if it's not a robot then do nothing
@@ -674,7 +688,7 @@ namespace IMS.Model
         }
 
         /// <summary>
-        /// Játék végének eseménykiváltása.
+        /// Szimuláció végének eseménykiváltása.
         /// </summary>
         private void OnSimulationOver()
         {
@@ -682,18 +696,16 @@ namespace IMS.Model
                 SimulationOver(this, EventArgs.Empty);
         }
         /// <summary>
-        /// Sebesség változásának eseménykiváltása.
+        /// Lépések számának változásának eseménykiváltása.
         /// </summary>
-        /// <param name="speed">A sebesség.</param>
         private void OnStepsChanged()
         {
             if (StepsChanged != null)
                 StepsChanged(this, EventArgs.Empty);
         }
         /// <summary>
-        /// Sebesség változásának eseménykiváltása.
+        /// Energiafogyasztás változásának eseménykiváltása.
         /// </summary>
-        /// <param name="speed">A sebesség.</param>
         private void OnAllEnergyChanged()
         {
             if (EnergyChanged != null)
@@ -718,13 +730,10 @@ namespace IMS.Model
             if (TimePassed != null)
                 TimePassed(this, new TimePassedEventArgs(time));
         }
-        /// <summary>
-        /// Mezőváltozás eseménykiváltása.
-        /// </summary>
-        /// <param name="x">Oszlop index.</param>
-        /// <param name="y">Sor index.</param>
-        /// <param name="Entity">Játékos.</param>
 
+        /// <summary>
+        /// A tábla megváltozásának eseménykiváltása
+        /// </summary>
         private void OnTableChanged()
         {
             _gameTable = _extractTableFromIMSData();
@@ -732,7 +741,12 @@ namespace IMS.Model
                 TableChanged(this, EventArgs.Empty);
         }
 
-
+        /// <summary>
+        /// Mezőváltozás eseménykiváltása a szerkesztő felületen.
+        /// </summary>
+        /// <param name="x">Oszlop index.</param>
+        /// <param name="y">Sor index.</param>
+        /// <param name="Entity">Játékos.</param>
         private void OnFieldChanged_SVM(Int32 x, Int32 y, Entity Entity)
         {
             if (FieldChanged_SVM != null)

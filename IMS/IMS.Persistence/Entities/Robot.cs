@@ -19,7 +19,7 @@ namespace IMS.Persistence.Entities
         public Int32 EnergyConsumption { get { return _energyConsumption; } }
         public Int32 Capacity { get { return _capacity; } }
         public int EnergyLeft { get; set; }
-        public Int32 DestinationID { get { return _destinationID; } }
+        public Int32 DestinationID { get { return _destinationID; } set { } }
 
         public Boolean UnderPod { get { return _underPod; } set { } }
 
@@ -136,6 +136,11 @@ namespace IMS.Persistence.Entities
         }
 
         public Robot(int x, int y, int capacity) : this(x,y,Direction.UP,capacity,capacity,-1)
+        {
+
+        }
+
+        public Robot(int x, int y, int capacity, int id) : this(x, y, Direction.UP, capacity, capacity, id)
         {
 
         }

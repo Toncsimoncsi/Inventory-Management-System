@@ -48,7 +48,7 @@ namespace IMS.ViewModel
         public DelegateCommand SelectDestinationCommand { get; private set; }
         public DelegateCommand SelectRobotCommand { get; private set; }
         public DelegateCommand RelocationCommand { get; private set; }
-        public DelegateCommand AddProductCommand { get; private set; }
+        public DelegateCommand AddProductOrIDCommand { get; private set; }
 
         public EntityType SelectedType
         {
@@ -59,22 +59,30 @@ namespace IMS.ViewModel
             get { return _sizeX; }
             set
             {
+                /*
                 if (_model.SizeX != value)
                 {
                     _sizeX = value;
                     OnPropertyChanged(nameof(SizeX));
                 }
+                */
+                _sizeX = value;
+                OnPropertyChanged(nameof(SizeX));
             }
         }
         public Int32 SizeY { 
             get { return _sizeY; }
             set
             {
+                /*
                 if (_model.SizeY != value)
                 {
                     _sizeY = value;
                     OnPropertyChanged(nameof(SizeY));
                 }
+                */
+                _sizeY = value;
+                OnPropertyChanged(nameof(SizeY));
             }
         }
 
@@ -164,7 +172,7 @@ namespace IMS.ViewModel
 
             RelocationCommand = new DelegateCommand(x => _startRelocation());
 
-            AddProductCommand = new DelegateCommand(x => _startSelection());
+            AddProductOrIDCommand = new DelegateCommand(x => _startSelection());
 
             _fieldColor = "White";
 
@@ -296,10 +304,8 @@ namespace IMS.ViewModel
         private void PutEntity(Int32 ind)
         {
             TableField field = Fields[ind];
-            //Debug.WriteLine("PutEntity called");
             if (_relocationStep == 0 && _selectionStep == 0)//changing field
             {
-                //Debug.WriteLine("putting down entity");
                 if (_selectedType == EntityType.Robot && SelectedCapacity > 0)//only put it down if the capacity value is valid
                 {
                     if (field.Type == EntityType.Robot)
@@ -308,8 +314,12 @@ namespace IMS.ViewModel
                     }
                     else
                     {
-                        _model.ChangeField(field.X, field.Y, _selectedType, SelectedCapacity);
+                        _model.ChangeField(field.X, field.Y, _selectedType, SelectedCapacity, SelectedProduct);
                     }
+                }
+                else if (_selectedType == EntityType.Destination)
+                {
+                    _model.ChangeField(field.X, field.Y, _selectedType, SelectedCapacity, SelectedProduct);
                 }
                 else
                 {
@@ -318,7 +328,6 @@ namespace IMS.ViewModel
             }
             else if (_relocationStep == 1)
             {
-                //Debug.WriteLine("step 1 in relocation");
                 _x1 = field.X;
                 _y1 = field.Y;
                 ++_relocationStep;
@@ -334,20 +343,9 @@ namespace IMS.ViewModel
             }
             else if (_relocationStep == 3)
             {
-                //Debug.WriteLine("step 3 in relocation");
-                //int dx = _x2 - _x1;
-                //int dy = _y2 - _y1;
 
                 int x = field.X;
                 int y = field.Y;
-
-                //if (x + dx < 0 || x + dx >= _model.SizeX || y + dy < 0 || y + dy >= _model.SizeY)
-                //{
-                //this means the other corner of the rectangle would be outside the map
-                //also reset the whole process
-                //    _relocationStep = 0;
-                //    return;
-                //}
 
                 _model.RelocationAttempt(_x1, _y1, _x2, _y2, x, y);
 
@@ -370,8 +368,6 @@ namespace IMS.ViewModel
                 _x2 = field.X;
                 _y2 = field.Y;
 
-
-
                 _model.AddProduct(_x1, _y1, _x2, _y2, SelectedProduct);
 
                 _selectionStep = 0;
@@ -386,19 +382,10 @@ namespace IMS.ViewModel
 
         private void Model_FieldChanged_SVM(Object sender, RobotMovedEventArgs e)
         {
-            //Debug.WriteLine("Model_FieldChanged_SVM called, "+e.X.ToString()+", "+e.Y.ToString());
-            //TODO: get values from _tempTable
-            //Fields[e.Y * _model.SizeX + _model.SizeY].Entity = _model[e.X, e.Y];
-            //Fields[e.Y * _model.SizeX + _model.SizeY].Type = _model[e.X, e.Y].Type;
-            //Fields[e.Y * _model.SizeX + _model.SizeY].Color = EntityToColor(_model[e.X, e.Y].Type);
 
             Fields[e.Y * _model.TempSizeX + e.X].Entity = _model.GetTemp(e.X, e.Y);
             Fields[e.Y * _model.TempSizeX + e.X].Type = _model.GetTemp(e.X, e.Y).Type;
             Fields[e.Y * _model.TempSizeX + e.X].Color = EntityToColor(_model.GetTemp(e.X, e.Y).Type);
-            //Debug.WriteLine(Fields[e.Y * _model.SizeX + _model.SizeY].Entity.Pos.X.ToString());
-            //Debug.WriteLine(Fields[e.Y * _model.SizeX + _model.SizeY].Entity.Pos.Y.ToString());
-            //Debug.WriteLine(Fields[e.Y * _model.SizeX + _model.SizeY].X.ToString());
-            //Debug.WriteLine(Fields[e.Y * _model.SizeX + _model.SizeY].Y.ToString());
         }
 
         private void Model_SelectionChanged_SVM(Object sender, SelectionChangedEventArgs e)
