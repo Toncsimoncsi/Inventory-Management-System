@@ -19,7 +19,6 @@ namespace IMS.Test
         private IMSModel _model;
         private IMSData _table;
         private IMSDataAccess _dataAccess;
-        //private PathFinder _sim;
         //private Mock<IIMSDataAccess> _mock;
         #endregion
 
@@ -227,12 +226,13 @@ namespace IMS.Test
             int x = 10;
             int y = 10;
             int capacity = 10;
+            int id = 1;
             _model.GenerateEmtyTableForSettingsWindow(x, y);
 
             _model.ChangeField(0, 0, EntityType.Dock);
             Assert.AreEqual(_model.GetTemp(0, 0).Type, EntityType.Dock);
 
-            _model.ChangeField(0, 0, EntityType.Robot, capacity);
+            _model.ChangeField(0, 0, EntityType.Robot, capacity, id);
             Assert.AreEqual(_model.GetTemp(0, 0).Type, EntityType.Robot);
             Assert.AreEqual(((Robot)_model.GetTemp(0, 0)).Capacity, capacity);
             Assert.AreEqual(_model.GetTemp(0, 0).Direction, Direction.UP);
