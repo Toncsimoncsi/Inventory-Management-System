@@ -59,22 +59,30 @@ namespace IMS.ViewModel
             get { return _sizeX; }
             set
             {
+                /*
                 if (_model.SizeX != value)
                 {
                     _sizeX = value;
                     OnPropertyChanged(nameof(SizeX));
                 }
+                */
+                _sizeX = value;
+                OnPropertyChanged(nameof(SizeX));
             }
         }
         public Int32 SizeY { 
             get { return _sizeY; }
             set
             {
+                /*
                 if (_model.SizeY != value)
                 {
                     _sizeY = value;
                     OnPropertyChanged(nameof(SizeY));
                 }
+                */
+                _sizeY = value;
+                OnPropertyChanged(nameof(SizeY));
             }
         }
 
