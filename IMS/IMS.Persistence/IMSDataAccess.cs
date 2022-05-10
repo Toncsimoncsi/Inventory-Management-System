@@ -23,7 +23,7 @@ namespace IMS.Persistence
             {
                 using (StreamReader reader = new StreamReader(path))
                 {
-                    //TODO: test if format is correct. For now we assume it is
+                    // test if format is correct. For now we assume it is
                     String line;
                     line = await reader.ReadLineAsync();
                     String[] numbers;

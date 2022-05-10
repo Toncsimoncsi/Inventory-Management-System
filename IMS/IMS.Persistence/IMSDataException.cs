@@ -9,7 +9,7 @@ namespace IMS.Persistence
     public class IMSDataException: Exception
     {
         /// <summary>
-        /// Tic-Tac-Toe adat kivétel példányosítása.
+        /// instantiate Ims exception 
         /// </summary>
         public IMSDataException(String message) : base(message) { }
     }

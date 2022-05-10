@@ -93,7 +93,6 @@ namespace IMS.ViewModel
         public DelegateCommand SlowerCommand { get; private set; }
         public DelegateCommand FasterCommand { get; private set; }
         public DelegateCommand StopCommand { get; private set; }
-        //public DelegateCommand ViewField { get; private set; }
         public DelegateCommand ModifyField { get; private set; }
         public ObservableCollection<TableField> Fields { get; private set; }
         public Int32 SizeX { get { return _model.SizeX; } }
@@ -105,7 +104,6 @@ namespace IMS.ViewModel
         #region Events
 
         public event EventHandler LoadSimulation;
-        //public event EventHandler CreateSimulation;
         public event EventHandler OpenSettings;
         public event EventHandler SaveSimulation;
         public event EventHandler SaveDiary;
@@ -148,14 +146,12 @@ namespace IMS.ViewModel
 
             LoadSimulationCommand = new DelegateCommand(param => OnLoadSimulation());
 
-            //CreateSimulationCommand = new DelegateCommand(param => OnCreateSimulation());
             SaveSimulationCommand = new DelegateCommand(param => OnSaveSimulation());
             SaveDiaryCommand = new DelegateCommand(param => OnSaveDiary());
             StartStopCommand = new DelegateCommand(param => OnStartStopSimulation());
             OpenSettingsCommand = new DelegateCommand(param => OnOpenSettings());
             FasterCommand = new DelegateCommand(param => OnSpeedUp());
             SlowerCommand = new DelegateCommand(param => OnSpeedDown());
-            //ViewField = new DelegateCommand(param => OnFieldClicked());
 
             _speedText = _model.Speed;
             _timerText = _model.Time;
@@ -247,7 +243,6 @@ namespace IMS.ViewModel
             }
             OnPropertyChanged(nameof(SizeX));
             OnPropertyChanged(nameof(SizeY));
-            //OnPropertyChanged(nameof(Fields));
         }
 
         /// <summary>
@@ -274,13 +269,17 @@ namespace IMS.ViewModel
                         field.BgImage = RobotImage(field.Direction);
                     }
                 }
+                else if (field.Type == EntityType.Pod && _model.isPodTaken(field.X, field.Y))
+                {
+                    field.BgImage = EntityToImg(EntityType.Empty);
+                }
                 else {
                     field.BgImage = EntityToImg(_model[field.X, field.Y].Type);
                 }
 
                 field.Entity = _model[field.X, field.Y];
             }
-            //OnPropertyChanged(nameof(Fields));
+
         }
 
         private void ViewFieldInfo(int ind)

@@ -19,50 +19,15 @@ namespace IMS.Test
         private IMSModel _model;
         private IMSData _table;
         private IMSDataAccess _dataAccess;
-        //private Mock<IIMSDataAccess> _mock;
         #endregion
 
         #region Initialization
         [TestInitialize]
         public void Initialize()
         {
-            //játéktábla még kell ide
-            //int totalEnergyConsumption = 0;
-            //int timeStep = 0;
-            //int sizeX = 12;
-            //int sizeY = 12;
-            //List<Pod> podData = new List<Pod>();
-            //podData.Add(new Pod(4, 3, new Dictionary<int, int>()));
-            //podData.Add(new Pod(4, 5, new Dictionary<int, int>()));
-            //podData.Add(new Pod(4, 6, new Dictionary<int, int>()));
-            //List<Destination> destinationData = new List<Destination>();
-            //destinationData.Add(new Destination(11, 5, 1));
-
-            //List<Dock> dockData = new List<Dock>();
-            //dockData.Add(new Dock(0, 11));
-
-            //List<Robot> robotData = new List<Robot>();
-            //Robot robot = new Robot(0, 0, 0, 5, 5, 1, 1);
-            //robotData.Add(robot);
-
-            //List<RobotUnderPod> robotUnderPodData = new List<RobotUnderPod>();
-            //Robot robot2 = new Robot(4, 4, 0, 5, 5, 1, 1);
-            //Pod pod2 = new Pod(4, 4, new Dictionary<int, int>());
-            //RobotUnderPod robotunder = new RobotUnderPod(4, 4, robot2, pod2);
-            //_table = new IMSData(podData, destinationData, dockData, robotData, robotUnderPodData, sizeX, sizeY, timeStep, totalEnergyConsumption);
-
-            //_mock = new Mock<IIMSDataAccess>();
-            //_mock.Setup(mock => mock.LoadSimulationAsync(It.IsAny<String>())).Returns(() => Task.FromResult(_table));
-
-            //_model = new IMSModel(_mock.Object);
+            
             _dataAccess = new IMSDataAccess();
             _model = new IMSModel(_dataAccess);
-            //_model.LoadSimulationAsync(It.IsAny<String>())).Returns(() => Task.FromResult(_table));
-            //_sim = new PathFinder(_table);
-
-            //_model.TimePassed += new EventHandler(Model_TimePassed);
-            //_model.SpeedChanged += new EventHandler(Model_SpeedChanged);
-
 
         }
         #endregion

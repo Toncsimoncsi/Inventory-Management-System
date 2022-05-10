@@ -481,8 +481,6 @@ namespace IMS.Model
 
             OnSimulationCreated();
 
-            //NewSimulation();
-
         }
 
         /// <summary>
@@ -519,6 +517,18 @@ namespace IMS.Model
                 if (robot.Pos.X == x && robot.Pos.Y == y)
                 {
                     return robot.UnderPod;
+                }
+            }
+            return false;
+        }
+
+        public bool isPodTaken(int x, int y)
+        {
+            foreach (Pod pod in _IMSData.EntityData.PodData)
+            {
+                if (pod.Pos.X == x && pod.Pos.Y == y)
+                {
+                    return pod.IsTake;
                 }
             }
             return false;
@@ -591,41 +601,7 @@ namespace IMS.Model
         /// </summary>
         public void Simulation()
         {
-            //random table
-            //example
-
-            Robot Robot1 = new Robot(0, 0, Direction.UP, 1000, 1000, 1);
-            Robot Robot2 = new Robot(0, 10, Direction.UP, 1000, 1000, 1);
-            //Robot Robot3 = new Robot(3, 3, Direction.UP, 1000, 1000, 1);
-            //Robot Robot4 = new Robot(9, 9, Direction.UP, 1000, 1000, 1);
-            _IMSData.EntityData.RobotData.Add(Robot1);
-            _IMSData.EntityData.RobotData.Add(Robot2);
-            //_IMSData.EntityData.RobotData.Add(Robot3);
-            //_IMSData.EntityData.RobotData.Add(Robot4);
-            Dictionary<Int32, Int32> asd = new Dictionary<Int32, Int32>() { { 2, 1 } };
-            Dictionary<Int32, Int32> asd2 = new Dictionary<Int32, Int32>() { { 1, 1 } };
-            //Dictionary<Int32, Int32> asd3 = new Dictionary<Int32, Int32>() { { 3, 1 } };
-            //Dictionary<Int32, Int32> asd4 = new Dictionary<Int32, Int32>() { { 4, 1 } };
-            Pod pod1 = new Pod(0, 9, asd);
-            Pod pod2 = new Pod(0, 1, asd2);
-            //Pod pod3 = new Pod(9, 1, asd3);
-            //Pod pod4 = new Pod(1, 4, asd4);
-            _IMSData.EntityData.PodData.Add(pod1);
-            _IMSData.EntityData.PodData.Add(pod2);
-            //_IMSData.EntityData.PodData.Add(pod3);
-            //_IMSData.EntityData.PodData.Add(pod4);
-            Destination dest1 = new Destination(11, 0, 1);
-            Destination dest2 = new Destination(3, 11, 2);
-            //Destination dest3 = new Destination(6, 4, 4);
-            //Destination dest4 = new Destination(5, 3, 1);
-            _IMSData.EntityData.DestinationData.Add(dest1);
-            _IMSData.EntityData.DestinationData.Add(dest2);
-            //_IMSData.EntityData.DestinationData.Add(dest3);
-            //_IMSData.EntityData.DestinationData.Add(dest4);
-            Dock dock1 = new Dock(4, 3);
-            Dock dock2 = new Dock(6, 10);
-            _IMSData.EntityData.DockData.Add(dock1);
-            _IMSData.EntityData.DockData.Add(dock2);
+            
             if (SimulationFinished)
             {
                 return;
@@ -647,6 +623,8 @@ namespace IMS.Model
             }
 
         }
+
+
         #endregion
 
         #region Private methods

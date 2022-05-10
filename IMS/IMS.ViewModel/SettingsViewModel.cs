@@ -30,7 +30,7 @@ namespace IMS.ViewModel
         private EntityType _selectedType;
         private int _selectedProduct;
         private int _selectionStep;
-        //private bool _robotRadioButtonIsChecked;
+      
 
         #endregion
 
@@ -38,8 +38,7 @@ namespace IMS.ViewModel
         public DelegateCommand CreateSimulationCommand { get; private set; }
         public DelegateCommand ResetSimulationCommand { get; private set; }
         public DelegateCommand ViewField { get; private set; }
-        //public DelegateCommand ModifyField { get; private set; }
-        //public DelegateCommand SelectFieldCommand { get; private set; }
+
         public ObservableCollection<TableField> Fields { get; private set; }
         public DelegateCommand SetSizeCommand { get; private set; }
         public DelegateCommand ChangeColorCommand { get; private set; }
@@ -94,16 +93,7 @@ namespace IMS.ViewModel
             }
         }
 
-        /*public bool RobotBtnChecked
-        {
-            get { return _robotRadioButtonIsChecked; }
-            set
-            {
-                _robotRadioButtonIsChecked = true;
-                _fieldColor = "Gold";
-                OnPropertyChanged(nameof(FieldColor));
-            }
-        }*/
+        
 
         #endregion
 
@@ -142,7 +132,6 @@ namespace IMS.ViewModel
 
             _model = model;
             _model.SimulationCreated += new EventHandler<EventArgs>(Model_SimulationCreated);
-            //_model.TableCreated_SVM += new EventHandler<EventArgs>(Model_TableCreated);
             _model.FieldChanged_SVM += new EventHandler<RobotMovedEventArgs>(Model_FieldChanged_SVM);
             _model.SelectionChanged_SVM += new EventHandler<SelectionChangedEventArgs>(Model_SelectionChanged_SVM);
 
@@ -150,7 +139,6 @@ namespace IMS.ViewModel
             CreateSimulationCommand = new DelegateCommand(param => OnCreateSimulation());
             ResetSimulationCommand = new DelegateCommand(param => OnResetSimulation());
             ChangeColorCommand = new DelegateCommand(param => OnColorChanged());
-            //SelectFieldCommand = new DelegateCommand(param => _changeSelection((String)param));
             SelectRobotCommand = new DelegateCommand(x => _changeSelection(EntityType.Robot));
             SelectPodCommand = new DelegateCommand(x => _changeSelection(EntityType.Pod));
             SelectDestinationCommand = new DelegateCommand(x => _changeSelection(EntityType.Destination));
@@ -235,7 +223,6 @@ namespace IMS.ViewModel
         /// </summary>
         public void GenerateTable()
         {
-            //Debug.WriteLine("generate new table, SizeX: " + SizeX.ToString() + ", SizeY: " + SizeY.ToString());
             Fields.Clear();
             for (Int32 i = 0; i < SizeY; ++i)
             {
@@ -250,12 +237,10 @@ namespace IMS.ViewModel
                         Direction = Direction.NONE.ToString(),
                         Number = i * SizeX + j,
                         BgImage = EntityToImg(EntityType.Empty),
-                        //PutField = new DelegateCommand(param => SelectEntityField((EntityType)Enum.Parse(typeof(EntityType), param.ToString())))
                         PutFieldCommand = new DelegateCommand(param => PutEntity(Convert.ToInt32(param)))
                     });
                 }
             }
-            //OnPropertyChanged(nameof(Fields));
             OnPropertyChanged(nameof(SizeX));
             OnPropertyChanged(nameof(SizeY));
         }
@@ -340,8 +325,6 @@ namespace IMS.ViewModel
                 _model.RelocationAttempt(_x1, _y1, _x2, _y2, x, y);
 
 
-
-                //reset:
                 _relocationStep = 0;
 
                 _model.EndSelection();

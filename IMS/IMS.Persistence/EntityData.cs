@@ -20,11 +20,7 @@ namespace IMS.Persistence
         public List<Dock> DockData { get { return _dockData; } }
         public List<Robot> RobotData { get { return _robotData; } }
         public List<RobotUnderPod> RobotUnderPodData { get { return _robotUnderPodData; } }
-        //public List<Pod> PodData { get; }=new List<Pod>();
-        //public List<Destination> DestinationData { get; }=new List<Destination>();
-        //public List<Dock> DockData { get;  }=new List<Dock>();
-        //public List<Robot> RobotData { get ;  }=new List<Robot>();
-        //public List<RobotUnderPod> RobotUnderPodData { get; set; } =new List<RobotUnderPod>();
+
 
         public EntityData(List<Pod> podData, List<Destination> destinationData, List<Dock> dockData, List<Robot> robotData, List<RobotUnderPod> robotUnderPodData)
         {
