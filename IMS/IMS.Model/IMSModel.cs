@@ -512,81 +512,11 @@ namespace IMS.Model
 
             await _dataAccess.SaveDiaryAsync(path, _IMSData);
         }
-
-        #endregion
-
-        #region Private methods
-
-        /// <summary>
-        /// create a table filled with Empty entities
-        /// </summary>
-        /// <param name="sizeX">width of the new table</param>
-        /// <param name="sizeY">height of the new table</param>
-        /// <returns></returns>
-        private Entity[,] _createEmptyTable(Int32 sizeX, Int32 sizeY)
-        {
-            Entity[,] table = new Entity[sizeX, sizeY];
-
-            for (Int32 i = 0; i < table.GetLength(0); i++)
-            {
-                for (Int32 j = 0; j < table.GetLength(1); j++)
-                {
-                    table[i, j] = new Empty(i, j);
-                }
-            }
-
-            return table;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void setTotalEnergy()
-        {
-            _allEnergy = _dataAccess.getTotalEnergy(_IMSData);
-            OnAllEnergyChanged();
-        }
-
-        /// <summary>
-        /// makes a table based on an already existing IMSData
-        /// </summary>
-        /// <returns></returns>
-        private Entity[,] _extractTableFromIMSData()
-        {
-            Entity[,] table = _createEmptyTable(_IMSData.SizeX, _IMSData.SizeY);
-
-            Debug.WriteLine("created new table, x: "+ _IMSData.SizeX.ToString()+", y: "+ _IMSData.SizeY.ToString());
-
-            foreach (Robot robot in _IMSData.EntityData.RobotData)
-            {
-                //Debug.WriteLine("putting down robot, x: "+robot.Pos.X.ToString()+", y: "+robot.Pos.Y.ToString());
-                table[robot.Pos.X, robot.Pos.Y] = robot;
-            }
-            foreach (Pod pod in _IMSData.EntityData.PodData)
-            {
-                table[pod.Pos.X, pod.Pos.Y] = pod;
-            }
-            foreach (RobotUnderPod robotUnderPod in _IMSData.EntityData.RobotUnderPodData)
-            {
-                table[robotUnderPod.Pos.X, robotUnderPod.Pos.Y] = robotUnderPod;
-            }
-            foreach (Destination destination in _IMSData.EntityData.DestinationData)
-            {
-                table[destination.Pos.X, destination.Pos.Y] = destination;
-            }
-            foreach (Dock dock in _IMSData.EntityData.DockData)
-            {
-                table[dock.Pos.X, dock.Pos.Y] = dock;
-            }
-
-            return table;
-        }
-
         public bool isRobotUnderPod(int x, int y)
         {
             foreach (Robot robot in _IMSData.EntityData.RobotData)
             {
-                if(robot.Pos.X == x && robot.Pos.Y == y)
+                if (robot.Pos.X == x && robot.Pos.Y == y)
                 {
                     return robot.UnderPod;
                 }
@@ -618,7 +548,7 @@ namespace IMS.Model
                     foreach (var item in routes)
                     {
                         //charge
-                        if (item.Value[_counter]== chargeSignal)
+                        if (item.Value[_counter] == chargeSignal)
                         {
                             item.Key.Charge();
                             shift++;
@@ -627,10 +557,11 @@ namespace IMS.Model
                         {
                             item.Key.UnderPod = true;
                             shift++;
+                            _IMSData.EntityData.PodData[assignmentRobPod[_IMSData.EntityData.RobotData.IndexOf(item.Key)]].IsTake = true; ;
                         }
-                        if (item.Value.Count() > _counter+shift)
+                        if (item.Value.Count() > _counter + shift)
                         {
-                            item.Key.Move(item.Value[_counter+shift]);
+                            item.Key.Move(item.Value[_counter + shift]);
                         }
 
                     }
@@ -710,12 +641,82 @@ namespace IMS.Model
             cbs = new ConflictBasedSearch(IMSData);
             routes = cbs.CheckConflicts();
             rotations = cbs.Rotations;
-            if (routes!= null)
+            if (routes != null)
             {
                 SimulationFinished = true;
             }
 
         }
+        #endregion
+
+        #region Private methods
+
+        /// <summary>
+        /// create a table filled with Empty entities
+        /// </summary>
+        /// <param name="sizeX">width of the new table</param>
+        /// <param name="sizeY">height of the new table</param>
+        /// <returns></returns>
+        private Entity[,] _createEmptyTable(Int32 sizeX, Int32 sizeY)
+        {
+            Entity[,] table = new Entity[sizeX, sizeY];
+
+            for (Int32 i = 0; i < table.GetLength(0); i++)
+            {
+                for (Int32 j = 0; j < table.GetLength(1); j++)
+                {
+                    table[i, j] = new Empty(i, j);
+                }
+            }
+
+            return table;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void setTotalEnergy()
+        {
+            _allEnergy = _dataAccess.getTotalEnergy(_IMSData);
+            OnAllEnergyChanged();
+        }
+
+        /// <summary>
+        /// makes a table based on an already existing IMSData
+        /// </summary>
+        /// <returns></returns>
+        private Entity[,] _extractTableFromIMSData()
+        {
+            Entity[,] table = _createEmptyTable(_IMSData.SizeX, _IMSData.SizeY);
+
+            Debug.WriteLine("created new table, x: "+ _IMSData.SizeX.ToString()+", y: "+ _IMSData.SizeY.ToString());
+
+            foreach (Robot robot in _IMSData.EntityData.RobotData)
+            {
+                //Debug.WriteLine("putting down robot, x: "+robot.Pos.X.ToString()+", y: "+robot.Pos.Y.ToString());
+                table[robot.Pos.X, robot.Pos.Y] = robot;
+            }
+            foreach (Pod pod in _IMSData.EntityData.PodData)
+            {
+                table[pod.Pos.X, pod.Pos.Y] = pod;
+            }
+            foreach (RobotUnderPod robotUnderPod in _IMSData.EntityData.RobotUnderPodData)
+            {
+                table[robotUnderPod.Pos.X, robotUnderPod.Pos.Y] = robotUnderPod;
+            }
+            foreach (Destination destination in _IMSData.EntityData.DestinationData)
+            {
+                table[destination.Pos.X, destination.Pos.Y] = destination;
+            }
+            foreach (Dock dock in _IMSData.EntityData.DockData)
+            {
+                table[dock.Pos.X, dock.Pos.Y] = dock;
+            }
+
+            return table;
+        }
+
+
 
         #endregion
 
