@@ -6250,25 +6250,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Leon\\.nuget\\packages\\": {},
+    "C:\\Users\\Test\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
     "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Test\\IMS.Test.csproj",
+      "projectUniqueName": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Test\\IMS.Test.csproj",
       "projectName": "IMS.Test",
-      "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Test\\IMS.Test.csproj",
-      "packagesPath": "C:\\Users\\Leon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Test\\obj\\",
+      "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Test\\IMS.Test.csproj",
+      "packagesPath": "C:\\Users\\Test\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Test\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
         "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\Leon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Test\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
@@ -6284,17 +6284,17 @@
         "net5.0-windows7.0": {
           "targetAlias": "net5.0-windows",
           "projectReferences": {
-            "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj": {
-              "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Model\\IMS.Model.csproj"
+            "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj": {
+              "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Model\\IMS.Model.csproj"
             },
-            "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj": {
-              "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.Persistence\\IMS.Persistence.csproj"
+            "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Persistence\\IMS.Persistence.csproj": {
+              "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.Persistence\\IMS.Persistence.csproj"
             },
-            "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj": {
-              "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj"
+            "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj": {
+              "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS.ViewModel\\IMS.ViewModel.csproj"
             },
-            "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS\\IMS.csproj": {
-              "projectPath": "C:\\Users\\Leon\\Documents\\uni_stuff\\felev_6\\szofttech\\inventory-management\\IMS\\IMS\\IMS.csproj"
+            "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS\\IMS.csproj": {
+              "projectPath": "C:\\Users\\Test\\source\\repos\\wip-model-representation-and-diary-two\\IMS\\IMS\\IMS.csproj"
             }
           }
         }

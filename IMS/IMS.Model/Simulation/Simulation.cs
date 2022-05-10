@@ -100,7 +100,8 @@ namespace IMS.Model.Simulation
                 Rotations[robot].AddRange(waitRobotRotate);
                 time += 5;
 
-                robot.Charge();
+                route.Add(new Pos(-2, -2));
+                //robot.Charge();
                 //to pod
                 List<Pos> routeRobotToPod = new AstarSpacetime(IMSData.SizeX, IMSData.SizeY).FindPath(constraints, staticObstacles, time, closestDock(robot).Pos, pod.Pos);
                 List<Direction> turnRobotToPod = convertTurn(routeRobotToPod.ToArray(), robot);
@@ -121,6 +122,9 @@ namespace IMS.Model.Simulation
                 time += convertTurnTime(turnStartToPod);
 
             }
+            //add signal that it is underpod
+            route.Add(new Pos(-3, -3));
+            
         }
 
         //move robot from pod to dest

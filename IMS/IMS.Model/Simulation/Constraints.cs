@@ -33,7 +33,6 @@ namespace IMS.Model.Simulation
 
         public Constraints Extend(Robot robot, Pos obstacle, int start)
         {
-            //johnny deep copy of constraints
 
             Dictionary<Robot, Dictionary<int, HashSet<Pos>>> constraintsCopy = new Dictionary<Robot, Dictionary<int, HashSet<Pos>>>(Agent_Constraints);
 
